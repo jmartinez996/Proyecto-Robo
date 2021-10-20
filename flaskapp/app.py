@@ -12,6 +12,7 @@ from Classes.Area import Area
 from hashlib import md5
 from werkzeug.security import check_password_hash as checkph
 from werkzeug.security import generate_password_hash as genph
+import requests as req
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = 'ywtg.9819'
@@ -175,9 +176,9 @@ def ejecutaRobot():
         pass_siagj = request.values['pass_siagj']
         archivo = request.files['archivo']
       
-        archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],'archivo.xls'))
-        print(archivo)
-
+        archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],'resumen.xls'))
+        resp = req.get('http://127.0.0.1:5001/')
+        print(resp.text)
         return''
     except:
         return ''
