@@ -42,11 +42,11 @@ import withReactContent from 'sweetalert2-react-content'
             }
           })
           .then((res) => {
-            console.log(res.data.message)
+            //console.log(res.data.message)
             setData(res.data.message)
           })
           .catch((error) => {
-            console.log(error.message)
+            //console.log(error.message)
           })
     }
     
@@ -100,6 +100,36 @@ import withReactContent from 'sweetalert2-react-content'
           })
           
     }
+    const change_Area=($id,$name)=>{
+      const id = $id;
+      const name = $name;
+      const token = window.localStorage.getItem('robo-jwt-token');
+      const f = new FormData();
+      Swal.fire({
+        title: 'Cambiar el',
+            input: 'text',
+            inputValue:name,
+            inputAttributes: {
+              autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Modificar',
+            showLoaderOnConfirm: true,
+            preConfirm:()=>{
+              f.append("nombre_area","nombre")
+              console.log("se modifico");
+              console.log(name);
+            }
+      })
+      console.log("Cambiar area con id"+id);
+
+    };
+    const delete_Area=(id)=>{
+      const token = window.localStorage.getItem('robo-jwt-token');
+      const f = new FormData();
+      console.log("Eliminar area con id"+id);
+    };
   return(
 
       <Card>
@@ -146,10 +176,15 @@ import withReactContent from 'sweetalert2-react-content'
                       {area && area.nombre_area}
                     </TableCell>
                     <TableCell>
-                    <IconButton  aria-label="Eliminar">
+                    <IconButton  aria-label="Eliminar"
+                      onClick= {() => delete_Area(area.id_area)}
+                    >
+                    
                       <DeleteIcon />
                     </IconButton>
-                    <IconButton aria-label="Editar">
+                    <IconButton aria-label="Editar"
+                      onClick= {() => change_Area(area.id_area,area.nombre_area)}
+                    >
                       <EditIcon />
                     </IconButton>
                     </TableCell>

@@ -1,3 +1,4 @@
+
 from operator import countOf
 import re
 from flask import Flask, jsonify, request
@@ -13,8 +14,9 @@ from hashlib import md5
 from werkzeug.security import check_password_hash as checkph
 from werkzeug.security import generate_password_hash as genph
 import requests as req
-
+from routes import *
 app = Flask(__name__)
+app.register_blueprint(routes)
 app.config['JWT_SECRET_KEY'] = 'ywtg.9819'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
 app.config['UPLOAD_FOLDER'] = './Archivos'
@@ -86,7 +88,7 @@ def getUsers():
         return jsonify({'message': data})
     except:
         return jsonify({'message':'No esta logeado'}), 422
-
+'''
 @app.route('/getAreas', methods=['GET'])
 @jwt_required()
 def getAreas():
@@ -103,7 +105,7 @@ def getAreas():
         return jsonify({'message': data})
     except:
         return jsonify({'message':'Error mostrando areas'}), 422
-
+'''
 @app.route('/agregauser/', methods=['POST'])
 @jwt_required()
 def agregauser():
@@ -162,7 +164,7 @@ def agregatribunal():
     except:
         return jsonify({'message':'No se puedo agregar Tribunal'})
 
-@app.route('/ejecutaRobot/', methods=['POST'])
+'''@app.route('/ejecutaRobot/', methods=['POST'])
 @jwt_required()
 def ejecutaRobot():
     try:
@@ -185,7 +187,7 @@ def ejecutaRobot():
     except:
         return ''
     print("Robot Ejecutado")
-    return jsonify({'message':'Robot ejecutado'})
+    return jsonify({'message':'Robot ejecutado'})'''
 
 if __name__ == '__main__': 
     app.run(debug=True)     
