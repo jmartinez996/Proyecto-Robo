@@ -171,9 +171,9 @@ def ejecutaRobot():
         pass_familia = request.values['pass_familia']
         user_siagj = request.values['user_siagj']
         pass_siagj = request.values['pass_siagj']
-        archivo = request.values['archivo']
+        archivo = request.files['archivo']
       
-        archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],'archivo.docx'))
+        archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],'archivo.xls'))
         print(archivo)
 
         return''

@@ -54,13 +54,36 @@ const useStyles = makeStyles((theme) => ({
   const classes = useStyles();
   const [errMssg, setErrMssg] = useState('');
   const { handleSubmit, control} = useForm();
+  const [archivo, setArchivo] = useState(null);
+
+  const subirArchivo = e => {
+    setArchivo(e);
+    console.log(e.size);
+  }
+
+  function validationFile(archivo){
+    console.log(archivo)
+    if( archivo === null ){
+      return 'No se ha seleccionado ningun archivo'
+    }
+    
+  }
+
+  function validationType(archivo){
+    console.log(archivo)
+    if ( archivo !== null ){
+      if(archivo.type !== 'application/vnd.ms-excel' || archivo.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
+        return 'Tipo de archivo no permitido'
+      }
+    }
+  }
 
   const onSubmit = (data) => {
     const token = window.localStorage.getItem('robo-jwt-token')
     const f = new FormData();
-    console.log(data.archivo[9])
+    //console.log(data.archivo[9])
     f.append("correo", data.correo);
-    f.append("archivo", data.archivo);
+    f.append("archivo", archivo);
     f.append("user_mixtos", data.user_mixtos);
     f.append("pass_mixtos", data.pass_mixtos);
     f.append("user_familia", data.user_familia);
@@ -85,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
         .then(response=>{
 
             // seteaError("");
-            console.log(response.data.message)
+            //console.log(response.data.message)
             MySwal.fire({
                 icon: 'success',
                 title: 'Completado',
@@ -103,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
         // )
       }
     })
-    console.log('enviando');
+    //console.log('enviando');
 };
 
   return(
@@ -180,16 +203,19 @@ const useStyles = makeStyles((theme) => ({
                     type='file'
                     fullWidth
                     id="archivo"
-                    value={value}
+                    // value={value}
                     error={!!error}
                     helperText={error ? error.message : null}
-                    onChange={onChange}
+                    onChange={e => subirArchivo(e.target.files[0])}
                     />
                 )}
-                rules={{ required: 'No se ha seleccionado ningun archivo.',
-                        //  validate: (value) => validation(value) 
+                rules={{  validateType: () => validationType(archivo), 
+                          validate: () => validationFile(archivo),
+                         
                         }}
                 />
+                 {/* <input type="file" name="pic" id="pic" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /> */}
+                <Typography variant="inherit" color="error">{errMssg}</Typography>
                 <Controller
                 name="user_mixtos"
                 control={control}
