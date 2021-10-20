@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   }
 
   function validationFile(archivo){
-    console.log(archivo)
+    //console.log(archivo)
     if( archivo === null ){
       return 'No se ha seleccionado ningun archivo'
     }
@@ -72,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
   function validationType(archivo){
     console.log(archivo)
     if ( archivo !== null ){
+      console.log('hay algo')
       if(archivo.type !== 'application/vnd.ms-excel' || archivo.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
         return 'Tipo de archivo no permitido'
       }
