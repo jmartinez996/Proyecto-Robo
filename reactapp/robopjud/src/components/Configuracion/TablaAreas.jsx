@@ -23,7 +23,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-
+import ReactDOM from "react-dom";
 
 
 
@@ -53,7 +53,6 @@ import withReactContent from 'sweetalert2-react-content'
     useEffect(() => {
        getAreas();
     }, []);
-    
     const showAlert =() =>{
         const token = window.localStorage.getItem('robo-jwt-token')
         const f = new FormData();
@@ -70,7 +69,7 @@ import withReactContent from 'sweetalert2-react-content'
             preConfirm: (nombre) => {
 
               f.append("nombre_area", nombre);
-              return axios.post(`http://127.0.0.1:5000/agregaarea/`, f, {headers: {'Content-Type': 'application/json','Authorization': `Bearer `+token}})
+              return axios.post(`http://127.0.0.1:5000/createArea/`, f, {headers: {'Content-Type': 'application/json','Authorization': `Bearer `+token}})
                 .then(response => {
                     // console.log(response.data.message)
                     var aux = data;
@@ -86,7 +85,7 @@ import withReactContent from 'sweetalert2-react-content'
                         title: 'Completado',
                         text: 'Agregado con exito',
                       })
-                    
+                    getAreas();
                 })
                 .catch(error => {
                     MySwal.fire({
@@ -97,38 +96,64 @@ import withReactContent from 'sweetalert2-react-content'
                 })
             },
             allowOutsideClick: () => !Swal.isLoading()
+            
           })
-          
     }
     const change_Area=($id,$name)=>{
       const id = $id;
       const name = $name;
       const token = window.localStorage.getItem('robo-jwt-token');
       const f = new FormData();
+      f.append("id_area", id);
+      f.append("nombre_area", name);
       Swal.fire({
         title: 'Cambiar el',
-            input: 'text',
-            inputValue:name,
-            inputAttributes: {
-              autocapitalize: 'off'
-            },
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar',
-            confirmButtonText: 'Modificar',
-            showLoaderOnConfirm: true,
-            preConfirm:()=>{
-              f.append("nombre_area","nombre")
-              console.log("se modifico");
-              console.log(name);
-            }
+        input: 'text',
+        inputValue:name,
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Modificar',
+        showLoaderOnConfirm: true,
+        preConfirm:(nombre)=>{
+          f.append("nombre_area_nuevo",nombre)
+          console.log("se modifico");
+          console.log(name);
+          return axios.post(`http://127.0.0.1:5000/updateArea/`, f, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer `+token
+            }}).then(response=>{
+              getAreas();    
+            });
+        }
       })
       console.log("Cambiar area con id"+id);
 
     };
-    const delete_Area=(id)=>{
+    
+    const delete_Area=($id,$name)=>{
+      const id = $id;
+      const name = $name;
+      console.log(name);
       const token = window.localStorage.getItem('robo-jwt-token');
       const f = new FormData();
-      console.log("Eliminar area con id"+id);
+      console.log("aca");
+      f.append("id_area", id);
+      f.append("nombre_area", name);
+      for (var pair of f.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]); 
+      }
+      return axios.post(`http://127.0.0.1:5000/deleteArea/`, f, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer `+token
+        }}).then(response=>{
+          getAreas();    
+        });
+      
     };
   return(
 
@@ -177,7 +202,7 @@ import withReactContent from 'sweetalert2-react-content'
                     </TableCell>
                     <TableCell>
                     <IconButton  aria-label="Eliminar"
-                      onClick= {() => delete_Area(area.id_area)}
+                      onClick= {() => delete_Area(area.id_area,area.nombre_area)}
                     >
                     
                       <DeleteIcon />
