@@ -177,9 +177,11 @@ def ejecutaRobot():
         archivo = request.files['archivo']
       
         archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],'resumen.xls'))
+        #fichero = {'file1': open('Archivos/resumen.xls', 'rb')}
+        # resp = req.post('http://127.0.0.1:5001/eje/',files=fichero)
         resp = req.get('http://127.0.0.1:5001/')
-        print(resp.text)
-        return''
+        print(resp.json())
+        return ''
     except:
         return ''
     print("Robot Ejecutado")
