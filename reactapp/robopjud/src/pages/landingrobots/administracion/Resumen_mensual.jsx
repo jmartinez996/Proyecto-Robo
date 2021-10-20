@@ -63,16 +63,26 @@ const useStyles = makeStyles((theme) => ({
 
   function validationFile(archivo){
     //console.log(archivo)
-    if( archivo === null ){
+    if( archivo == null ){
       return 'No se ha seleccionado ningun archivo'
     }
-    
+    if( archivo !== null ){
+      var nombre = archivo.name.split('.');
+      console.log(nombre[1])
+      if(nombre[1] != 'xls'){
+        return 'Tipo de archivo no compatible'
+      }
+      // if(nombre[1] != 'xlsx' ){
+      //   return 'Tipo de archivo no compatible'
+      // }
+      
+    }
   }
 
   function validationType(archivo){
     console.log(archivo)
     if ( archivo !== null ){
-      console.log('hay algo')
+      console.log(archivo.type)
       if(archivo.type !== 'application/vnd.ms-excel' || archivo.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
         return 'Tipo de archivo no permitido'
       }
@@ -210,10 +220,9 @@ const useStyles = makeStyles((theme) => ({
                     onChange={e => subirArchivo(e.target.files[0])}
                     />
                 )}
-                rules={{  validateType: () => validationType(archivo), 
-                          validate: () => validationFile(archivo),
-                         
-                        }}
+                rules={{  
+                        validate: () => validationFile(archivo),
+                      }}
                 />
                  {/* <input type="file" name="pic" id="pic" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /> */}
                 <Typography variant="inherit" color="error">{errMssg}</Typography>

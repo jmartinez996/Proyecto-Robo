@@ -1,6 +1,6 @@
 from operator import countOf
 import re
-from flask import Flask, json, jsonify, request
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
@@ -9,7 +9,6 @@ from sqlalchemy.orm import query
 from werkzeug.datastructures import ResponseCacheControl
 from Classes.Usuarios import User
 from Classes.Area import Area
-import json
 from hashlib import md5
 from werkzeug.security import check_password_hash as checkph
 from werkzeug.security import generate_password_hash as genph
@@ -46,8 +45,11 @@ def mensaje():
 def login():
     rut = request.values['rut']
     contrasena = request.values['contrasena']
+    print(rut)
+    print(contrasena)
     try:
         usuario = User.query.filter_by(rut=rut).first()
+        
         if usuario.rut == rut and checkph(usuario.contrasena, contrasena):
             access_token = create_access_token(identity=usuario.id_usuario)
             return jsonify(message="Usuario correcto.", token=access_token, id_usuario=usuario.id_usuario), 200
