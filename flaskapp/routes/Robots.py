@@ -16,6 +16,9 @@ from werkzeug.security import check_password_hash as checkph
 from werkzeug.security import generate_password_hash as genph
 import requests as req
 
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = './Archivos'
+
 @routes.route('/ejecutaRobot/', methods=['POST'])
 @jwt_required()
 def ejecutaRobot():
@@ -38,8 +41,8 @@ def ejecutaRobot():
         return ''
     except:
         return ''
-    print("Robot Ejecutado")
-    return jsonify({'message':'Robot ejecutado'})
+    # print("Robot Ejecutado")
+    # return jsonify({'message':'Robot ejecutado'})/
 
 
 @routes.route('/upRobot') 
