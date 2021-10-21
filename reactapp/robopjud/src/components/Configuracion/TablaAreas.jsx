@@ -83,7 +83,7 @@ import ReactDOM from "react-dom";
                     MySwal.fire({
                         icon: 'success',
                         title: 'Completado',
-                        text: 'Agregado con exito',
+                        text: 'Se agrego con exito '+nombre +'.',
                       })
                     getAreas();
                 })
@@ -91,7 +91,7 @@ import ReactDOM from "react-dom";
                     MySwal.fire({
                         icon: 'error',
                         title: 'Error...',
-                        text: 'No se pudo agregar.',
+                        text: 'No se pudo agregar' + nombre+'.',
                       })
                 })
             },
@@ -126,8 +126,19 @@ import ReactDOM from "react-dom";
               'Content-Type': 'application/json',
               'Authorization': `Bearer `+token
             }}).then(response=>{
-              getAreas();    
-            });
+              getAreas();
+              Swal.fire({
+                title: 'confirmación',
+                text: "Se ha modificado el registro "+name+" por "+nombre,
+                icon: 'sucess'
+              });    
+            }).catch(error => {
+              MySwal.fire({
+                  icon: 'error',
+                  title: 'Error...',
+                  text: 'No se pudo cambiar' + name+'.',
+                })
+          })
         }
       })
       console.log("Cambiar area con id"+id);
@@ -143,16 +154,55 @@ import ReactDOM from "react-dom";
       console.log("aca");
       f.append("id_area", id);
       f.append("nombre_area", name);
-      for (var pair of f.entries()) {
-        console.log(pair[0]+ ', ' + pair[1]); 
-      }
+
+      MySwal.fire({
+        title: 'Eliminar',
+        text: "¿Desea Eliminar el registro "+name+" ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.post(`http://127.0.0.1:5000/deleteArea/`, f, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer `+token
+            }}).then(response=>{
+              getAreas();    
+            })
+          MySwal.fire(
+            'Eliminado',
+            'El registro '+name+' se ha eliminado',
+            'success'
+          )
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          MySwal.fire(
+            'Cancelado',
+            'El registro no se ha eliminado',
+            'error'
+          )
+        }
+      }).catch(error => {
+        MySwal.fire({
+            icon: 'error',
+            title: 'Error...',
+            text: 'No se pudo Eliminar.',
+          })
+    })
+      /*
       return axios.post(`http://127.0.0.1:5000/deleteArea/`, f, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer `+token
         }}).then(response=>{
           getAreas();    
-        });
+        });*/
+        return "";
       
     };
   return(
