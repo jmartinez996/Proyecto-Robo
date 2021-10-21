@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
   const [errMssg, setErrMssg] = useState('');
   const { handleSubmit, control} = useForm();
   const [archivo, setArchivo] = useState(null);
+  const [formState, setFormState] = useState(false);
 
   const subirArchivo = e => {
     setArchivo(e);
@@ -125,6 +126,7 @@ const useStyles = makeStyles((theme) => ({
                 title: 'Completado',
                 text: 'Usuario Registrado con exito!',
             })
+            // setFormState(true);
 
         }).catch(error=>{
             // seteaError(error.response.data.message);
@@ -195,6 +197,7 @@ const useStyles = makeStyles((theme) => ({
                     autoComplete="Correo Electronico"
                     autoFocus
                     onChange={onChange}
+                    disabled = {formState}
                     />
                 )}
                 rules={{ required: 'El campo Correo Electronico esta vacío',
@@ -218,6 +221,7 @@ const useStyles = makeStyles((theme) => ({
                     error={!!error}
                     helperText={error ? error.message : null}
                     onChange={e => subirArchivo(e.target.files[0])}
+                    disabled = {formState}
                     />
                 )}
                 rules={{  
@@ -242,6 +246,7 @@ const useStyles = makeStyles((theme) => ({
                     label="Usuario de la plataforma mixtos.pjud"
                     autoComplete="usuario mixtos"
                     onChange={onChange}
+                    disabled = {formState}
                     />
                 )}
                 rules={{ required: 'El campo usuario mixtos esta vacío',
@@ -265,6 +270,7 @@ const useStyles = makeStyles((theme) => ({
                     autoComplete="contrasena"
                     type="password"
                     onChange={onChange}
+                    disabled = {formState}
                     />
                   )}
                   rules={{ required: 'El campo Contrasena mixtos esta vacío' }}
@@ -285,6 +291,7 @@ const useStyles = makeStyles((theme) => ({
                     label="Usuario de la plataforma familia.pjud"
                     autoComplete="usuario familia"
                     onChange={onChange}
+                    disabled = {formState}
                     />
                 )}
                 rules={{ required: 'El campo usuario familia esta vacío',
@@ -307,6 +314,7 @@ const useStyles = makeStyles((theme) => ({
                     label="Contrasena plataforma familia.pjud"
                     type="password"
                     onChange={onChange}
+                    disabled = {formState}
                     />
                   )}
                   rules={{ required: 'El campo Contrasena familia esta vacío' }}
@@ -327,6 +335,7 @@ const useStyles = makeStyles((theme) => ({
                     label="Usuario de la plataforma siagj"
                     autoComplete="usuario siagj"
                     onChange={onChange}
+                    disabled = {formState}
                     />
                 )}
                 rules={{ required: 'El campo usuario siagj esta vacío',
@@ -349,6 +358,7 @@ const useStyles = makeStyles((theme) => ({
                     label="Contrasena plataforma siagj"
                     type="password"
                     onChange={onChange}
+                    disabled = {formState}
                     />
                   )}
                   rules={{ required: 'El campo Contrasena siagj esta vacío' }}
@@ -360,7 +370,7 @@ const useStyles = makeStyles((theme) => ({
                   style={{marginTop:'10px'}}
                 >
                   
-                  <Button type="submit" variant="contained" color="primary">
+                  <Button type="submit" disabled={formState}  variant="contained" color="primary">
                    Iniciar Robot
                   </Button>
                 
