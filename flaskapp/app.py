@@ -19,6 +19,7 @@ app = Flask(__name__)
 app.register_blueprint(routes)
 app.config['JWT_SECRET_KEY'] = 'ywtg.9819'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost:5434/robot'
 app.config['UPLOAD_FOLDER'] = './Archivos'
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
@@ -128,7 +129,7 @@ def agregauser():
     except:
         return jsonify({'message':'No se pudo agregar el Usuario '+ nombre}), 422
 
-@app.route('/agregaarea/', methods=['POST'])
+'''@app.route('/agregaarea/', methods=['POST'])
 @jwt_required()
 def agregaarea():
     try:
@@ -151,7 +152,7 @@ def agregaarea():
             return jsonify({'message':'No se pudo agregar'}), 422
     except:
         return ''
-
+'''
 @app.route('/agregatribunal/', methods=['POST'])
 @jwt_required()
 def agregatribunal():
