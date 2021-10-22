@@ -18,8 +18,8 @@ from routes import *
 app = Flask(__name__)
 app.register_blueprint(routes)
 app.config['JWT_SECRET_KEY'] = 'ywtg.9819'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost:5434/robot'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost:5434/robot'
 app.config['UPLOAD_FOLDER'] = './Archivos'
 db = SQLAlchemy(app)
 jwt = JWTManager(app)

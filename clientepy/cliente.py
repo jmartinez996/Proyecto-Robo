@@ -21,9 +21,8 @@ def index():
     pass_siagj = request.values['pass_siagj']
     archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],'resumen.xls'))
     print('recibido desde el cliente')
-    #os.startfile(r"prueba.bat")  
-    os.system('start "" /min "C:/Users/'+windows_user+'/AppData/Local/UiPath/app-20.4.3/UiRobot.exe" -f "D:/'+windows_user+'/Documents/UiPath/Tarea de prueba/Main.xaml" -i {"correo":'+correo+'}')
-
+    # os.system('start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Informe Mensual/Main.xaml "' + " --input {'correo':'"+correo+"','user_mixtos':'"+user_mixtos+"', 'pass_mixtos':'"+pass_mixtos+"', 'user_familia':'"+user_familia+"', 'pass_familia':'"+pass_familia+"', 'user_siagj':'"+user_siagj+"', 'pass_siagj':'"+pass_siagj+"'}")                                                                                           
+    os.system('start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Informe Mensual/Main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_mixtos+"', 'pass_mixtos':'"+pass_mixtos+"', 'user_familia':'"+user_familia+"', 'pass_familia':'"+pass_familia+"', 'user_siagj':'"+user_siagj+"', 'pass_siagj':'"+pass_siagj+"'}"+'"')      
     return 'robot ejecutado'
 
 if __name__ == '__main__': 
