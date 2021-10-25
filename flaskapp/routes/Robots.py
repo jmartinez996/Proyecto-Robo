@@ -36,7 +36,6 @@ def ejecutaRobot():
             'pass_siagj': pass_siagj
         }
         resp = req.post('http://127.0.0.1:5001/',files=fichero, data=dataForm)
-        #resp = req.get('http://127.0.0.1:5001/')
         print(resp.text)
         return ''
     except:
