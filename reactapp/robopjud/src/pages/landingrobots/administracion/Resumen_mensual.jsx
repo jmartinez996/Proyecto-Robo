@@ -126,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
                 title: 'Completado',
                 text: 'Robot ejecutado con exito!',
             })
-            // setFormState(true);
+            setFormState(true);
 
         }).catch(error=>{
             // seteaError(error.response.data.message);
