@@ -20,22 +20,29 @@ import requests as req
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost:5434/robot'
 db = SQLAlchemy(app)
 
 @routes.route('/createTribunal/', methods=['POST'])
 @jwt_required()
 def createTribunal():
-    print("print")
-    try:
-        return ""
-
-    except:
-        return ""
+    current_user_id = get_jwt_identity()
+    nombre = request.values['nombre']
+    fono = request.values['telefono']
+    id_area = 1
+    id_area_prueba = request.values['area']
+    id_area_prueba = id_area_prueba.split(',')
+    id_area_prueba = [int(i) for i in id_area_prueba]
+    print(id_area_prueba)
+    newTribunal = Tribunal(nombre=nombre,fono=fono,id_area=id_area,id_area_prueba=id_area_prueba)
+    db.session.add(newTribunal) 
+    db.session.commit()
+    print("asd")
+    return {"mensaje":"saludo"}
 
 @routes.route('/updateTribunal/', methods=['POST'])
 @jwt_required()
-def updateArea():
+def updateTribunal():
     try:
         return ""
 
@@ -44,7 +51,7 @@ def updateArea():
 
 @routes.route('/deleteTribunal/', methods=['POST'])
 @jwt_required()
-def deleteArea():
+def deleteTribunal():
     
     try:
         return ""
@@ -53,6 +60,23 @@ def deleteArea():
         return ""
  
 
-@routes.route('/upAreas') 
-def upAreas(): 
+@routes.route('/upTribunal') 
+def upTribunal(): 
+    #current_user_id = get_jwt_identity()
+    query = Tribunal.query.all()
+    print(query)
+    data = []
+    
+    for tribunal in query:
+        aux = {
+            'id_tribunal':tribunal.id_tribunal,
+            'id_area':tribunal.id_area,
+            'nombre':tribunal.nombre,
+            'fono':tribunal.fono,
+            'id_area_prueba':tribunal.id_area_prueba,
+        }
+        data.append(aux)
+    return jsonify({'message': data})
+    
+    
     return {"mensaje":"saludo"}
