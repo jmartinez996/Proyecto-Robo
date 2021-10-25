@@ -66,9 +66,9 @@ function AgregarTribunal() {
     const MySwal = withReactContent(Swal)
     const classes = useStyles();
     const [errMssg, setErrMssg] = useState('');
-    const { handleSubmit, control} = useForm();
+    const { handleSubmit, control, getValues,errors} = useForm({});
     const [areas, setAreas] = useState([]);
-
+    const [sArea, setSArea] = useState([]);
     const getAreas = async() => {
         const areas = await axios(`http://127.0.0.1:5000/getAreas`,{
             headers: {
@@ -99,17 +99,35 @@ function AgregarTribunal() {
 
     const onSubmit = async (data) => {
         const token = window.localStorage.getItem('robo-jwt-token')
-
-        const f = new FormData();
         
+        const f = new FormData();
+        console.log(sArea);
         console.log(JSON.stringify(data));
 
     };
-
+    const handleCheck = (checkedID)=>{
+      console.log("asd");
+      const {areas : ids} = getValues()
+      console.log(ids);
+    };
+    
+     const checked = (e,id) => {
+      //setSArea([...sArea,id])
+      console.log(sArea);
+      console.log(id);
+       if (e.target.checked == true) {
+         console.log("true");
+          //setSArea.append(id);
+          console.log(sArea);
+         setSArea([...sArea,id])
+       } 
+       //falso eliminar
+     }
+    
     const seteaError = err => {
         setErrMssg(err);
     };
-
+    
     // function validation(value){
     //   if(value != "1234"){
     //     return "el valor debe ser 1234"
@@ -175,26 +193,49 @@ function AgregarTribunal() {
                 />
                 <Controller
                   name="item_ids"
-                  render={props =>
+                  render={({ field: { onChange, value }, fieldState: { error } }) =>
                     areas.map((area) => (
                       <FormControlLabel
-                        control={
-                          <Checkbox
-                            onChange={handleChange} 
-                            name={area.nombre_area} 
-                            value={area.id_area}                           
-                          />
-                        }
-                        //key={area.id_area}
-                        label={area.nombre_area}
-                      />
+                control={
+                  <Checkbox
+                    //onChange={() => setChecked(!checked)}
+                    onChange={e => checked(e,area.id_area)}
+                    //onChange={() => props.onChange(handleCheck("item.id"))}
+                    //defaultChecked={defaultIds.includes(item.id)}
+                  />
+                }
+                key={area.id_area}
+                label={area.nombre_area}
+              />
                     ))
                   }
                   control={control}
                 />
-                
-                
-               
+
+
+              {/* <Controller
+                name="archivo"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                    variant="outlined"
+                    InputProps={{readOnly:true}}
+                    margin="dense"
+                    type='file'
+                    fullWidth
+                    id="archivo"
+                    // value={value}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    onChange={e => subirArchivo(e.target.files[0])}
+                    disabled = {formState}
+                    />
+                )}
+                rules={{  
+                        validate: () => validationFile(archivo),
+                      }}
+                /> */}
                 
                 <Typography variant="inherit" color="error">{errMssg}</Typography>
                 <div>
