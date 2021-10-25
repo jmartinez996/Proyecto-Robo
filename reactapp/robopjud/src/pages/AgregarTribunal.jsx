@@ -101,28 +101,9 @@ function AgregarTribunal() {
         const token = window.localStorage.getItem('robo-jwt-token')
 
         const f = new FormData();
-        f.append("nombre", data.nombre);
-        f.append("apellido", data.apellido);
-        f.append("rut", data.rut);
-        f.append("correo", data.correo);
-        f.append("contrasena", data.contrasena);
-        f.append("repcontrasena", data.repcontrasena);
-        await axios.post(`http://127.0.0.1:5000/agregatribunal/`, f, {headers: {'Content-Type': 'application/json','Authorization': `Bearer `+token}})
-        .then(response=>{
+        
+        console.log(JSON.stringify(data));
 
-            seteaError("");
-            console.log(response.data.message)
-            MySwal.fire({
-                icon: 'success',
-                title: 'Completado',
-                text: 'Usuario Registrado con exito!',
-            })
-
-        }).catch(error=>{
-            seteaError(error.response.data.message);
-
-        })
-        // console.log(data.rut);
     };
 
     const seteaError = err => {
@@ -134,6 +115,7 @@ function AgregarTribunal() {
     //     return "el valor debe ser 1234"
     //   }
     // }
+    // https://codesandbox.io/s/material-demo-bzj4i?file=/demo.js
     return (
 
         <Container component="main" maxWidth="xs">
@@ -191,27 +173,27 @@ function AgregarTribunal() {
                         //  validate: (value) => validation(value) 
                         }}
                 />
-                
                 <Controller
-                name="area"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-
-                    <FormGroup row>
-                        {areas.map((area) => (
-                            <FormControlLabel
-                            control={<Checkbox onChange={handleChange} name={area.nombre_area} value={area.id_area} />}
-                            label= {area.nombre_area}
-                            />
-                        ))}
-                        
-                    </FormGroup>
-                )}
-                rules={{ required: 'El campo telefono Tribunal esta vacío',
-                        //  validate: (value) => validation(value) 
-                        }}
+                  name="item_ids"
+                  render={props =>
+                    areas.map((area) => (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            onChange={handleChange} 
+                            name={area.nombre_area} 
+                            value={area.id_area}                           
+                          />
+                        }
+                        //key={area.id_area}
+                        label={area.nombre_area}
+                      />
+                    ))
+                  }
+                  control={control}
                 />
+                
+                
                
                 
                 <Typography variant="inherit" color="error">{errMssg}</Typography>

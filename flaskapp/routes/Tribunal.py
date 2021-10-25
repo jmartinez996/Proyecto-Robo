@@ -25,7 +25,8 @@ db = SQLAlchemy(app)
 
 @routes.route('/createTribunal/', methods=['POST'])
 @jwt_required()
-def createArea():
+def createTribunal():
+    print("print")
     try:
         return ""
 
