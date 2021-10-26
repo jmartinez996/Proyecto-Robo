@@ -38,6 +38,7 @@ import AgregarUsuario from "./AgregarUsuario";
 import AgregarTribunal from "./AgregarTribunal";
 import AppbarMenu from '../components/AppbarMenu'
 import ResumenMensual from "./landingrobots/administracion/Resumen_mensual";
+import AgregaRobot from "./AgregaRobot";
 
 
 const drawerWidth = 240;
@@ -298,6 +299,12 @@ function Home() {
               <AgregarTribunal/>
             </Route>
 
+            <Route path="/configuracion/editartribunal" exact>
+              <AgregarTribunal/>
+            </Route>
+            <Route path="/configuracion/agregarobot" exact>
+              <AgregaRobot/>
+            </Route>
             
             <Route path="/" >
               <SignIn/>

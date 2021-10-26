@@ -99,14 +99,13 @@ function AgregarTribunal() {
 
     const onSubmit = async (data) => {
         const token = window.localStorage.getItem('robo-jwt-token')
-        
         const f = new FormData();
         f.append("nombre", data.nombre);
         f.append("telefono", data.telefono);
         f.append("area",sArea);
         MySwal.fire({
-          title: 'agregar',
-          text: "¿Desea agregar el tribunal?",
+          title: 'Agregar',
+          text: "¿Desea agregar el tribunal "+  +"?",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Eliminar',
@@ -114,13 +113,11 @@ function AgregarTribunal() {
           reverseButtons: true
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log("aaaaaa");
             axios.post(`http://127.0.0.1:5000/createTribunal/`, f, {
               headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer `+token
               }})
-              console.log("BBBBBBBBBBB");
             MySwal.fire(
               'Agregado',
               'El registro se ha agregado',
@@ -237,7 +234,7 @@ function AgregarTribunal() {
                 control={
                   <Checkbox
                     //checked = {true}
-                    onChange={e => checked(e,area.id_area)}
+                    onChange={e => checked(e,area.nombre_area)}
                     //defaultChecked={defaultIds.includes(item.id)}
                   />
                 }

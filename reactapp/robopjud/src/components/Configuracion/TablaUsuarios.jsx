@@ -54,7 +54,7 @@ import EditIcon from '@material-ui/icons/Edit';
         <CardHeader title="Usuarios"  />
       </Grid>
       <Grid item>
-      <Link to='/configuracion/agregarusuario'>
+      <Link to='/configuracion/agregarusuario' style={{textDecoration:'none'}}>
         <Button
           variant="contained"
           color="primary"

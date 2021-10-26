@@ -32,12 +32,11 @@ def createTribunal():
     id_area = 1
     id_area_prueba = request.values['area']
     id_area_prueba = id_area_prueba.split(',')
-    id_area_prueba = [int(i) for i in id_area_prueba]
+    #id_area_prueba = [int(i) for i in id_area_prueba]
     print(id_area_prueba)
-    newTribunal = Tribunal(nombre=nombre,fono=fono,id_area=id_area,id_area_prueba=id_area_prueba)
+    newTribunal = Tribunal(nombre=nombre,fono=fono,id_area=id_area,nombre_area=id_area_prueba)
     db.session.add(newTribunal) 
     db.session.commit()
-    print("asd")
     return {"mensaje":"saludo"}
 
 @routes.route('/updateTribunal/', methods=['POST'])
@@ -52,7 +51,12 @@ def updateTribunal():
 @routes.route('/deleteTribunal/', methods=['POST'])
 @jwt_required()
 def deleteTribunal():
-    
+    id_t = request.values['id_tribunal']
+    current_user_id = get_jwt_identity()
+    db.session.query(Tribunal).filter(Tribunal.id_tribunal == id_t).delete()
+    db.session.commit()
+    print("Eliminar id: "+id_t)
+    print("llegue")
     try:
         return ""
 
@@ -60,7 +64,7 @@ def deleteTribunal():
         return ""
  
 
-@routes.route('/upTribunal') 
+@routes.route('/getTribunal') 
 def upTribunal(): 
     #current_user_id = get_jwt_identity()
     query = Tribunal.query.all()
@@ -73,10 +77,7 @@ def upTribunal():
             'id_area':tribunal.id_area,
             'nombre':tribunal.nombre,
             'fono':tribunal.fono,
-            'id_area_prueba':tribunal.id_area_prueba,
+            'nombre_area':tribunal.nombre_area,
         }
         data.append(aux)
     return jsonify({'message': data})
-    
-    
-    return {"mensaje":"saludo"}

@@ -9,6 +9,7 @@ import {
 import Tablausuarios from "../components/Configuracion/TablaUsuarios";
 import Tablaareas from "../components/Configuracion/TablaAreas";
 import Tablatribunales from "../components/Configuracion/TablaTribunales";
+import TablaRobot from "../components/Configuracion/TablaRobot";
 function Configuracion() {
     return (
 
@@ -51,6 +52,15 @@ function Configuracion() {
                         xs={12}
                     >
                         <Tablaareas/>
+                    </Grid>
+                    <Grid
+                        item
+                        lg={12}
+                        sm={12}
+                        xl={12}
+                        xs={12}
+                    >
+                        <TablaRobot/>
                     </Grid>
                 </Grid>
             </Container>
