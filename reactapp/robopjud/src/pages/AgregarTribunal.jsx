@@ -112,15 +112,13 @@ function AgregarTribunal() {
     };
     
      const checked = (e,id) => {
-      //setSArea([...sArea,id])
-      console.log(sArea);
-      console.log(id);
        if (e.target.checked == true) {
-         console.log("true");
-          //setSArea.append(id);
-          console.log(sArea);
          setSArea([...sArea,id])
-       } 
+         console.log(sArea);
+      } else {
+        setSArea(sArea => sArea.filter(n => n != id))
+        console.log(sArea)
+      }
        //falso eliminar
      }
     
