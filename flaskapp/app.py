@@ -5,39 +5,37 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
-from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required, get_jwt, set_access_cookies, unset_access_cookies
 from sqlalchemy.orm import query
-from werkzeug.datastructures import ResponseCacheControl
 from Classes.Usuarios import User
 from Classes.Area import Area
-from hashlib import md5
 from werkzeug.security import check_password_hash as checkph
 from werkzeug.security import generate_password_hash as genph
 import requests as req
 from routes import *
+from datetime import datetime, timedelta, timezone
+
 app = Flask(__name__)
 app.register_blueprint(routes)
+
 app.config['JWT_SECRET_KEY'] = 'ywtg.9819'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=30)
+#app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost:5434/robot'
+#app.config['SQLALCHEMY_POOL_SIZE'] = 10
+#app.config['SQLALCHEMY_MAX_OVERFLOW'] = 30
+#app.config['SQLALCHEMY_POOL_TIMEOUT'] = 300
 app.config['UPLOAD_FOLDER'] = './Archivos'
 db = SQLAlchemy(app)
+db.session.close_all()
 jwt = JWTManager(app)
 CORS(app)
+
 
 @app.route('/') 
 def index(): 
     return {"mensaje":"saludo"}
-    
-@app.route('/ejerobot', methods=['GET']) 
-def ejerobot():
-    # print("recibido en flask")
-    # os.startfile(r"prueba.bat") 
-
-    # new_user = User(nombre="usuario", apellido="prueba", rut="10259862-8", correo="prueba@prueba.com", contrasena="asdd", tipo_usuario=2, id_area=1) 
-    # db.session.add(new_user) 
-    # db.session.commit()
-    return {"mensaje":"Ejecu"}
 
 @app.route('/mensaje/', methods=['GET', 'POST'])
 def mensaje():
@@ -49,8 +47,6 @@ def mensaje():
 def login():
     rut = request.values['rut']
     contrasena = request.values['contrasena']
-    print(rut)
-    print(contrasena)
     try:
         usuario = User.query.filter_by(rut=rut).first()
         
@@ -84,11 +80,13 @@ def getUsers():
                     'apellido':users.apellido,
                     'rut':users.rut,
                     'correo':users.correo
-                  }
+                    }
             data.append(aux)
         return jsonify({'message': data})
     except:
-        return jsonify({'message':'No esta logeado'}), 422
+         return jsonify({'message':'No esta logeado'}), 422
+    finally:
+        db.session.close_all()
 '''
 @app.route('/getAreas', methods=['GET'])
 @jwt_required()

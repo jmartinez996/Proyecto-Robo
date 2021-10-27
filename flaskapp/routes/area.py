@@ -16,11 +16,10 @@ from hashlib import md5
 from werkzeug.security import check_password_hash as checkph
 from werkzeug.security import generate_password_hash as genph
 import requests as req
-
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
-db = SQLAlchemy(app)
+from app import db
+# app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
+# db = SQLAlchemy(app)
 
 @routes.route('/getAreas', methods=['GET'])
 @jwt_required()
@@ -33,11 +32,13 @@ def getAreas():
             aux = {
                     'id_area':areas.id_area,
                     'nombre_area':areas.nombre_area,
-                  }
+                    }
             data.append(aux)
         return jsonify({'message': data})
     except:
         return jsonify({'message':'Error mostrando areas'}), 422
+    finally:
+        db.session.close_all()
 
 @routes.route('/createArea/', methods=['POST'])
 @jwt_required()
