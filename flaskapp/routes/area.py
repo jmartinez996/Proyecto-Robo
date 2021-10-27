@@ -91,19 +91,9 @@ def deleteArea():
     try:
         id_A = request.values['id_area']
         name_A = request.values['nombre_area']
-        print("<",id_A,"--",name_A,">")
-        print("a")
         current_user_id = get_jwt_identity()
-        print("b")
         db.session.query(Area).filter(Area.id_area == id_A).delete()
-        print("c")
         db.session.commit()
-        #con = Area.query.filter_by(id_area = id_A).first()
-        #print(con.id_area)
-        #db.session.delete(con.id_area)
-        #print("c")
-        #db.session.commit()
-        print("eliminado")
         return ""
     except:
         return jsonify({'message':'No se puede eliminar el registro'}), 422
