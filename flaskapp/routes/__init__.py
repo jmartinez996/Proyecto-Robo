@@ -6,3 +6,4 @@ from .area import *
 from .Tribunal import *
 from .Robots import *
 from .crudrobot import *
+from .Usuarios import *

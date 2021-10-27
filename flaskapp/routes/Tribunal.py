@@ -17,11 +17,12 @@ from hashlib import md5
 from werkzeug.security import check_password_hash as checkph
 from werkzeug.security import generate_password_hash as genph
 import requests as req
+from app import db
 
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost:5434/robot'
-db = SQLAlchemy(app)
+# app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost:5434/robot'
+# db = SQLAlchemy(app)
 
 @routes.route('/createTribunal/', methods=['POST'])
 @jwt_required()
@@ -37,6 +38,7 @@ def createTribunal():
     newTribunal = Tribunal(nombre=nombre,fono=fono,id_area=id_area,nombre_area=id_area_prueba)
     db.session.add(newTribunal) 
     db.session.commit()
+    db.session.close_all()
     return {"mensaje":"saludo"}
 
 @routes.route('/updateTribunal/', methods=['POST'])

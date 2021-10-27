@@ -28,7 +28,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localho
 #app.config['SQLALCHEMY_POOL_TIMEOUT'] = 300
 app.config['UPLOAD_FOLDER'] = './Archivos'
 db = SQLAlchemy(app)
-db.session.close_all()
 jwt = JWTManager(app)
 CORS(app)
 
@@ -55,6 +54,8 @@ def login():
             return jsonify(message="Usuario correcto.", token=access_token, id_usuario=usuario.id_usuario), 200
     except:
         return jsonify(message="Usuario o contrasena son incorrectos."), 400
+    finally:
+        db.session.close_all()
     
 @app.route('/userState', methods=['GET'])
 @jwt_required()
@@ -65,28 +66,30 @@ def userState():
         return jsonify({"id_usuario": user.id_usuario, "nombre": user.nombre}), 200
     except:
         return jsonify({'message':'No esta logeado'}), 422
-
-@app.route('/getUsers', methods=['GET'])
-@jwt_required()
-def getUsers():
-    try:
-        current_user_id = get_jwt_identity()
-        query = User.query.all()
-        data = []
-        for users in query:
-            aux = {
-                    'id_usuario':users.id_usuario,
-                    'nombre':users.nombre,
-                    'apellido':users.apellido,
-                    'rut':users.rut,
-                    'correo':users.correo
-                    }
-            data.append(aux)
-        return jsonify({'message': data})
-    except:
-         return jsonify({'message':'No esta logeado'}), 422
     finally:
         db.session.close_all()
+
+# @app.route('/getUsers', methods=['GET'])
+# @jwt_required()
+# def getUsers():
+#     try:
+#         current_user_id = get_jwt_identity()
+#         query = User.query.all()
+#         data = []
+#         for users in query:
+#             aux = {
+#                     'id_usuario':users.id_usuario,
+#                     'nombre':users.nombre,
+#                     'apellido':users.apellido,
+#                     'rut':users.rut,
+#                     'correo':users.correo
+#                     }
+#             data.append(aux)
+#         return jsonify({'message': data})
+#     except:
+#          return jsonify({'message':'No esta logeado'}), 422
+#     finally:
+#         db.session.close_all()
 '''
 @app.route('/getAreas', methods=['GET'])
 @jwt_required()
@@ -126,6 +129,8 @@ def agregauser():
             return jsonify({'message':'Usuario Registrado con Exito'})
     except:
         return jsonify({'message':'No se pudo agregar el Usuario '+ nombre}), 422
+    finally:
+        db.session.close_all()
 
 '''@app.route('/agregaarea/', methods=['POST'])
 @jwt_required()
@@ -162,6 +167,8 @@ def agregatribunal():
         return jsonify({'message':'Se recibio'})
     except:
         return jsonify({'message':'No se puedo agregar Tribunal'})
+    finally:
+        db.session.close_all()
 
 '''@app.route('/ejecutaRobot/', methods=['POST'])
 @jwt_required()
