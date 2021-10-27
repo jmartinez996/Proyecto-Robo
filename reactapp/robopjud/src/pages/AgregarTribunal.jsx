@@ -99,10 +99,47 @@ function AgregarTribunal() {
 
     const onSubmit = async (data) => {
         const token = window.localStorage.getItem('robo-jwt-token')
-        
         const f = new FormData();
-        console.log(sArea);
-        console.log(JSON.stringify(data));
+        f.append("nombre", data.nombre);
+        f.append("telefono", data.telefono);
+        f.append("area",sArea);
+        MySwal.fire({
+          title: 'Agregar',
+          text: "¿Desea agregar el tribunal "+  +"?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Eliminar',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.post(`http://127.0.0.1:5000/createTribunal/`, f, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer `+token
+              }})
+            MySwal.fire(
+              'Agregado',
+              'El registro se ha agregado',
+              'success'
+            )
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            MySwal.fire(
+              'Cancelado',
+              'El registro no se ha eliminado',
+              'error'
+            )
+          }
+        }).catch(error => {
+          MySwal.fire({
+              icon: 'error',
+              title: 'Error...',
+              text: 'No se pudo Eliminar.',
+            })
+      })
 
     };
     const handleCheck = (checkedID)=>{
@@ -196,9 +233,8 @@ function AgregarTribunal() {
                       <FormControlLabel
                 control={
                   <Checkbox
-                    //onChange={() => setChecked(!checked)}
-                    onChange={e => checked(e,area.id_area)}
-                    //onChange={() => props.onChange(handleCheck("item.id"))}
+                    //checked = {true}
+                    onChange={e => checked(e,area.nombre_area)}
                     //defaultChecked={defaultIds.includes(item.id)}
                   />
                 }
@@ -210,30 +246,6 @@ function AgregarTribunal() {
                   control={control}
                 />
 
-
-              {/* <Controller
-                name="archivo"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                    variant="outlined"
-                    InputProps={{readOnly:true}}
-                    margin="dense"
-                    type='file'
-                    fullWidth
-                    id="archivo"
-                    // value={value}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                    onChange={e => subirArchivo(e.target.files[0])}
-                    disabled = {formState}
-                    />
-                )}
-                rules={{  
-                        validate: () => validationFile(archivo),
-                      }}
-                /> */}
                 
                 <Typography variant="inherit" color="error">{errMssg}</Typography>
                 <div>

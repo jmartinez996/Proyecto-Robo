@@ -29,70 +29,18 @@ import {Link } from 'react-router-dom';
 
 
 
- export default function Tablatribunales(){
+ export default function TablaRobot(){
     const MySwal = withReactContent(Swal)
     const token = window.localStorage.getItem('robo-jwt-token')
     const [data, setData] = useState([]);
-    const getTribunal = async() => {
-    const tribunal = await axios(`http://127.0.0.1:5000/getTribunal`,{
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer `+token
-      }
-      }).then((res) => {
-          
-        //console.log(res.data.message)
-          setData(res.data.message)
-        }).catch((error) => {
-          //console.log(error.message)
-        })
-    }
-    useEffect(() => {
-      getTribunal();
-   }, []);
+    
     
     const showAlert =() =>{
       
     }
     const delete_Tribunal= ($id,$name)=>{
-      console.log("Delete id: "+$id);
-      const token = window.localStorage.getItem('robo-jwt-token');
-      const f = new FormData();
-      f.append("id_tribunal", $id);
-      Swal.fire({
-        title: 'Eliminar',
-        text: "Desea eliminar el Tribunal "+$name,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          axios.post(`http://127.0.0.1:5000/deleteTribunal/`, f, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer `+token
-          }}).then(response=>{
-            Swal.fire(
-              'Deleted!',
-              'Your file has been deleted.',
-              'success'
-            )
-            getTribunal();    
-          })
-        } else if (
-          /* Read more about handling dismissals below */
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          Swal.fire(
-            'Cancelled',
-            'Your imaginary file is safe :)',
-            'error'
-          )
-        }
-      })
-      
+        console.log("Update")
+
     }
     const update_Tribunal=($name,$id)=>{
       console.log("Update")
@@ -105,7 +53,7 @@ import {Link } from 'react-router-dom';
             <CardHeader title="Tribunales"  />
           </Grid>
           <Grid item>
-            <Link to='/configuracion/agregartribunal' style={{textDecoration:'none'}}>
+            <Link to='/configuracion/agregarobot' style={{textDecoration:'none'}}>
               <Button
                 variant="contained"
                 color="primary"
@@ -114,7 +62,7 @@ import {Link } from 'react-router-dom';
                   marginTop:"15px"
                 }}
                 >
-                Agregar Tribunal
+                Agregar robot
               </Button>
             </Link>
           </Grid>

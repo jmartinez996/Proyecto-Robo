@@ -13,6 +13,7 @@ class Tribunal(db.Model):
     id_area = db.Column(db.Integer)
     nombre = db.Column(db.String())
     fono = db.Column(db.String())
+    nombre_area = db.Column(db.ARRAY(db.String))
     
 
     def __repr__(self):
