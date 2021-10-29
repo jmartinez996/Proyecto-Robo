@@ -55,8 +55,8 @@ function AgregaRobot() {
         f.append("nombre",data.nombre);
         f.append("descripcion",data.apellido);
         f.append("ruta",data.exe);
-        f.append("id_tribunal",data.tribunal);
-        f.append("id_area",data.area);
+        f.append("nombre_tribunal",data.tribunal);
+        f.append("nombre_area",data.area);
         axios.post(`http://127.0.0.1:5000/createRobot/`, f, {
             headers: {
               'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ function AgregaRobot() {
                             helperText={error ? error.message : null}
                             onChange={onChange}
                             >
-                            <MenuItem value={1}>Tribunal de Letras y Garantia de Pucon</MenuItem>
+                            <MenuItem value={"Tribunal de Letras y Garantia de Pucon"}>Tribunal de Letras y Garantia de Pucon</MenuItem>
 
                             </Select>
                         </FormControl>
@@ -192,7 +192,7 @@ function AgregaRobot() {
                             helperText={error ? error.message : null}
                             onChange={onChange}
                             >
-                            <MenuItem value={1}>Tribunal de Letras y Garantia de Pucon</MenuItem>
+                            <MenuItem value={"Tribunal de Letras y Garantia de Pucon"}>Tribunal de Letras y Garantia de Pucon</MenuItem>
 
                             </Select>
                         </FormControl>

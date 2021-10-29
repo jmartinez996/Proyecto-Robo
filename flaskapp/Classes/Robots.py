@@ -16,6 +16,8 @@ class Robots(db.Model):
     exe_robot = db.Column(db.String())
     estado_robot = db.Column(db.Integer)
     id_tribunal = db.Column(db.Integer)
+    nombre_tribunal = db.Column(db.String())
+    nombre_area = db.Column(db.String())
 
     def __repr__(self):
         return f"<Nombre {self.id_robot}>"

@@ -32,6 +32,8 @@ def getRobot():
             'exe_robot':robots.exe_robot,
             'estado_robot':robots.estado_robot,
             'id_tribunal': robots.id_tribunal,
+            'nombre_tribunal': robots.nombre_tribunal,
+            'nombre_area': robots.nombre_area,
         }
         data.append(aux)
     session.close()
@@ -44,10 +46,12 @@ def createRobot():
     #print(nombre)
     desc = request.values['descripcion']
     exe = request.values['ruta']
-    tribunal = request.values['id_tribunal']
-    area = request.values['id_area']
+    tribunal = request.values['nombre_tribunal']
+    area = request.values['nombre_area']
+    id_area = 0
+    id_tribunal = 0
     estado = 0
-    new_Robot = Robots(id_area=area,nombre_robot=nombre, desc_robot = desc, exe_robot = exe, estado_robot = estado, id_tribunal = tribunal)
+    new_Robot = Robots(id_area=id_area,nombre_robot=nombre, desc_robot = desc, exe_robot = exe, estado_robot = estado, id_tribunal = id_tribunal,nombre_tribunal = tribunal,nombre_area = area)
     session.add(new_Robot) 
     session.commit()
     #print("Agregado")

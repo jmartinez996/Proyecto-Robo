@@ -159,10 +159,10 @@ import {Link } from 'react-router-dom';
                       {robot.desc_robot}
                     </TableCell>
                     <TableCell>
-                      {robot.id_tribunal}
+                      {robot.nombre_tribunal}
                     </TableCell>
                     <TableCell>
-                    {robot.id_area}
+                      {robot.nombre_area}
                     </TableCell>
                     <TableCell>
                     <IconButton  aria-label="Eliminar"
