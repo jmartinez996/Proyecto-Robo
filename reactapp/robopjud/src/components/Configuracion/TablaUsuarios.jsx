@@ -30,8 +30,8 @@ import EditIcon from '@material-ui/icons/Edit';
  export default function Tablausuarios(){
     const token = window.localStorage.getItem('robo-jwt-token')
     const [data, setData] = useState([]);
-    useEffect(() => {
-        const users = axios.get(`http://127.0.0.1:5000/getUsers`,{
+    useEffect(async() => {
+        const users = await axios.get(`http://127.0.0.1:5000/getUsers`,{
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer `+token
@@ -45,6 +45,7 @@ import EditIcon from '@material-ui/icons/Edit';
         console.log(error.message)
       })
     }, []);
+    // console.log(data.data_usuarios)
   
   return(
   

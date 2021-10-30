@@ -1,28 +1,15 @@
-from flask import render_template
 from . import routes
-from operator import countOf
-import re
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
-import os
-from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required
-from sqlalchemy.orm import query
-from sqlalchemy.sql import text
+from flask import jsonify, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from werkzeug.datastructures import ResponseCacheControl
-from Classes.Usuarios import User
 from Classes.Area import Area
 from Classes.Tribunal import Tribunal
-from hashlib import md5
-from werkzeug.security import check_password_hash as checkph
-from werkzeug.security import generate_password_hash as genph
 import requests as req
-from app import db
+from database import Base, SessionLocal, engine
 
+Base.metadata.create_all(engine)
 
-# app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost:5434/robot'
-# db = SQLAlchemy(app)
+session = SessionLocal()
 
 @routes.route('/createTribunal/', methods=['POST'])
 @jwt_required()
@@ -36,9 +23,9 @@ def createTribunal():
     #id_area_prueba = [int(i) for i in id_area_prueba]
     print(id_area_prueba)
     newTribunal = Tribunal(nombre=nombre,fono=fono,id_area=id_area,nombre_area=id_area_prueba)
-    db.session.add(newTribunal) 
-    db.session.commit()
-    db.session.close_all()
+    session.add(newTribunal) 
+    session.commit()
+    session.close()
     return {"mensaje":"saludo"}
 
 @routes.route('/updateTribunal/', methods=['POST'])
@@ -55,8 +42,8 @@ def updateTribunal():
 def deleteTribunal():
     id_t = request.values['id_tribunal']
     current_user_id = get_jwt_identity()
-    db.session.query(Tribunal).filter(Tribunal.id_tribunal == id_t).delete()
-    db.session.commit()
+    session.query(Tribunal).filter(Tribunal.id_tribunal == id_t).delete()
+    session.commit()
     print("Eliminar id: "+id_t)
     print("llegue")
     try:
@@ -69,11 +56,11 @@ def deleteTribunal():
 @routes.route('/getTribunal') 
 def upTribunal(): 
     #current_user_id = get_jwt_identity()
-    query = Tribunal.query.all()
-    print(query)
+    quer = session.query(Tribunal).all()
+    query_cop = quer
     data = []
     
-    for tribunal in query:
+    for tribunal in query_cop:
         aux = {
             'id_tribunal':tribunal.id_tribunal,
             'id_area':tribunal.id_area,
@@ -82,4 +69,5 @@ def upTribunal():
             'nombre_area':tribunal.nombre_area,
         }
         data.append(aux)
+    session.close()
     return jsonify({'message': data})

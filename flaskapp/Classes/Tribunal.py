@@ -1,19 +1,23 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+# from flask import Flask
+# from flask_sqlalchemy import SQLAlchemy
+# from flask_cors import CORS
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
-db = SQLAlchemy(app)
+# app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
+# db = SQLAlchemy(app)
 
-class Tribunal(db.Model):
+from sqlalchemy import Column, Integer, String, ARRAY
+from sqlalchemy.types import Date
+from database import Base
+
+class Tribunal(Base):
     __tablename__ = 'tribunal'
 
-    id_tribunal = db.Column(db.Integer, primary_key=True)
-    id_area = db.Column(db.Integer)
-    nombre = db.Column(db.String())
-    fono = db.Column(db.String())
-    nombre_area = db.Column(db.ARRAY(db.String))
+    id_tribunal = Column(Integer, primary_key=True)
+    id_area = Column(Integer)
+    nombre = Column(String())
+    fono = Column(String())
+    nombre_area = Column(ARRAY(String))
     
 
     def __repr__(self):

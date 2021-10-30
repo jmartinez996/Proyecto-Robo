@@ -45,6 +45,8 @@ def createRobot():
         return ""
     except:
         return ""
+    finally:
+        db.session.close()
     
 
 # @routes.route('/updateTribunal/', methods=['POST'])

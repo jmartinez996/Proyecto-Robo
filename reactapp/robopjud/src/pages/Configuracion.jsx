@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography'
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -10,7 +11,33 @@ import Tablausuarios from "../components/Configuracion/TablaUsuarios";
 import Tablaareas from "../components/Configuracion/TablaAreas";
 import Tablatribunales from "../components/Configuracion/TablaTribunales";
 import TablaRobot from "../components/Configuracion/TablaRobot";
+import axios from "axios";
 function Configuracion() {
+
+    // const token = window.localStorage.getItem('robo-jwt-token')
+    // const [dataUsuarios, setDataUsuarios] = useState([]);
+    // const [dataTribunales, setDataTribunales] = useState([]);
+    // const [dataAreas, setDataAreas] = useState([]);
+
+    // useEffect(async() => {
+    //     const datos = await axios.get(`http://127.0.0.1:5000/getDataConf`,{
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer `+token
+    //     }
+    //   })
+    //   .then((res) => {
+    //     setDataUsuarios(res.data.data.data_usuarios)
+    //     setDataTribunales(res.data.data.data_tribunal)
+    //     setDataAreas(res.data.data.data_area)
+    //     // console.log(res.data.data.data_area)
+    //     // setNombre(res.data.nombre)
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.message)
+    //   })
+    // }, []);
+
     return (
 
       <>
@@ -33,7 +60,7 @@ function Configuracion() {
                         xl={12}
                         xs={12}
                     >
-                        <Tablausuarios/>
+                        <Tablausuarios />
                     </Grid>
                     <Grid
                         item
@@ -42,7 +69,7 @@ function Configuracion() {
                         xl={6}
                         xs={12}
                     >
-                        <Tablatribunales/>
+                        <Tablatribunales />
                     </Grid>
                     <Grid
                         item
