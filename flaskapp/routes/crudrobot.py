@@ -1,28 +1,12 @@
-from flask import render_template
 from . import routes
-from operator import countOf
-import re
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
-import os
-from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required
-from sqlalchemy.orm import query
-from sqlalchemy.sql import text
-from werkzeug.datastructures import ResponseCacheControl
-from Classes.Usuarios import User
-from Classes.Area import Area
-from Classes.Tribunal import Tribunal
-from hashlib import md5
-from werkzeug.security import check_password_hash as checkph
-from werkzeug.security import generate_password_hash as genph
-import requests as req
-
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from Classes.Robots import Robots
+from database import Base, SessionLocal, engine
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost:5434/robot'
-db = SQLAlchemy(app)
+Base.metadata.create_all(engine)
+
+session = SessionLocal()
 
 @routes.route('/testrobot') 
 def testrobot(): 
@@ -36,7 +20,7 @@ def testrobot():
 #@jwt_required()
 def getRobot():
     #return {"mensaje": "Saludos"}
-    query = Robots.query.all()
+    query = session.query(Robots).all()
     print(query)
     data = []
     for robots in query:
@@ -50,6 +34,7 @@ def getRobot():
             'id_tribunal': robots.id_tribunal,
         }
         data.append(aux)
+    session.close()
     return jsonify({'message': data})
 @routes.route('/createRobot/', methods=['POST'])
 @jwt_required()
@@ -63,15 +48,15 @@ def createRobot():
     area = request.values['id_area']
     estado = 0
     new_Robot = Robots(id_area=area,nombre_robot=nombre, desc_robot = desc, exe_robot = exe, estado_robot = estado, id_tribunal = tribunal)
-    db.session.add(new_Robot) 
-    db.session.commit()
+    session.add(new_Robot) 
+    session.commit()
     #print("Agregado")
     try:
         return ""
     except:
         return ""
     finally:
-        db.session.close()
+        session.close()
     
 
 # @routes.route('/updateTribunal/', methods=['POST'])
@@ -88,13 +73,14 @@ def createRobot():
 def deleteRobot():
     current_user_id = get_jwt_identity()
     id_R = request.values['id_robot']
-    db.session.query(Robots).filter(Robots.id_robot == id_R).delete()
-    db.session.commit()
+    session.query(Robots).filter(Robots.id_robot == id_R).delete()
+    session.commit()
     try:
         return ""
 
     except:
        return ""
-    return "hola"
+    finally:
+        session.close()
 
 
