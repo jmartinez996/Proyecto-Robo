@@ -23,7 +23,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-
+import ReactDOM from "react-dom";
 
 
 
@@ -42,18 +42,17 @@ import withReactContent from 'sweetalert2-react-content'
             }
           })
           .then((res) => {
-            console.log(res.data.message)
+            //console.log(res.data.message)
             setData(res.data.message)
           })
           .catch((error) => {
-            console.log(error.message)
+            //console.log(error.message)
           })
     }
     
     useEffect(() => {
        getAreas();
     }, []);
-    
     const showAlert =() =>{
         const token = window.localStorage.getItem('robo-jwt-token')
         const f = new FormData();
@@ -70,7 +69,7 @@ import withReactContent from 'sweetalert2-react-content'
             preConfirm: (nombre) => {
 
               f.append("nombre_area", nombre);
-              return axios.post(`http://127.0.0.1:5000/agregaarea/`, f, {headers: {'Content-Type': 'application/json','Authorization': `Bearer `+token}})
+              return axios.post(`http://127.0.0.1:5000/createArea/`, f, {headers: {'Content-Type': 'application/json','Authorization': `Bearer `+token}})
                 .then(response => {
                     // console.log(response.data.message)
                     var aux = data;
@@ -84,22 +83,128 @@ import withReactContent from 'sweetalert2-react-content'
                     MySwal.fire({
                         icon: 'success',
                         title: 'Completado',
-                        text: 'Agregado con exito',
+                        text: 'Se agrego con exito '+nombre +'.',
                       })
-                    
+                    getAreas();
                 })
                 .catch(error => {
                     MySwal.fire({
                         icon: 'error',
                         title: 'Error...',
-                        text: 'No se pudo agregar.',
+                        text: 'No se pudo agregar' + nombre+'.',
                       })
                 })
             },
             allowOutsideClick: () => !Swal.isLoading()
+            
           })
-          
     }
+    const change_Area=($id,$name)=>{
+      const id = $id;
+      const name = $name;
+      const token = window.localStorage.getItem('robo-jwt-token');
+      const f = new FormData();
+      f.append("id_area", id);
+      f.append("nombre_area", name);
+      Swal.fire({
+        title: 'Cambiar el',
+        input: 'text',
+        inputValue:name,
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Modificar',
+        showLoaderOnConfirm: true,
+        preConfirm:(nombre)=>{
+          f.append("nombre_area_nuevo",nombre)
+          console.log("se modifico");
+          console.log(name);
+          return axios.post(`http://127.0.0.1:5000/updateArea/`, f, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer `+token
+            }}).then(response=>{
+              getAreas();
+              Swal.fire({
+                title: 'confirmación',
+                text: "Se ha modificado el registro "+name+" por "+nombre,
+                icon: 'sucess'
+              });    
+            }).catch(error => {
+              MySwal.fire({
+                  icon: 'error',
+                  title: 'Error...',
+                  text: 'No se pudo cambiar' + name+'.',
+                })
+          })
+        }
+      })
+      console.log("Cambiar area con id"+id);
+
+    };
+    
+    const delete_Area=($id,$name)=>{
+      const id = $id;
+      const name = $name;
+      console.log(name);
+      const token = window.localStorage.getItem('robo-jwt-token');
+      const f = new FormData();
+      console.log("aca");
+      f.append("id_area", id);
+      f.append("nombre_area", name);
+
+      MySwal.fire({
+        title: 'Eliminar',
+        text: "¿Desea Eliminar el registro "+name+" ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.post(`http://127.0.0.1:5000/deleteArea/`, f, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer `+token
+            }}).then(response=>{
+              getAreas();    
+            })
+          MySwal.fire(
+            'Eliminado',
+            'El registro '+name+' se ha eliminado',
+            'success'
+          )
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          MySwal.fire(
+            'Cancelado',
+            'El registro no se ha eliminado',
+            'error'
+          )
+        }
+      }).catch(error => {
+        MySwal.fire({
+            icon: 'error',
+            title: 'Error...',
+            text: 'No se pudo Eliminar.',
+          })
+    })
+      /*
+      return axios.post(`http://127.0.0.1:5000/deleteArea/`, f, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer `+token
+        }}).then(response=>{
+          getAreas();    
+        });*/
+        return "";
+      
+    };
   return(
 
       <Card>
@@ -146,10 +251,15 @@ import withReactContent from 'sweetalert2-react-content'
                       {area && area.nombre_area}
                     </TableCell>
                     <TableCell>
-                    <IconButton  aria-label="Eliminar">
+                    <IconButton  aria-label="Eliminar"
+                      onClick= {() => delete_Area(area.id_area,area.nombre_area)}
+                    >
+                    
                       <DeleteIcon />
                     </IconButton>
-                    <IconButton aria-label="Editar">
+                    <IconButton aria-label="Editar"
+                      onClick= {() => change_Area(area.id_area,area.nombre_area)}
+                    >
                       <EditIcon />
                     </IconButton>
                     </TableCell>

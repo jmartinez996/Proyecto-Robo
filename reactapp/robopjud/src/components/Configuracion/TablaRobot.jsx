@@ -29,35 +29,38 @@ import {Link } from 'react-router-dom';
 
 
 
- export default function Tablatribunales(){
+ export default function TablaRobot(){
     const MySwal = withReactContent(Swal)
     const token = window.localStorage.getItem('robo-jwt-token')
     const [data, setData] = useState([]);
-    const getTribunal = async() => {
-    const tribunal = await axios(`http://127.0.0.1:5000/getTribunal`,{
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer `+token
-      }
-      }).then((res) => {
+    const getrobot = async() => {
+      const robots = await axios(`http://127.0.0.1:5000/getRobot`,{
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer `+token
+          }
+        })
+        .then((res) => {
           //console.log(res.data.message)
           setData(res.data.message)
-        }).catch((error) => {
+        })
+        .catch((error) => {
           //console.log(error.message)
         })
-    }
-    useEffect(() => {
-      getTribunal();
-   }, []);
+  }
+  
+  useEffect(() => {
+    getrobot();
+  }, []);
     
     const showAlert =() =>{
       
     }
-    const delete_Tribunal= ($id,$name)=>{
-      console.log("Delete id: "+$id);
+    const delete_Robot= ($id,$name)=>{
+      console.log("delete id: "+$id)
       const token = window.localStorage.getItem('robo-jwt-token');
       const f = new FormData();
-      f.append("id_tribunal", $id);
+      f.append("id_robot", $id);
       Swal.fire({
         title: 'Eliminar',
         text: "Desea eliminar el Tribunal "+$name,
@@ -68,7 +71,7 @@ import {Link } from 'react-router-dom';
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          axios.post(`http://127.0.0.1:5000/deleteTribunal/`, f, {
+          axios.post(`http://127.0.0.1:5000/deleteRobot/`, f, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer `+token
@@ -78,7 +81,7 @@ import {Link } from 'react-router-dom';
               'Your file has been deleted.',
               'success'
             )
-            getTribunal();    
+            getrobot();    
           })
         } else if (
           /* Read more about handling dismissals below */
@@ -91,9 +94,9 @@ import {Link } from 'react-router-dom';
           )
         }
       })
-      
+
     }
-    const update_Tribunal=($name,$id)=>{
+    const update_Robot=($name,$id)=>{
       console.log("Update")
     }
   return(
@@ -104,7 +107,7 @@ import {Link } from 'react-router-dom';
             <CardHeader title="Tribunales"  />
           </Grid>
           <Grid item>
-            <Link to='/configuracion/agregartribunal' style={{textDecoration:'none'}}>
+            <Link to='/configuracion/agregarobot' style={{textDecoration:'none'}}>
               <Button
                 variant="contained"
                 color="primary"
@@ -113,7 +116,7 @@ import {Link } from 'react-router-dom';
                   marginTop:"15px"
                 }}
                 >
-                Agregar Tribunal
+                Agregar robot
               </Button>
             </Link>
           </Grid>
@@ -130,7 +133,10 @@ import {Link } from 'react-router-dom';
                     Nombre
                   </TableCell>
                   <TableCell>
-                    Telefono
+                    Descripción
+                  </TableCell>
+                  <TableCell>
+                    Tribunal
                   </TableCell>
                   <TableCell>
                     Area
@@ -141,33 +147,31 @@ import {Link } from 'react-router-dom';
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((tribunal) => (
+                {data.map((robot) => (
                   <TableRow
                     hover
                     //key={.id_usuario}
                   >
                     <TableCell>
-                      {tribunal.nombre}
+                      {robot.nombre_robot}
                     </TableCell>
                     <TableCell>
-                      {tribunal.fono}
+                      {robot.desc_robot}
                     </TableCell>
                     <TableCell>
-                    <List>
-                      {tribunal.nombre_area.map((areas)=>(
-                        <ListItem>{areas}</ListItem>
-                      ))}
-                      </List>
-                      {/* {tribunal.nombre_area} */}
+                      {robot.nombre_tribunal}
+                    </TableCell>
+                    <TableCell>
+                      {robot.nombre_area}
                     </TableCell>
                     <TableCell>
                     <IconButton  aria-label="Eliminar"
-                    onClick= {() => delete_Tribunal(tribunal.id_tribunal,tribunal.nombre)}
+                    onClick= {() => delete_Robot(robot.id_robot,robot.nombre_robot)}
                     >
                     <DeleteIcon />
                     </IconButton>
                     <IconButton aria-label="Editar"
-                    onClick= {() => update_Tribunal(tribunal.id_tribunal)}
+                    onClick= {() => update_Robot()}
                     >
                       <EditIcon />
                     </IconButton>

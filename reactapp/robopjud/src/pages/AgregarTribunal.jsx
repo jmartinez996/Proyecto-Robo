@@ -66,9 +66,9 @@ function AgregarTribunal() {
     const MySwal = withReactContent(Swal)
     const classes = useStyles();
     const [errMssg, setErrMssg] = useState('');
-    const { handleSubmit, control} = useForm();
+    const { handleSubmit, control, getValues,errors} = useForm({});
     const [areas, setAreas] = useState([]);
-
+    const [sArea, setSArea] = useState([]);
     const getAreas = async() => {
         const areas = await axios(`http://127.0.0.1:5000/getAreas`,{
             headers: {
@@ -99,41 +99,76 @@ function AgregarTribunal() {
 
     const onSubmit = async (data) => {
         const token = window.localStorage.getItem('robo-jwt-token')
-
         const f = new FormData();
         f.append("nombre", data.nombre);
-        f.append("apellido", data.apellido);
-        f.append("rut", data.rut);
-        f.append("correo", data.correo);
-        f.append("contrasena", data.contrasena);
-        f.append("repcontrasena", data.repcontrasena);
-        await axios.post(`http://127.0.0.1:5000/agregatribunal/`, f, {headers: {'Content-Type': 'application/json','Authorization': `Bearer `+token}})
-        .then(response=>{
-
-            seteaError("");
-            console.log(response.data.message)
-            MySwal.fire({
-                icon: 'success',
-                title: 'Completado',
-                text: 'Usuario Registrado con exito!',
+        f.append("telefono", data.telefono);
+        f.append("area",sArea);
+        MySwal.fire({
+          title: 'Agregar',
+          text: "¿Desea agregar el tribunal "+  +"?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Eliminar',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.post(`http://127.0.0.1:5000/createTribunal/`, f, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer `+token
+              }})
+            MySwal.fire(
+              'Agregado',
+              'El registro se ha agregado',
+              'success'
+            )
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            MySwal.fire(
+              'Cancelado',
+              'El registro no se ha eliminado',
+              'error'
+            )
+          }
+        }).catch(error => {
+          MySwal.fire({
+              icon: 'error',
+              title: 'Error...',
+              text: 'No se pudo Eliminar.',
             })
+      })
 
-        }).catch(error=>{
-            seteaError(error.response.data.message);
-
-        })
-        // console.log(data.rut);
     };
-
+    const handleCheck = (checkedID)=>{
+      console.log("asd");
+      const {areas : ids} = getValues()
+      console.log(ids);
+    };
+    
+     const checked = (e,id) => {
+       if (e.target.checked == true) {
+         setSArea([...sArea,id])
+         console.log(sArea);
+      } else {
+        setSArea(sArea => sArea.filter(n => n != id))
+        console.log(sArea)
+      }
+       //falso eliminar
+     }
+    
     const seteaError = err => {
         setErrMssg(err);
     };
-
+    
     // function validation(value){
     //   if(value != "1234"){
     //     return "el valor debe ser 1234"
     //   }
     // }
+    // https://codesandbox.io/s/material-demo-bzj4i?file=/demo.js
     return (
 
         <Container component="main" maxWidth="xs">
@@ -191,28 +226,26 @@ function AgregarTribunal() {
                         //  validate: (value) => validation(value) 
                         }}
                 />
-                
                 <Controller
-                name="area"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-
-                    <FormGroup row>
-                        {areas.map((area) => (
-                            <FormControlLabel
-                            control={<Checkbox onChange={handleChange} name={area.nombre_area} value={area.id_area} />}
-                            label= {area.nombre_area}
-                            />
-                        ))}
-                        
-                    </FormGroup>
-                )}
-                rules={{ required: 'El campo telefono Tribunal esta vacío',
-                        //  validate: (value) => validation(value) 
-                        }}
+                  name="item_ids"
+                  render={({ field: { onChange, value }, fieldState: { error } }) =>
+                    areas.map((area) => (
+                      <FormControlLabel
+                control={
+                  <Checkbox
+                    //checked = {true}
+                    onChange={e => checked(e,area.nombre_area)}
+                    //defaultChecked={defaultIds.includes(item.id)}
+                  />
+                }
+                key={area.id_area}
+                label={area.nombre_area}
+              />
+                    ))
+                  }
+                  control={control}
                 />
-               
+
                 
                 <Typography variant="inherit" color="error">{errMssg}</Typography>
                 <div>
