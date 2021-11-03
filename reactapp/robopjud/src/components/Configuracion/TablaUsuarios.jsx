@@ -90,6 +90,9 @@ import EditIcon from '@material-ui/icons/Edit';
                 Correo
               </TableCell>
               <TableCell>
+                Tribunal
+              </TableCell>
+              <TableCell>
                 Acciones
               </TableCell>
             </TableRow>
@@ -111,6 +114,9 @@ import EditIcon from '@material-ui/icons/Edit';
                 </TableCell>
                 <TableCell>
                 {user.correo}
+                </TableCell>
+                <TableCell>
+                {user.tribunal}
                 </TableCell>
                 <TableCell>
                 <IconButton  aria-label="Eliminar">

@@ -83,11 +83,13 @@ def agregauser():
         correo = request.values['correo']
         contrasena = request.values['contrasena']
         repcontrasena = request.values['repcontrasena']
+        tribunal = request.values['tribunal']
+        print(tribunal)
         if contrasena != repcontrasena:
             return jsonify({'message':'Contrasenas no coinciden'}),422
         else:
             contrasena = genph(contrasena)
-            new_user = User(nombre=nombre, apellido=apellido, rut=rut, correo=correo, contrasena=contrasena, tipo_usuario=2, id_area=1, id_tribunal=1) 
+            new_user = User(nombre=nombre, apellido=apellido, rut=rut, correo=correo, contrasena=contrasena, tipo_usuario=2, id_area=1, id_tribunal=tribunal) 
             session.add(new_user) 
             session.commit()
             return jsonify({'message':'Usuario Registrado con Exito'})

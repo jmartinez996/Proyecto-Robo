@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import Link from '@material-ui/core/Link';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -43,13 +42,16 @@ import withReactContent from 'sweetalert2-react-content'
   }));
 
 function AgregarUsuario() {
-    const MySwal = withReactContent(Swal)
+    const MySwal = withReactContent(Swal);
     const classes = useStyles();
     const [errMssg, setErrMssg] = useState('');
+    const [tribunales, setTribunales] = useState([]);
     const { handleSubmit, control} = useForm();
+    const token = window.localStorage.getItem('robo-jwt-token')
+    
 
     const onSubmit = async (data) => {
-        const token = window.localStorage.getItem('robo-jwt-token')
+        
 
         const f = new FormData();
         f.append("nombre", data.nombre);
@@ -58,6 +60,7 @@ function AgregarUsuario() {
         f.append("correo", data.correo);
         f.append("contrasena", data.contrasena);
         f.append("repcontrasena", data.repcontrasena);
+        f.append("tribunal", data.tribunal)
         await axios.post(`http://127.0.0.1:5000/agregauser/`, f, {headers: {'Content-Type': 'application/json','Authorization': `Bearer `+token}})
         .then(response=>{
 
@@ -79,12 +82,24 @@ function AgregarUsuario() {
     const seteaError = err => {
         setErrMssg(err);
     };
+    
+    useEffect(async() => {
+        await axios.get(`http://127.0.0.1:5000/getTribunal`,{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer `+token
+        }
+      })
+      .then((res) => {
+        setTribunales(res.data.message)
+        // setNombre(res.data.nombre)
+        console.log(tribunales)
+      })
+      .catch((error) => {
+        console.log(error.message)
+      })
+    }, []);
 
-    // function validation(value){
-    //   if(value != "1234"){
-    //     return "el valor debe ser 1234"
-    //   }
-    // }
     return (
 
         <Container component="main" maxWidth="xs">
@@ -245,8 +260,13 @@ function AgregarUsuario() {
                             error={!!error}
                             helperText={error ? error.message : null}
                             onChange={onChange}
+                            name="tribunal"
                             >
-                            <MenuItem value={1}>Tribunal de Letras y Garantia de Pucon</MenuItem>
+
+                            {tribunales.map((tribunal)=> (
+                                <MenuItem value={tribunal.id_tribunal}>{tribunal.nombre}</MenuItem>
+                            ))}
+                            
 
                             </Select>
                         </FormControl>
