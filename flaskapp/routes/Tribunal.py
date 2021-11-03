@@ -54,8 +54,9 @@ def deleteTribunal():
  
 
 @routes.route('/getTribunal') 
-def upTribunal(): 
-    #current_user_id = get_jwt_identity()
+@jwt_required()
+def getTribunal(): 
+    current_user_id = get_jwt_identity()
     quer = session.query(Tribunal).all()
     query_cop = quer
     data = []
@@ -71,3 +72,27 @@ def upTribunal():
         data.append(aux)
     session.close()
     return jsonify({'message': data})
+
+@routes.route('/getTribunalId', methods = ["POST"])
+#@jwt_required()
+def getTribunalId():
+    print("Entre")
+    #current_user_id = get_jwt_identity()
+    id_t = request.values['id']
+    quer = session.query(Tribunal).get(id_t)
+    aux = {
+        'id_tribunal':quer.id_tribunal,
+        'id_area':quer.id_area,
+        'nombre':quer.nombre,
+        'fono':quer.fono,
+        'nombre_area':quer.nombre_area,
+    }
+    session.close()
+    return aux
+    try:
+        return ""
+
+    except:
+        return ""
+    
+    

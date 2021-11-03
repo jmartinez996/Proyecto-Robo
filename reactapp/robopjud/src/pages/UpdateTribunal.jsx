@@ -3,19 +3,29 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Link from '@material-ui/core/Link';
 import GavelIcon from '@material-ui/icons/Gavel';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-  
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Favorite from '@material-ui/icons/Favorite';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import { useParams } from "react-router";
   const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(1),
@@ -51,13 +61,15 @@ import Checkbox from '@material-ui/core/Checkbox';
     checked: {},
   })((props) => <Checkbox color="default" {...props} />);
 
-function AgregarTribunal() {
+function UpdateTribunal() {
     const token = window.localStorage.getItem('robo-jwt-token')
+    let { id } = useParams();
     const MySwal = withReactContent(Swal)
     const classes = useStyles();
     const [errMssg, setErrMssg] = useState('');
     const { handleSubmit, control, getValues,errors} = useForm({});
     const [areas, setAreas] = useState([]);
+    const [tribunal, setTribu] = useState([]);
     const [sArea, setSArea] = useState([]);
     const getAreas = async() => {
         const areas = await axios(`http://127.0.0.1:5000/getAreas`,{
@@ -67,18 +79,31 @@ function AgregarTribunal() {
             }
           })
           .then((res) => {
-            console.log(res.data.message)
             setAreas(res.data.message)
           })
           .catch((error) => {
             console.log(error.message)
           })
     }
-
     useEffect(() => {
         getAreas();
+        getTribunal();
     }, []);
-
+    
+    const getTribunal = async () => {
+        console.log(id);
+        const token = window.localStorage.getItem('robo-jwt-token')
+        const f = new FormData();
+        f.append("id", id);
+        const tribun = await axios.post(`http://127.0.0.1:5000/getTribunalId`, f, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer `+token
+            }}).then(res=>{
+                console.log(res.data);
+                setTribu(res.data);
+            })
+    }
     const [state, setState] = React.useState({
         checkedA: true,
       });
@@ -86,6 +111,7 @@ function AgregarTribunal() {
       const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
       };
+    
 
     const onSubmit = async (data) => {
         const token = window.localStorage.getItem('robo-jwt-token')
@@ -93,58 +119,18 @@ function AgregarTribunal() {
         f.append("nombre", data.nombre);
         f.append("telefono", data.telefono);
         f.append("area",sArea);
-        MySwal.fire({
-          title: 'Agregar',
-          text: "¿Desea agregar el tribunal "+ data.nombre +"?",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Eliminar',
-          cancelButtonText: 'Cancelar',
-          reverseButtons: true
-        }).then((result) => {
-          if (result.isConfirmed) {
-            axios.post(`http://127.0.0.1:5000/createTribunal/`, f, {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer `+token
-              }})
-            MySwal.fire(
-              'Agregado',
-              'El registro se ha agregado',
-              'success'
-            )
-          } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
-            MySwal.fire(
-              'Cancelado',
-              'El registro no se ha eliminado',
-              'error'
-            )
-          }
-        }).catch(error => {
-          MySwal.fire({
-              icon: 'error',
-              title: 'Error...',
-              text: 'No se pudo Eliminar.',
-            })
-      })
+        
 
     };
     const handleCheck = (checkedID)=>{
-      console.log("asd");
       const {areas : ids} = getValues()
-      console.log(ids);
     };
-    
-     const checked = (e,id) => {
+
+    const checked = (e,id) => {
        if (e.target.checked == true) {
          setSArea([...sArea,id])
-         console.log(sArea);
       } else {
         setSArea(sArea => sArea.filter(n => n != id))
-        console.log(sArea)
       }
        //falso eliminar
      }
@@ -153,12 +139,6 @@ function AgregarTribunal() {
         setErrMssg(err);
     };
     
-    // function validation(value){
-    //   if(value != "1234"){
-    //     return "el valor debe ser 1234"
-    //   }
-    // }
-    // https://codesandbox.io/s/material-demo-bzj4i?file=/demo.js
     return (
 
         <Container component="main" maxWidth="xs">
@@ -168,7 +148,7 @@ function AgregarTribunal() {
                 <GavelIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-                Agregar Tribunal
+                Modificar Tribunal
             </Typography>
             <form className={classes.form} onSubmit={handleSubmit(onSubmit)} encType='application/json'>
                 <Controller
@@ -181,10 +161,10 @@ function AgregarTribunal() {
                     margin="dense"
                     fullWidth
                     id="nombre"
-                    value={value}
+                    value={tribunal.nombre}
                     error={!!error}
                     helperText={error ? error.message : null}
-                    label="Ingresa Nombre Tribunal"
+                    label=""
                     autoComplete="Nombre de Tribunal"
                     autoFocus
                     onChange={onChange}
@@ -197,17 +177,17 @@ function AgregarTribunal() {
                 <Controller
                 name="telefono"
                 control={control}
-                defaultValue=""
+                defaultValue={tribunal.fono}
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                     variant="outlined"
                     margin="dense"
                     fullWidth
                     id="telefono"
-                    value={value}
+                    value={tribunal.fono}
                     error={!!error}
                     helperText={error ? error.message : null}
-                    label="Ingresa Telefono Tribunal"
+                    label=""
                     autoComplete="Telefono Tribunal"
                     onChange={onChange}
                     />
@@ -221,16 +201,16 @@ function AgregarTribunal() {
                   render={({ field: { onChange, value }, fieldState: { error } }) =>
                     areas.map((area) => (
                       <FormControlLabel
-                control={
-                  <Checkbox
-                    //checked = {true}
-                    onChange={e => checked(e,area.nombre_area)}
-                    //defaultChecked={defaultIds.includes(item.id)}
-                  />
-                }
-                key={area.id_area}
-                label={area.nombre_area}
-              />
+                        control={
+                          <Checkbox
+                            //checked = {true}
+                            //defaultChecked={true}
+                            onChange={e => checked(e,area.nombre_area)}
+                          />
+                        }
+                        key={area.id_area}
+                        label={area.nombre_area}
+                        />
                     ))
                   }
                   control={control}
@@ -245,6 +225,11 @@ function AgregarTribunal() {
                 </div>
                
             </form>
+            <h1>id_prop {id}</h1>
+            <h1>id_bd {tribunal.id_tribunal}</h1>
+            <h1>nombre {tribunal.nombre}</h1>
+            <h1>nombre {tribunal.fono}</h1>
+            <h1>area {tribunal.nombre_area[1]}</h1>
             </div>
     
             
@@ -252,4 +237,4 @@ function AgregarTribunal() {
   );
 }
 
-export default AgregarTribunal;
+export default UpdateTribunal;

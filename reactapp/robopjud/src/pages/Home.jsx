@@ -39,7 +39,7 @@ import AgregarTribunal from "./AgregarTribunal";
 import AppbarMenu from '../components/AppbarMenu'
 import ResumenMensual from "./landingrobots/administracion/Resumen_mensual";
 import AgregaRobot from "./AgregaRobot";
-
+import UpdateTribunal from "./UpdateTribunal";
 
 const drawerWidth = 240;
 
@@ -302,8 +302,13 @@ function Home() {
             <Route path="/configuracion/editartribunal" exact>
               <AgregarTribunal/>
             </Route>
+
             <Route path="/configuracion/agregarobot" exact>
               <AgregaRobot/>
+            </Route>
+
+            <Route path="/configuracion/updatetribunal/:id" children={<UpdateTribunal/>} exact>
+              <UpdateTribunal/>
             </Route>
             
             <Route path="/" >

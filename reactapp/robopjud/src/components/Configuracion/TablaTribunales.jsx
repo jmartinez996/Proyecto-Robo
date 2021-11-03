@@ -5,29 +5,20 @@ import {
   Button,
   Card,
   CardHeader,
-  Chip,
   Divider,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  TableSortLabel,
-  Tooltip,
   Grid, IconButton,List,ListItem
 } from '@material-ui/core';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import axios from 'axios';
-import Typography from '@material-ui/core/Typography'
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import {Link } from 'react-router-dom';
-
-
-
-
 
  export default function Tablatribunales(){
     const MySwal = withReactContent(Swal)
@@ -144,7 +135,6 @@ import {Link } from 'react-router-dom';
                 {data.map((tribunal) => (
                   <TableRow
                     hover
-                    //key={.id_usuario}
                   >
                     <TableCell>
                       {tribunal.nombre}
@@ -158,7 +148,6 @@ import {Link } from 'react-router-dom';
                         <ListItem>{areas}</ListItem>
                       ))}
                       </List>
-                      {/* {tribunal.nombre_area} */}
                     </TableCell>
                     <TableCell>
                     <IconButton  aria-label="Eliminar"
@@ -166,11 +155,9 @@ import {Link } from 'react-router-dom';
                     >
                     <DeleteIcon />
                     </IconButton>
-                    <IconButton aria-label="Editar"
-                    onClick= {() => update_Tribunal(tribunal.id_tribunal)}
-                    >
-                      <EditIcon />
-                    </IconButton>
+                    <Link to={'/configuracion/updatetribunal/'.concat(tribunal.id_tribunal)} style={{textDecoration:'none'}}>
+                      <IconButton aria-label="Editar"><EditIcon /></IconButton>
+                    </Link>
                     </TableCell>
                     
                   </TableRow>
