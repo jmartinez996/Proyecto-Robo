@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -43,20 +43,23 @@ import withReactContent from 'sweetalert2-react-content'
   }));
 
 function AgregaRobot() {
+    const token = window.localStorage.getItem('robo-jwt-token')
     const MySwal = withReactContent(Swal)
     const classes = useStyles();
     const [errMssg, setErrMssg] = useState('');
+    const [tribunales, setTribunales] = useState([]);
+    const [areas, setAreas] = useState([]);
     const { handleSubmit, control} = useForm();
 
     const onSubmit = async (data) => {
-        const token = window.localStorage.getItem('robo-jwt-token')
+       
         console.log(data);
         const f = new FormData();
         f.append("nombre",data.nombre);
         f.append("descripcion",data.apellido);
         f.append("ruta",data.exe);
-        f.append("nombre_tribunal",data.tribunal);
-        f.append("nombre_area",data.area);
+        f.append("id_tribunal",data.tribunal);
+        f.append("id_area",data.area);
         axios.post(`http://127.0.0.1:5000/createRobot/`, f, {
             headers: {
               'Content-Type': 'application/json',
@@ -67,6 +70,37 @@ function AgregaRobot() {
     const seteaError = err => {
         setErrMssg(err);
     };
+
+    useEffect(async () => {
+        await axios.get(`http://127.0.0.1:5000/getTribunal`,{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer `+token
+        }
+      })
+      .then((res) => {
+        setTribunales(res.data.message)
+      })
+      .catch((error) => {
+        console.log(error.message)
+      })
+    }, []);
+
+    useEffect(async() => {
+        await axios.get(`http://127.0.0.1:5000/getAreas`,{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer `+token
+        }
+      })
+      .then((res) => {
+        setAreas(res.data.message)
+      })
+      .catch((error) => {
+        console.log(error.message)
+      })
+    }, []);
+
 
     return (
 
@@ -164,8 +198,12 @@ function AgregaRobot() {
                             error={!!error}
                             helperText={error ? error.message : null}
                             onChange={onChange}
+                            name = "tribunal"
                             >
-                            <MenuItem value={"Tribunal de Letras y Garantia de Pucon"}>Tribunal de Letras y Garantia de Pucon</MenuItem>
+                           
+                           {tribunales.map((tribunal)=> (
+                                <MenuItem value={tribunal.id_tribunal}>{tribunal.nombre}</MenuItem>
+                            ))}
 
                             </Select>
                         </FormControl>
@@ -191,8 +229,11 @@ function AgregaRobot() {
                             error={!!error}
                             helperText={error ? error.message : null}
                             onChange={onChange}
+                            name = "area"
                             >
-                            <MenuItem value={"Tribunal de Letras y Garantia de Pucon"}>Tribunal de Letras y Garantia de Pucon</MenuItem>
+                            {areas.map((area)=> (
+                                <MenuItem value={area.id_area}>{area.nombre_area}</MenuItem>
+                            ))}
 
                             </Select>
                         </FormControl>

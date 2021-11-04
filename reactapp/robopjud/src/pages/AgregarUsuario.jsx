@@ -51,8 +51,6 @@ function AgregarUsuario() {
     
 
     const onSubmit = async (data) => {
-        
-
         const f = new FormData();
         f.append("nombre", data.nombre);
         f.append("apellido", data.apellido);
@@ -65,7 +63,6 @@ function AgregarUsuario() {
         .then(response=>{
 
             seteaError("");
-            console.log(response.data.message)
             MySwal.fire({
                 icon: 'success',
                 title: 'Completado',
@@ -92,8 +89,6 @@ function AgregarUsuario() {
       })
       .then((res) => {
         setTribunales(res.data.message)
-        // setNombre(res.data.nombre)
-        console.log(tribunales)
       })
       .catch((error) => {
         console.log(error.message)

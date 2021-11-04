@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Container,
@@ -6,18 +6,12 @@ import {
   Typography
 } from '@material-ui/core';
 import { useForm, Controller } from 'react-hook-form';
-import FormControl from '@material-ui/core/FormControl';
 import { TextField } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Link from '@material-ui/core/Link';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import InputLabel from '@material-ui/core/InputLabel';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
@@ -126,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
                 title: 'Completado',
                 text: 'Robot ejecutado con exito!',
             })
-            setFormState(true);
+            // setFormState(true);
 
         }).catch(error=>{
             // seteaError(error.response.data.message);

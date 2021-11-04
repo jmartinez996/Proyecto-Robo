@@ -1,21 +1,20 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from sqlalchemy import Column, Integer, String, ARRAY
+from sqlalchemy.sql.schema import ForeignKey
+from sqlalchemy.types import Date
+from database import Base
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
-db = SQLAlchemy(app)
-
-class Robots(db.Model):
+class Robots(Base):
     __tablename__ = 'robots'
 
-    id_robot = db.Column(db.Integer, primary_key=True)
-    id_area = db.Column(db.Integer)
-    nombre_robot = db.Column(db.String())
-    desc_robot = db.Column(db.String())
-    exe_robot = db.Column(db.String())
-    estado_robot = db.Column(db.Integer)
-    id_tribunal = db.Column(db.Integer)
+    id_robot = Column(Integer, primary_key=True)
+    id_area = Column(Integer, ForeignKey('area.id_area'))
+    nombre_robot = Column(String())
+    desc_robot = Column(String())
+    exe_robot = Column(String())
+    estado_robot = Column(Integer)
+    id_tribunal = Column(Integer, ForeignKey('tribunal.id_tribunal'))
+    # nombre_tribunal = Column(String())
+    # nombre_area = Column(String())
     
 
     def __repr__(self):

@@ -1,7 +1,4 @@
 import React from "react";
-import { useEffect, useState } from 'react';
-import Typography from '@material-ui/core/Typography'
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
   Box,
   Container,
@@ -11,7 +8,6 @@ import Tablausuarios from "../components/Configuracion/TablaUsuarios";
 import Tablaareas from "../components/Configuracion/TablaAreas";
 import Tablatribunales from "../components/Configuracion/TablaTribunales";
 import TablaRobot from "../components/Configuracion/TablaRobot";
-import axios from "axios";
 function Configuracion() {
 
     // const token = window.localStorage.getItem('robo-jwt-token')

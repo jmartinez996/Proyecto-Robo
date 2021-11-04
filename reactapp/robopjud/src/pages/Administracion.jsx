@@ -53,7 +53,7 @@ function Administracion() {
                   <RoboAdm1 titulo="Resumen mensual." />
               </Grid>
             </Link>
-            {/* <Grid
+            <Grid
               item
               lg={4}
               md={6}
@@ -61,7 +61,7 @@ function Administracion() {
 
             >
                 <ProductCard titulo="Gestion SII."/>
-            </Grid> */}
+            </Grid>
             
 
         </Grid>

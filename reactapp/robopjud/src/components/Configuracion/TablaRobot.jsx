@@ -104,7 +104,7 @@ import {Link } from 'react-router-dom';
       <Card>
         <Grid container align-content-center justify="space-between">
           <Grid item>
-            <CardHeader title="Tribunales"  />
+            <CardHeader title="Robots"  />
           </Grid>
           <Grid item>
             <Link to='/configuracion/agregarobot' style={{textDecoration:'none'}}>
