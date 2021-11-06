@@ -40,6 +40,10 @@ import AppbarMenu from '../components/AppbarMenu'
 import ResumenMensual from "./landingrobots/administracion/Resumen_mensual";
 import AgregaRobot from "./AgregaRobot";
 import UpdateTribunal from "./UpdateTribunal";
+import RemoveIcon from '@material-ui/icons/Remove';
+import JsxParser from 'react-jsx-parser'
+import StringToReact from 'string-to-react'
+import ReactDOM from 'react-dom'
 
 const drawerWidth = 240;
 
@@ -112,6 +116,7 @@ const renderHome = (nombre) => {
 function Home() {
   const [nombre, setNombre] = useState(null)
   const token= window.localStorage.getItem('robo-jwt-token');
+  const [areas, setAreas] = useState([])
 
   const getUserState = () => {
     axios.get(`http://127.0.0.1:5000/userState`,{
@@ -129,8 +134,26 @@ function Home() {
       })
   }
 
+  const getAreas = () => {
+    axios(`http://127.0.0.1:5000/getAreas`,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer `+token
+      }
+    })
+    .then((res) => {
+      //console.log(res.data.message)
+      setAreas(res.data.message)
+      console.log(areas)
+    })
+    .catch((error) => {
+      //console.log(error.message)
+    })
+  }
+
   useEffect(()=> {
     getUserState()
+    getAreas()
   }
   ,[])
 
@@ -228,7 +251,21 @@ function Home() {
             </ListItem> 
             <Divider />
 
-            <ListItem component={Link} to="/civil" button key={'civil'}>
+            {
+              areas.map((area)=>(
+
+                <ListItem component={Link} to={"/"+area.nombre_area.toLowerCase()} button key={area.nombre_area.toLowerCase()}>
+                  <ListItemIcon><RemoveIcon/></ListItemIcon>
+                  <ListItemText primary={area.nombre_area} />
+                </ListItem> 
+
+              ))
+
+                
+            }
+            
+
+            {/* <ListItem component={Link} to="/civil" button key={'civil'}>
               <ListItemIcon><LocationCityIcon/></ListItemIcon>
               <ListItemText primary='Civil' />
             </ListItem> 
@@ -244,7 +281,7 @@ function Home() {
               <ListItemIcon><AccountTreeIcon/></ListItemIcon>
               <ListItemText primary='Administracion'/>
             </ListItem> 
-            <Divider />
+            <Divider /> */}
 
             <ListItem button onClick={cerrarSesion} key={'Cerrar sesion'}>
               <ListItemIcon><ExitToAppIcon/></ListItemIcon>
@@ -266,12 +303,25 @@ function Home() {
           
           <Switch>
             
-            <Route path="/home">
-              {nombre !== null && renderHome(nombre)}
-              {nombre === null && <NoLogged/>}
-            </Route>
-
-            <Route path="/civil" exact>
+              {
+                areas.map((area)=>(
+                  <Route path={"/"+area.nombre_area.toLowerCase()}>
+                    {console.log("<"+area.nombre_area+"/>")}
+                    {/* <div>{ReactHtmlParser('&lt'+area.nombre_area+'/&gt')}</div> */}
+                    {/* <div dangerouslySetInnerHTML={{ __html: '&lt'+area.nombre_area+'/&gt' }} /> */}
+                    {/* <JsxParser components={ '<'+area.nombre_area+'/>' } /> */}
+                    {/* {StringToReact('<'+area.nombre_area+'/>')} */}
+                    
+                      {/* {ReactDOM.render(StringToReact('<'+area.nombre_area+'/>'), document.getElementById('container'+area.nombre_area))} */}
+                      {ReactDOM.render(StringToReact('hola'), document.getElementById('container'))}
+                    
+                     <div id="container">
+                    </div>
+                  </Route>
+                ))
+              }
+            
+            {/* <Route path="/civil" exact>
               <Civil/>
             </Route>
 
@@ -281,10 +331,17 @@ function Home() {
 
             <Route path="/administracion" exact>
               <Administracion/>
-            </Route>
+            </Route> */}
 
             <Route path="/administracion/resumen_mensual" exact>
               <ResumenMensual/>
+            </Route>
+
+            {/* ------------------------------------------- */}
+
+            <Route path="/home">
+              {nombre !== null && renderHome(nombre)}
+              {nombre === null && <NoLogged/>}
             </Route>
 
             <Route path="/configuracion" exact>
