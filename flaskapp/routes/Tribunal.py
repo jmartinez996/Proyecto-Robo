@@ -17,12 +17,14 @@ def createTribunal():
     current_user_id = get_jwt_identity()
     nombre = request.values['nombre']
     fono = request.values['telefono']
-    id_area = 1
-    id_area_prueba = request.values['area']
-    id_area_prueba = id_area_prueba.split(',')
-    #id_area_prueba = [int(i) for i in id_area_prueba]
-    print(id_area_prueba)
-    newTribunal = Tribunal(nombre=nombre,fono=fono,id_area=id_area,nombre_area=id_area_prueba)
+    ciudad = request.values['ciudad']
+    s_area = request.values['s_area']
+    s_area = s_area.split(',')
+    i_area = []
+    for x in s_area:
+        query = session.query(Area).filter_by(nombre_area=x).first()
+        i_area.append(query.id_area)
+    newTribunal = Tribunal(nombre=nombre,fono=fono,nombre_area=s_area,id_area=i_area,ciudad=ciudad)
     session.add(newTribunal) 
     session.commit()
     session.close()

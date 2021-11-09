@@ -14,10 +14,11 @@ class Tribunal(Base):
     __tablename__ = 'tribunal'
 
     id_tribunal = Column(Integer, primary_key=True)
-    id_area = Column(Integer)
     nombre = Column(String())
     fono = Column(String())
     nombre_area = Column(ARRAY(String))
+    id_area = Column(ARRAY(Integer))
+    ciudad = Column(String())
     
 
     def __repr__(self):

@@ -59,6 +59,7 @@ function AgregarTribunal() {
     const { handleSubmit, control, getValues,errors} = useForm({});
     const [areas, setAreas] = useState([]);
     const [sArea, setSArea] = useState([]);
+    const [iArea, setIArea] = useState([]);
     const getAreas = async() => {
         const areas = await axios(`http://127.0.0.1:5000/getAreas`,{
             headers: {
@@ -90,15 +91,18 @@ function AgregarTribunal() {
     const onSubmit = async (data) => {
         const token = window.localStorage.getItem('robo-jwt-token')
         const f = new FormData();
+        console.log(data)
         f.append("nombre", data.nombre);
         f.append("telefono", data.telefono);
-        f.append("area",sArea);
+        f.append("ciudad", data.ciudad);
+        f.append("s_area",sArea);
+        f.append("i_area",iArea);
         MySwal.fire({
           title: 'Agregar',
           text: "¿Desea agregar el tribunal "+ data.nombre +"?",
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonText: 'Eliminar',
+          confirmButtonText: 'Agregar',
           cancelButtonText: 'Cancelar',
           reverseButtons: true
         }).then((result) => {
@@ -209,6 +213,28 @@ function AgregarTribunal() {
                     helperText={error ? error.message : null}
                     label="Ingresa Telefono Tribunal"
                     autoComplete="Telefono Tribunal"
+                    onChange={onChange}
+                    />
+                )}
+                rules={{ required: 'El campo telefono Tribunal esta vacío',
+                        //  validate: (value) => validation(value) 
+                        }}
+                />
+                <Controller
+                name="ciudad"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                    variant="outlined"
+                    margin="dense"
+                    fullWidth
+                    id="ciudad"
+                    value={value}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    label="Ingresa la Ciudad del Tribunal"
+                    autoComplete="Ciudad de Tribunal"
                     onChange={onChange}
                     />
                 )}

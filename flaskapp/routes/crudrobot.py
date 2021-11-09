@@ -65,16 +65,6 @@ def createRobot():
     finally:
         session.close()
     
-
-# @routes.route('/updateTribunal/', methods=['POST'])
-# #@jwt_required()
-# def updateTribunal():
-#     try:
-#         return ""
-
-#     except:
-#         return ""
-
 @routes.route('/deleteRobot/', methods=['POST'])
 @jwt_required()
 def deleteRobot():

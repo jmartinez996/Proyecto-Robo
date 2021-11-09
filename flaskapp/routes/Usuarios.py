@@ -1,6 +1,7 @@
 from . import routes
-from flask import jsonify
+from flask import Flask, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
+from werkzeug.datastructures import ResponseCacheControl
 from Classes.Usuarios import User
 from Classes.Tribunal import Tribunal
 import requests as req
@@ -30,7 +31,29 @@ def getUsers():
         print(aux)
         data.append(aux)
     session.close()
+    print("Entre")
     return jsonify({'message': data})
     # except:
     #      return jsonify({'message':'No esta logeado'}), 422
-        
+
+
+@routes.route('/deleteUser/', methods=['POST'])
+@jwt_required()
+def deleteUser():
+    current_user_id = get_jwt_identity()
+    id_us = request.values['id_usuario']    
+    session.query(User).filter(User.id_usuario == id_us).delete()
+    session.commit()
+    print("eliminado")
+    try:
+        return ""
+
+    except:
+        return ""
+
+
+@routes.route('/upusers')
+def upusers():
+    print("data")
+    return jsonify({"data":"data"})
+
