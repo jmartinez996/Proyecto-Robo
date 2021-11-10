@@ -30,7 +30,19 @@ export default function Tablatribunales() {
 	useEffect(() => {
 		getTribunal();
 	}, []);
-
+	const prueba = ($id) =>{
+		var sendT = {
+			id: 1,
+			nombre: "Prueba Enviar",
+			fono: 957606100,
+			ciudad : "asd",
+			areas: [81, 91, 3],
+		};
+		sendT = JSON.stringify(sendT);
+		
+		console.log(sendT)
+		return sendT;
+	}
 	const showAlert = () => {};
 	const delete_Tribunal = ($id, $name) => {
 		console.log("Delete id: " + $id);
@@ -118,7 +130,11 @@ export default function Tablatribunales() {
 										<IconButton aria-label='Eliminar' onClick={() => delete_Tribunal(tribunal.id_tribunal, tribunal.nombre)}>
 											<DeleteIcon />
 										</IconButton>
-										<Link to={"/configuracion/updatetribunal/".concat(tribunal.id_tribunal)} style={{ textDecoration: "none" }}>
+										<Link
+											// to={"/configuracion/updatetribunal/".concat(tribunal.id_tribunal)}
+											to={`/configuracion/updatetribunal/${prueba(tribunal.id)}`}
+											style={{ textDecoration: "none" }}
+										>
 											<IconButton aria-label='Editar'>
 												<EditIcon />
 											</IconButton>

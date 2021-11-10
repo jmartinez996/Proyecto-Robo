@@ -64,6 +64,8 @@ import { useParams } from "react-router";
 function UpdateTribunal() {
     const token = window.localStorage.getItem('robo-jwt-token')
     let { id } = useParams();
+    var myObject = JSON.parse(id);
+    console.log(myObject)
     const MySwal = withReactContent(Swal)
     const classes = useStyles();
     const [errMssg, setErrMssg] = useState('');
@@ -87,23 +89,23 @@ function UpdateTribunal() {
     }
     useEffect(() => {
         getAreas();
-        getTribunal();
+        //getTribunal();
     }, []);
     
-    const getTribunal = async () => {
-        console.log(id);
-        const token = window.localStorage.getItem('robo-jwt-token')
-        const f = new FormData();
-        f.append("id", id);
-        const tribun = await axios.post(`http://127.0.0.1:5000/getTribunalId`, f, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer `+token
-            }}).then(res=>{
-                console.log(res.data);
-                setTribu(res.data);
-            })
-    }
+    // const getTribunal = async () => {
+    //     console.log(id);
+    //     const token = window.localStorage.getItem('robo-jwt-token')
+    //     const f = new FormData();
+    //     f.append("id", id);
+    //     const tribun = await axios.post(`http://127.0.0.1:5000/getTribunalId`, f, {
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //           'Authorization': `Bearer `+token
+    //         }}).then(res=>{
+    //             console.log(res.data);
+    //             setTribu(res.data);
+    //         })
+    // }
     const [state, setState] = React.useState({
         checkedA: true,
       });
@@ -141,11 +143,7 @@ function UpdateTribunal() {
         setErrMssg(err);
     };
     const defaul = [81];
-    const datos = {
-      "nombre" : "nombre prueba",
-      "fono" : 213123,
-      "city" : "City1"
-    };
+    console.log(myObject.areas)
     return (
 
         <Container component="main" maxWidth="xs">
@@ -161,7 +159,7 @@ function UpdateTribunal() {
                 <Controller
                 name="nombre"
                 control={control}
-                defaultValue={datos.nombre}
+                defaultValue={myObject.nombre}
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                     variant="outlined"
@@ -184,7 +182,7 @@ function UpdateTribunal() {
                 <Controller
                 name="telefono"
                 control={control}
-                defaultValue={datos.fono}
+                defaultValue={myObject.fono}
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                     variant="outlined"
@@ -212,7 +210,7 @@ function UpdateTribunal() {
                           <Checkbox
                             //checked = {true}
                             //defaultChecked={console.log(area.id_area)}
-                            defaultChecked={defaul.includes(area.id_area)}
+                            defaultChecked={myObject.areas.includes(area.id_area)}
                             onChange={e => checked(e,area.nombre_area)}
                           />
                         }
@@ -221,6 +219,7 @@ function UpdateTribunal() {
                         />
                     ))
                   }
+                  
                   control={control}
                 />
 
@@ -233,7 +232,7 @@ function UpdateTribunal() {
                 </div>
                
             </form>
-            <h1>id_prop {id}</h1>
+            <h1>id_prop {myObject.nombre}</h1>
             </div>
     
             
