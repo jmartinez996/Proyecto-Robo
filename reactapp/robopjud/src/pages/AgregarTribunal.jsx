@@ -137,9 +137,7 @@ function AgregarTribunal() {
 
     };
     const handleCheck = (checkedID)=>{
-      console.log("asd");
       const {areas : ids} = getValues()
-      console.log(ids);
     };
     
      const checked = (e,id) => {

@@ -115,10 +115,12 @@ function UpdateTribunal() {
 
     const onSubmit = async (data) => {
         const token = window.localStorage.getItem('robo-jwt-token')
+        console.log(data)
+        console.log(sArea)
         const f = new FormData();
         f.append("nombre", data.nombre);
         f.append("telefono", data.telefono);
-        f.append("area",sArea);
+        //f.append("area",sArea);
         
 
     };
@@ -138,7 +140,12 @@ function UpdateTribunal() {
     const seteaError = err => {
         setErrMssg(err);
     };
-    
+    const defaul = [81];
+    const datos = {
+      "nombre" : "nombre prueba",
+      "fono" : 213123,
+      "city" : "City1"
+    };
     return (
 
         <Container component="main" maxWidth="xs">
@@ -154,14 +161,14 @@ function UpdateTribunal() {
                 <Controller
                 name="nombre"
                 control={control}
-                defaultValue=""
+                defaultValue={datos.nombre}
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                     variant="outlined"
                     margin="dense"
                     fullWidth
                     id="nombre"
-                    value={tribunal.nombre}
+                    value={value}
                     error={!!error}
                     helperText={error ? error.message : null}
                     label=""
@@ -177,14 +184,14 @@ function UpdateTribunal() {
                 <Controller
                 name="telefono"
                 control={control}
-                defaultValue={tribunal.fono}
+                defaultValue={datos.fono}
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                     variant="outlined"
                     margin="dense"
                     fullWidth
                     id="telefono"
-                    value={tribunal.fono}
+                    value={value}
                     error={!!error}
                     helperText={error ? error.message : null}
                     label=""
@@ -204,7 +211,8 @@ function UpdateTribunal() {
                         control={
                           <Checkbox
                             //checked = {true}
-                            //defaultChecked={true}
+                            //defaultChecked={console.log(area.id_area)}
+                            defaultChecked={defaul.includes(area.id_area)}
                             onChange={e => checked(e,area.nombre_area)}
                           />
                         }
@@ -226,10 +234,6 @@ function UpdateTribunal() {
                
             </form>
             <h1>id_prop {id}</h1>
-            <h1>id_bd {tribunal.id_tribunal}</h1>
-            <h1>nombre {tribunal.nombre}</h1>
-            <h1>nombre {tribunal.fono}</h1>
-            <h1>area {tribunal.nombre_area[1]}</h1>
             </div>
     
             
