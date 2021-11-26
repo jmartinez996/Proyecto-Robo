@@ -15,6 +15,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
+import { useParams } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -42,9 +43,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
- export default function ResumenMensual(){
+ export default function ResumenMensual(props){
   const MySwal = withReactContent(Swal)
-  
+  // console.log(useParams())
+  const {idT} = useParams()
+  const {idR} = useParams()
   const classes = useStyles();
   const [errMssg, setErrMssg] = useState('');
   const { handleSubmit, control} = useForm();
@@ -96,6 +99,8 @@ const useStyles = makeStyles((theme) => ({
     f.append("pass_familia", data.pass_familia);
     f.append("user_siagj", data.user_siagj);
     f.append("pass_siagj", data.pass_siagj);
+    f.append("id_tribunal", idT);
+    f.append("id_robot", idR); 
     
     Swal.fire({
       title: 'Estas seguro que los datos son correctos?',
@@ -110,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
     }).then((result) => {
       if (result.isConfirmed) {
 
-        axios.post(`http://127.0.0.1:5000/ejecutaRobot/`, f, {headers: {'Content-Type': 'multipart/form-data','Authorization': `Bearer `+token}})
+        axios.post(`http://127.0.0.1:5000/ejecutaRobotResMens/`, f, {headers: {'Content-Type': 'multipart/form-data','Authorization': `Bearer `+token}})
         .then(response=>{
 
             // seteaError("");
@@ -120,7 +125,7 @@ const useStyles = makeStyles((theme) => ({
                 title: 'Completado',
                 text: 'Robot ejecutado con exito!',
             })
-            // setFormState(true);
+            setFormState(true);
 
         }).catch(error=>{
             // seteaError(error.response.data.message);

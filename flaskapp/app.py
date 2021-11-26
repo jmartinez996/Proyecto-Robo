@@ -1,21 +1,14 @@
-
-from operator import countOf
-import re
-from flask import Flask, jsonify, request, _app_ctx_stack
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, jsonify, request
 from flask_cors import CORS
-import os
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required, get_jwt, set_access_cookies, unset_access_cookies
 from sqlalchemy.orm import query, scoped_session
 from Classes.Usuarios import User
-#from Classes.Area import Area
-#from Classes.Tribunal import Tribunal
 from werkzeug.security import check_password_hash as checkph
 from werkzeug.security import generate_password_hash as genph
-import requests as req
 from routes import *
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 from database import Base, SessionLocal, engine
+from flask_socketio import SocketIO, emit
 
 
 app = Flask(__name__)
@@ -32,6 +25,8 @@ Base.metadata.create_all(engine)
 session = SessionLocal()
 
 jwt = JWTManager(app)
+# socketio = SocketIO(app)
+socket_io = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 CORS(app)
 
 
@@ -86,7 +81,7 @@ def agregauser():
         tribunal = request.values['tribunal']
         print(tribunal)
         if contrasena != repcontrasena:
-            return jsonify({'message':'Contrasenas no coinciden'}),422
+            return jsonify({'message':'Contrasenas no coinciden.'}),422
         else:
             contrasena = genph(contrasena)
             new_user = User(nombre=nombre, apellido=apellido, rut=rut, correo=correo, contrasena=contrasena, tipo_usuario=2, id_area=1, id_tribunal=tribunal) 
@@ -98,5 +93,16 @@ def agregauser():
     finally:
         session.close()
 
+@socket_io.on('connect')
+def test_connect():
+    print('conectado')
+
+@socket_io.on('disconnect')
+def test_disconnect():
+    print('desconectado')
+
+
 if __name__ == '__main__': 
-    app.run(debug=True)     
+    # socketio.run(app, host='0.0.0.0', debug=False)
+    socket_io.run(app, debug=True)
+    # app.run(debug=True)     

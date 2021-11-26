@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
@@ -6,28 +6,28 @@ import {
   CardContent,
   Divider,
   Grid,
-  Typography
-} from '@material-ui/core';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import {Link} from 'react-router-dom'
+  Typography,
+} from "@material-ui/core";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import GetAppIcon from "@material-ui/icons/GetApp";
+import { Link } from "react-router-dom";
 
 const RoboAdm1 = (titulo) => (
   // <Link to="/home" style={{textDecoration:'none'}}>
   <Card
     button
     sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",
     }}
   >
     <CardContent>
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          pb: 3
+          display: "flex",
+          justifyContent: "center",
+          pb: 3,
         }}
       >
         {/* <Avatar
@@ -36,35 +36,22 @@ const RoboAdm1 = (titulo) => (
           variant="square"
         /> */}
       </Box>
-      <Typography
-        align="center"
-        color="textPrimary"
-        gutterBottom
-        variant="h4"
-      >
+      <Typography align="center" color="textPrimary" gutterBottom variant="h4">
         {titulo.titulo}
       </Typography>
-      <Typography
-        align="center"
-        color="textPrimary"
-        variant="body1"
-      >
+      <Typography align="center" color="textPrimary" variant="body1">
         Descripcion
       </Typography>
     </CardContent>
     <Box sx={{ flexGrow: 1 }} />
     <Divider />
     <Box sx={{ p: 2 }}>
-      <Grid
-        container
-        spacing={2}
-        sx={{ justifyContent: 'space-between' }}
-      >
+      <Grid container spacing={2} sx={{ justifyContent: "space-between" }}>
         <Grid
           item
           sx={{
-            alignItems: 'center',
-            display: 'flex'
+            alignItems: "center",
+            display: "flex",
           }}
         >
           <AccessTimeIcon color="action" />
@@ -80,8 +67,8 @@ const RoboAdm1 = (titulo) => (
         <Grid
           item
           sx={{
-            alignItems: 'center',
-            display: 'flex'
+            alignItems: "center",
+            display: "flex",
           }}
         >
           <GetAppIcon color="action" />
@@ -91,9 +78,7 @@ const RoboAdm1 = (titulo) => (
             sx={{ pl: 1 }}
             variant="body2"
           >
-            200
-            {' '}
-            Downloads
+            200 Downloads
           </Typography>
         </Grid>
       </Grid>

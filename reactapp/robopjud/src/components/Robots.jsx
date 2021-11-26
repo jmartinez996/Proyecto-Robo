@@ -6,13 +6,49 @@ import {
   CardContent,
   Divider,
   Grid,
-  Typography
+  Typography, Container
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import PauseCircleFilledRoundedIcon from '@material-ui/icons/PauseCircleFilledRounded';
 import {Link} from 'react-router-dom'
 
-const ProductCard = (titulo) => (
+const Play = (flag) => {
+  console.log(flag)
+  return (
+    <Container>
+      <PlayCircleOutlineIcon color="action" />
+      <Typography
+        color="textSecondary"
+        display="inline"
+        sx={{ pl: 1 }}
+        variant="body2"
+      >
+        Disponible para ejecutar. 
+      </Typography>
+    </Container>
+  );
+};
+
+const Pausa = (flag) => {
+  console.log(flag)
+  return (
+    <Container>
+      <PauseCircleFilledRoundedIcon color="action" />
+      <Typography
+        color="textSecondary"
+        display="inline"
+        sx={{ pl: 1 }}
+        variant="body2"
+      >
+        No Disponible para ejecutar.
+      </Typography>
+    </Container>
+  );
+};
+
+const ProductCard = (props) => (
   // <Link to="/home" style={{textDecoration:'none'}}>
   <Card
     button
@@ -42,14 +78,14 @@ const ProductCard = (titulo) => (
         gutterBottom
         variant="h4"
       >
-        {titulo.titulo}
+        {props.titulo}
       </Typography>
       <Typography
         align="center"
         color="textPrimary"
         variant="body1"
       >
-        Descripcion
+        {props.desc}
       </Typography>
     </CardContent>
     <Box sx={{ flexGrow: 1 }} />
@@ -67,34 +103,9 @@ const ProductCard = (titulo) => (
             display: 'flex'
           }}
         >
-          <AccessTimeIcon color="action" />
-          <Typography
-            color="textSecondary"
-            display="inline"
-            sx={{ pl: 1 }}
-            variant="body2"
-          >
-            Updated 2hr ago
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          sx={{
-            alignItems: 'center',
-            display: 'flex'
-          }}
-        >
-          <GetAppIcon color="action" />
-          <Typography
-            color="textSecondary"
-            display="inline"
-            sx={{ pl: 1 }}
-            variant="body2"
-          >
-            200
-            {' '}
-            Downloads
-          </Typography>
+          {props.disp === 'true' ? Play(props.disp) : Pausa(props.disp)}
+          {/* {props.disp === true && Play(props.disp)}
+          {props.disp === false && Pausa(props.disp)} */}
         </Grid>
       </Grid>
     </Box>

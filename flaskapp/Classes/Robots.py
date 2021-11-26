@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ARRAY
 from sqlalchemy.sql.schema import ForeignKey
+from sqlalchemy.sql.sqltypes import Boolean
 from sqlalchemy.types import Date
 from database import Base
 
@@ -13,9 +14,7 @@ class Robots(Base):
     exe_robot = Column(String())
     estado_robot = Column(Integer)
     id_tribunal = Column(Integer, ForeignKey('tribunal.id_tribunal'))
-    # nombre_tribunal = Column(String())
-    # nombre_area = Column(String())
-    
+    disponibilidad = Column(Boolean)
 
     def __repr__(self):
         return f"<Nombre {self.id_robot}>"
