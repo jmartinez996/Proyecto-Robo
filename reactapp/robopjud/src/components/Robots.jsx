@@ -18,9 +18,9 @@ const Play = (flag) => {
   console.log(flag)
   return (
     <Container>
-      <PlayCircleOutlineIcon color="action" />
+      <PlayCircleOutlineIcon color="primary" />
       <Typography
-        color="textSecondary"
+        color="primary"
         display="inline"
         sx={{ pl: 1 }}
         variant="body2"
@@ -42,7 +42,7 @@ const Pausa = (flag) => {
         sx={{ pl: 1 }}
         variant="body2"
       >
-        No Disponible para ejecutar.
+        El Robot se esta ejecutando.
       </Typography>
     </Container>
   );

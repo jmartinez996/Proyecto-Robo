@@ -8,8 +8,8 @@ from werkzeug.security import generate_password_hash as genph
 from routes import *
 from datetime import timedelta
 from database import Base, SessionLocal, engine
-from flask_socketio import SocketIO, emit
-
+from flask_mail import Mail, Message
+# from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 
@@ -19,19 +19,30 @@ app.config['JWT_SECRET_KEY'] = 'ywtg.9819'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=30)
 #app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 app.config['UPLOAD_FOLDER'] = './Archivos'
+
+app.config['MAIL_SERVER']='smtp.mail.pjud'
+app.config['MAIL_PORT'] = 25
+app.config['MAIL_USERNAME'] = 'sgc_pucon@pjud.cl'
+app.config['MAIL_PASSWORD'] = 'letras2021'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = False
 # db = SQLAlchemy(app)
 
 Base.metadata.create_all(engine)
 session = SessionLocal()
 
 jwt = JWTManager(app)
+mail = Mail(app)
 # socketio = SocketIO(app)
-socket_io = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+# socket_io = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 CORS(app)
 
 
 @app.route('/') 
 def index(): 
+    msg = Message('Hello', sender = 'sgc_pucon@pjud.cl', recipients = ['agmardones@pjud.cl'])
+    msg.body = "Hello Flask message sent from Flask-Mail"
+    mail.send(msg)
     return {"mensaje":"saludo"}
 
 @app.route('/mensaje/', methods=['GET', 'POST'])
@@ -93,16 +104,25 @@ def agregauser():
     finally:
         session.close()
 
-@socket_io.on('connect')
-def test_connect():
-    print('conectado')
+# @app.route('/sendEmail/') 
+# def index(): 
+#     msg = Message('Hello', sender = 'sgc_pucon@pjud.cl', recipients = ['agmardones@pjud.cl'])
+#     msg.body = "Hello Flask message sent from Flask-Mail"
+#     mail.send(msg)
+#     return {"mensaje":"saludo"}
 
-@socket_io.on('disconnect')
-def test_disconnect():
-    print('desconectado')
+
+
+# @socket_io.on('connect')
+# def test_connect():
+#     print('conectado')
+
+# @socket_io.on('disconnect')
+# def test_disconnect():
+#     print('desconectado')
 
 
 if __name__ == '__main__': 
     # socketio.run(app, host='0.0.0.0', debug=False)
-    socket_io.run(app, debug=True)
-    # app.run(debug=True)     
+    # socket_io.run(app, debug=True)
+    app.run(debug=True)     
