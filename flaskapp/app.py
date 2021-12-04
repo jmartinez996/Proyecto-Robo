@@ -9,6 +9,7 @@ from routes import *
 from datetime import timedelta
 from database import Base, SessionLocal, engine
 from flask_mail import Mail, Message
+from flask_apscheduler import APScheduler
 # from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -33,16 +34,17 @@ session = SessionLocal()
 
 jwt = JWTManager(app)
 mail = Mail(app)
-# socketio = SocketIO(app)
-# socket_io = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+
+scheduler = APScheduler()
+
 CORS(app)
 
 
 @app.route('/') 
 def index(): 
-    msg = Message('Hello', sender = 'sgc_pucon@pjud.cl', recipients = ['agmardones@pjud.cl'])
-    msg.body = "Hello Flask message sent from Flask-Mail"
-    mail.send(msg)
+    # msg = Message('Hello', sender = 'sgc_pucon@pjud.cl', recipients = ['agmardones@pjud.cl'])
+    # msg.body = "Hello Flask message sent from Flask-Mail"
+    # mail.send(msg)
     return {"mensaje":"saludo"}
 
 @app.route('/mensaje/', methods=['GET', 'POST'])
@@ -104,25 +106,11 @@ def agregauser():
     finally:
         session.close()
 
-# @app.route('/sendEmail/') 
-# def index(): 
-#     msg = Message('Hello', sender = 'sgc_pucon@pjud.cl', recipients = ['agmardones@pjud.cl'])
-#     msg.body = "Hello Flask message sent from Flask-Mail"
-#     mail.send(msg)
-#     return {"mensaje":"saludo"}
 
-
-
-# @socket_io.on('connect')
-# def test_connect():
-#     print('conectado')
-
-# @socket_io.on('disconnect')
-# def test_disconnect():
-#     print('desconectado')
-
+def scheduledTask():
+    print('Ejecutado cada 5 seg...')
 
 if __name__ == '__main__': 
-    # socketio.run(app, host='0.0.0.0', debug=False)
-    # socket_io.run(app, debug=True)
+    # scheduler.add_job(id='Scheduled task', func = scheduledTask, trigger = 'cron', hour = 1, minute = 12)
+    # scheduler.start()
     app.run(debug=True)     

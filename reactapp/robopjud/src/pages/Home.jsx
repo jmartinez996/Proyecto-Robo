@@ -30,6 +30,7 @@ import AgregarUsuario from "./AgregarUsuario";
 import AgregarTribunal from "./AgregarTribunal";
 import AppbarMenu from "../components/AppbarMenu";
 import ResumenMensual from "./landingrobots/administracion/Resumen_mensual";
+import GestionSii from "./landingrobots/administracion/Gestion_sii"
 import AgregaRobot from "./AgregaRobot";
 import UpdateTribunal from "./UpdateTribunal";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -153,23 +154,23 @@ function Home() {
     getAreas();
   }, []);
 
-  const [estado, setEstado] = useState({});
+  // const [estado, setEstado] = useState({});
 
-  const pasaDato = async () => {
-    const res = await axios.post(`http://127.0.0.1:5000/ejerobot`);
-    // .then(res => {
-    //   console.log(res.data);
-    // }).catch(error => {
-    //   console.log(error);
-    // })
-    console.log(res.data);
+  // const pasaDato = async () => {
+  //   const res = await axios.post(`http://127.0.0.1:5000/ejerobot`);
+  //   // .then(res => {
+  //   //   console.log(res.data);
+  //   // }).catch(error => {
+  //   //   console.log(error);
+  //   // })
+  //   console.log(res.data);
 
-    if (res.data.mensaje === "Ejecutado") {
-      const act = 1;
-      console.log(act);
-      setEstado(res.data);
-    }
-  };
+  //   if (res.data.mensaje === "Ejecutado") {
+  //     const act = 1;
+  //     console.log(act);
+  //     setEstado(res.data);
+  //   }
+  // };
 
   const classes = useStyles();
   const theme = useTheme();
@@ -289,7 +290,7 @@ function Home() {
 
           <Switch>
 
-            <Route path="/civil" exact>
+            {/* <Route path="/civil" exact>
               <Civil />
             </Route>
 
@@ -301,22 +302,20 @@ function Home() {
               <ResumenMensual />
             </Route>
 
+            <Route path="/administracion/gestion_de_sii/:idT/:idR" exact>
+              <GestionSii />
+            </Route>
+
             <Route path="/administracion" exact>
               <Administracion nombre='Administracion'/>
             </Route>
-
-            
-
-            {/* ------------------------------------------- */}
 
             <Route path="/home">
               {nombre !== null && renderHome(nombre)}
               {nombre === null && <NoLogged />}
             </Route>
 
-            <Route path="/configuracion" exact>
-              <Configuracion />
-            </Route>
+            
 
             <Route path="/configuracion/agregarusuario" exact>
               <AgregarUsuario />
@@ -344,7 +343,7 @@ function Home() {
 
             <Route path="/">
               <SignIn />
-            </Route>
+            </Route> */}
           </Switch>
         </main>
       </div>

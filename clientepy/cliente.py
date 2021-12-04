@@ -9,12 +9,16 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './'
 CORS(app)
 
+@app.route('/')
+def index():
+    return 'It Works!'
+
 @app.route('/mensaje', methods=['GET'])
 def mensaje():
     return 'It Works!'
 
-@app.route('/', methods=['POST']) 
-def index():
+@app.route('/ExeResMens/', methods=['POST']) 
+def ExeResMens():
 
     windows_user = getuser()
 
@@ -36,6 +40,32 @@ def index():
     archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
     print('recibido desde el cliente')
     script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Informe Mensual/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_mixtos+"', 'pass_mixtos':'"+pass_mixtos+"', 'user_familia':'"+user_familia+"', 'pass_familia':'"+pass_familia+"', 'user_siagj':'"+user_siagj+"', 'pass_siagj':'"+pass_siagj+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
+    os.system(script)                             
+    
+    #os.system('start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Informe Mensual/Main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_mixtos+"', 'pass_mixtos':'"+pass_mixtos+"', 'user_familia':'"+user_familia+"', 'pass_familia':'"+pass_familia+"', 'user_siagj':'"+user_siagj+"', 'pass_siagj':'"+pass_siagj+"', 'ruta':'"+path+"'}"+'"')      
+    print(script)
+    return 'robot ejecutado'
+
+@app.route('/ExeGestSii/', methods=['POST']) 
+def ExeGestSii():
+
+    windows_user = getuser()
+
+    archivo = request.files['file1']
+    correo = request.values['correo']
+    user_sii = request.values['user_sii']
+    pass_sii = request.values['pass_sii']
+    id_robot = request.values['id_robot']
+    id_tribunal = request.values['id_tribunal']
+
+    # fecha_act = date.today().replace(day=1)
+    # mes_ant = fecha_act - timedelta(days = 1)
+    # file = 'EstadoMensual'+str(mes_ant.strftime("%b"))+'.xls'
+    file = 'archivo.xls'
+    # path = os.path.abspath(file)
+    archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
+    print('recibido desde el cliente')                                                                           #VOOOOOOOY AQUIIIIIIIII
+    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Pago de facturas/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_sii+"', 'user_wind':'"+windows_user+"', 'pass_mixtos':'"+pass_sii+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
     os.system(script)                             
     
     #os.system('start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Informe Mensual/Main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_mixtos+"', 'pass_mixtos':'"+pass_mixtos+"', 'user_familia':'"+user_familia+"', 'pass_familia':'"+pass_familia+"', 'user_siagj':'"+user_siagj+"', 'pass_siagj':'"+pass_siagj+"', 'ruta':'"+path+"'}"+'"')      

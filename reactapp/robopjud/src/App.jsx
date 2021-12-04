@@ -1,27 +1,32 @@
-import React from 'react'
-import Typography from '@material-ui/core/Typography';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom"
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import SignIn from './pages/Login'
-import Home from './pages/Home'
+import React, { useEffect, useState } from "react";
+import Typography from "@material-ui/core/Typography";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import SignIn from "./pages/Login";
+import Home from "./pages/Home";
+import Configuracion from "./pages/Configuracion";
+import Civil from "./pages/Civil";
+import Familia from "./pages/Familia";
+import ResumenMensual from "./pages/landingrobots/administracion/Resumen_mensual";
+import GestionSii from "./pages/landingrobots/administracion/Gestion_sii";
+import Administracion from "./pages/Administracion";
+import AgregarUsuario from "./pages/AgregarUsuario";
+import AgregarTribunal from "./pages/AgregarTribunal";
+import AgregaRobot from "./pages/AgregaRobot";
+import UpdateTribunal from "./pages/UpdateTribunal";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -29,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -38,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   hide: {
-    display: 'none',
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
@@ -48,24 +53,24 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
   },
   drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -drawerWidth,
   },
   contentShift: {
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -73,37 +78,96 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
+
 function App() {
   const classes = useStyles();
+  const [nombre, setNombre] = useState('hola');
+
+
   return (
     <Router>
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
-        >
+        <AppBar position="fixed">
           <Toolbar>
-
-            <Link to="/" style={{ textDecoration: 'none', color:'white' }}>
+            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
               <Typography variant="h6" noWrap>
                 Robo Pjud
               </Typography>
             </Link>
           </Toolbar>
         </AppBar>
-        
 
         <Switch>
-          
+          <Route path="/civil" exact>
+            <Civil />
+          </Route>
+
+          <Route path="/familia" exact>
+            <Familia />
+          </Route>
+
+          <Route path="/administracion/resumen_mensual/:idT/:idR" exact>
+            <ResumenMensual />
+          </Route>
+
+          <Route path="/administracion/gestion_de_sii/:idT/:idR" exact>
+            <GestionSii />
+          </Route>
+
+          <Route path="/administracion" exact>
+            <Administracion nombre="Administracion" />
+          </Route>
+
+          {/* ------------------------------------------- */}
+
+          {/* <Route path="/home">
+            {nombre !== null && renderHome(nombre)}
+            {nombre === null && <NoLogged />}
+          </Route> */}
+
+          <Route path="/configuracion/agregarusuario" exact>
+            <AgregarUsuario />
+          </Route>
+
+          <Route path="/configuracion/agregartribunal" exact>
+            <AgregarTribunal />
+          </Route>
+
+          <Route path="/configuracion/editartribunal" exact>
+            <AgregarTribunal />
+          </Route>
+
+          <Route path="/configuracion/agregarobot" exact>
+            <AgregaRobot />
+          </Route>
+
+          <Route
+            path="/configuracion/updatetribunal/:id"
+            children={<UpdateTribunal />}
+            exact
+          >
+            <UpdateTribunal />
+          </Route>
+
+          <Route path="/">
+            <SignIn />
+          </Route>
+
+          {/* <Route path="/configuracion" exact>
+            <Configuracion />
+          </Route>
+
           <Route path="/home" exact>
-            <Home/>
+            <Home />
           </Route>
 
-          <Route path="/" >
-            <SignIn/>
-          </Route>
-
-        </Switch>    
+          <Route path="/">
+            <SignIn />
+          </Route> */}
+        </Switch>
       </div>
     </Router>
   );

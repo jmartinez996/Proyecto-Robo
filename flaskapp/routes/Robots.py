@@ -20,7 +20,7 @@ app.config['UPLOAD_FOLDER'] = './Archivos'
 
 @routes.route('/ejecutaRobotResMens/', methods=['POST'])
 @jwt_required()
-def ejecutaRobot():
+def ejecutaRobotResMens():
     try:
         current_user_id = get_jwt_identity()
         correo = request.values['correo']
@@ -46,7 +46,7 @@ def ejecutaRobot():
             'id_robot': id_robot,
             'id_tribunal': id_tribunal
         } 
-        resp = req.post('http://127.0.0.1:5001/',files=fichero, data=dataForm)
+        resp = req.post('http://127.0.0.1:5001/ExeResMens/',files=fichero, data=dataForm)
         session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(False)})
         session.commit()
         return ''
@@ -54,11 +54,9 @@ def ejecutaRobot():
         return ''
     finally:
         session.close()
-    # print("Robot Ejecutado")
-    # return jsonify({'message':'Robot ejecutado'})/
 
 @routes.route('/stateRobotResMens/', methods=['POST', 'GET'])
-def stateRobot():
+def stateRobotResMens():
     try:
         estado = request.values['i']
         id_robot = request.values['id_robot']
@@ -78,6 +76,67 @@ def stateRobot():
             msg.attach(file_name,'application/vnd.ms-excel',fp.read())  
         mail.send(msg)
 
+    except:
+        print('no se pudo enviar nada')
+        return ''
+    finally:
+        session.close()
+        return ''
+
+@routes.route('/ejecutaRobotGestSii/', methods=['POST'])
+@jwt_required()
+def ejecutaRobotGestSii():
+    try:
+        current_user_id = get_jwt_identity()
+        correo = request.values['correo']
+        user_sii = request.values['user_sii']
+        pass_sii = request.values['pass_sii']
+        archivo = request.files['archivo']
+        id_tribunal = request.values['id_tribunal']
+        id_robot = request.values['id_robot']
+        
+        fichero = {'file1': archivo}
+        dataForm = {
+            'correo': correo,
+            'user_sii': user_sii,
+            'pass_sii': pass_sii,
+            'id_robot': id_robot,
+            'id_tribunal': id_tribunal
+        } 
+        resp = req.post('http://127.0.0.1:5001/ExeGestSii/',files=fichero, data=dataForm)
+        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(False)})
+        session.commit()
+        return ''
+    except:
+        return ''
+    finally:
+        session.close()
+
+
+@routes.route('/stateRobotGestSii/', methods=['POST', 'GET'])
+def stateRobotGestSii():
+    try:
+
+        estado = request.values['i']
+        id_robot = request.values['id_robot']
+        id_tribunal = request.values['id_tribunal']
+        correo = request.values['correo']
+        file_name = request.values['file_name']
+
+        print(estado)
+        
+        archivo = request.files['archivo']
+        archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file_name))
+
+        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(True)})
+        session.commit()
+
+        msg = Message('RPA: Gestión de SII ejecutado con Éxito.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+        msg.body = "Se adjunta a este correo un archivo comprimido con el resultado."
+        with routes.open_resource('../Archivos/'+file_name) as fp:  
+            msg.attach(file_name,'application/zip',fp.read())  
+        mail.send(msg)
+ 
     except:
         print('no se pudo enviar nada')
         return ''
