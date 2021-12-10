@@ -108,9 +108,9 @@ def agregauser():
 
 
 def scheduledTask():
-    print('Ejecutado cada 5 seg...')
+    print('EJECUTADO A LAS 3 de la mañana')
 
 if __name__ == '__main__': 
-    # scheduler.add_job(id='Scheduled task', func = scheduledTask, trigger = 'cron', hour = 1, minute = 12)
-    # scheduler.start()
-    app.run(debug=True)     
+    scheduler.add_job(id='Scheduled task', func = scheduledTask, trigger = 'cron', hour = 15, minute = 00)
+    scheduler.start()
+    app.run(debug=True, host='0.0.0.0')     

@@ -28,7 +28,7 @@ function Administracion(nombre) {
   // console.log(nombre.nombre)
   const getRobots = async () => {
     const robots = await axios(
-      `http://127.0.0.1:5000/getRobotArea/` + nombre.nombre,
+      `http://10.13.18.84:5000/getRobotArea/` + nombre.nombre,
       {
         headers: {
           "Content-Type": "application/json",

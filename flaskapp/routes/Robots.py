@@ -18,6 +18,8 @@ session = SessionLocal()
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './Archivos'
 
+####################### ESTADOS MENSUALES #########################
+
 @routes.route('/ejecutaRobotResMens/', methods=['POST'])
 @jwt_required()
 def ejecutaRobotResMens():
@@ -47,8 +49,8 @@ def ejecutaRobotResMens():
             'id_tribunal': id_tribunal
         } 
         resp = req.post('http://127.0.0.1:5001/ExeResMens/',files=fichero, data=dataForm)
-        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(False)})
-        session.commit()
+        # session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(False)})
+        # session.commit()
         return ''
     except:
         return ''
@@ -83,6 +85,8 @@ def stateRobotResMens():
         session.close()
         return ''
 
+####################### GESTION DE SII #########################
+
 @routes.route('/ejecutaRobotGestSii/', methods=['POST'])
 @jwt_required()
 def ejecutaRobotGestSii():
@@ -111,7 +115,6 @@ def ejecutaRobotGestSii():
         return ''
     finally:
         session.close()
-
 
 @routes.route('/stateRobotGestSii/', methods=['POST', 'GET'])
 def stateRobotGestSii():
@@ -143,6 +146,9 @@ def stateRobotGestSii():
     finally:
         session.close()
         return ''
+        # 
+
+####################### ------------- #########################
 
 
 @routes.route('/upRobot') 

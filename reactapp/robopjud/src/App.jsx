@@ -101,64 +101,8 @@ function App() {
         </AppBar>
 
         <Switch>
-          <Route path="/civil" exact>
-            <Civil />
-          </Route>
 
-          <Route path="/familia" exact>
-            <Familia />
-          </Route>
-
-          <Route path="/administracion/resumen_mensual/:idT/:idR" exact>
-            <ResumenMensual />
-          </Route>
-
-          <Route path="/administracion/gestion_de_sii/:idT/:idR" exact>
-            <GestionSii />
-          </Route>
-
-          <Route path="/administracion" exact>
-            <Administracion nombre="Administracion" />
-          </Route>
-
-          {/* ------------------------------------------- */}
-
-          {/* <Route path="/home">
-            {nombre !== null && renderHome(nombre)}
-            {nombre === null && <NoLogged />}
-          </Route> */}
-
-          <Route path="/configuracion/agregarusuario" exact>
-            <AgregarUsuario />
-          </Route>
-
-          <Route path="/configuracion/agregartribunal" exact>
-            <AgregarTribunal />
-          </Route>
-
-          <Route path="/configuracion/editartribunal" exact>
-            <AgregarTribunal />
-          </Route>
-
-          <Route path="/configuracion/agregarobot" exact>
-            <AgregaRobot />
-          </Route>
-
-          <Route
-            path="/configuracion/updatetribunal/:id"
-            children={<UpdateTribunal />}
-            exact
-          >
-            <UpdateTribunal />
-          </Route>
-
-          <Route path="/">
-            <SignIn />
-          </Route>
-
-          {/* <Route path="/configuracion" exact>
-            <Configuracion />
-          </Route>
+          
 
           <Route path="/home" exact>
             <Home />
@@ -166,7 +110,7 @@ function App() {
 
           <Route path="/">
             <SignIn />
-          </Route> */}
+          </Route>
         </Switch>
       </div>
     </Router>

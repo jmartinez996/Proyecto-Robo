@@ -3,7 +3,13 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import NoLogged from "./NoLogged";
-import { BrowserRouter as Router, Switch, Route, Link, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -30,7 +36,7 @@ import AgregarUsuario from "./AgregarUsuario";
 import AgregarTribunal from "./AgregarTribunal";
 import AppbarMenu from "../components/AppbarMenu";
 import ResumenMensual from "./landingrobots/administracion/Resumen_mensual";
-import GestionSii from "./landingrobots/administracion/Gestion_sii"
+import GestionSii from "./landingrobots/administracion/Gestion_sii";
 import AgregaRobot from "./AgregaRobot";
 import UpdateTribunal from "./UpdateTribunal";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -117,7 +123,7 @@ function Home() {
 
   const getUserState = () => {
     axios
-      .get(`http://127.0.0.1:5000/userState`, {
+      .get(`http://10.13.18.84:5000/userState`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -133,7 +139,7 @@ function Home() {
   };
 
   const getAreas = () => {
-    axios(`http://127.0.0.1:5000/getAreas`, {
+    axios(`http://10.13.18.84:5000/getAreas`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -157,7 +163,7 @@ function Home() {
   // const [estado, setEstado] = useState({});
 
   // const pasaDato = async () => {
-  //   const res = await axios.post(`http://127.0.0.1:5000/ejerobot`);
+  //   const res = await axios.post(`http://10.13.18.84:5000/ejerobot`);
   //   // .then(res => {
   //   //   console.log(res.data);
   //   // }).catch(error => {
@@ -289,8 +295,7 @@ function Home() {
           <div className={classes.drawerHeader} />
 
           <Switch>
-
-            {/* <Route path="/civil" exact>
+            <Route path="/civil" exact>
               <Civil />
             </Route>
 
@@ -307,15 +312,13 @@ function Home() {
             </Route>
 
             <Route path="/administracion" exact>
-              <Administracion nombre='Administracion'/>
+              <Administracion nombre="Administracion" />
             </Route>
 
             <Route path="/home">
               {nombre !== null && renderHome(nombre)}
               {nombre === null && <NoLogged />}
             </Route>
-
-            
 
             <Route path="/configuracion/agregarusuario" exact>
               <AgregarUsuario />
@@ -341,9 +344,13 @@ function Home() {
               <UpdateTribunal />
             </Route>
 
+            <Route path="/configuracion" exact>
+              <Configuracion />
+            </Route>
+
             <Route path="/">
               <SignIn />
-            </Route> */}
+            </Route>
           </Switch>
         </main>
       </div>
