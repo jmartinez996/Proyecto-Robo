@@ -15,6 +15,7 @@ class Robots(Base):
     estado_robot = Column(Integer)
     id_tribunal = Column(Integer, ForeignKey('tribunal.id_tribunal'))
     disponibilidad = Column(Boolean)
+    id_juez = Column(Integer, ForeignKey('jueces.id_juez'))
 
     def __repr__(self):
         return f"<Nombre {self.id_robot}>"

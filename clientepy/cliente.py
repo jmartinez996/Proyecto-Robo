@@ -17,6 +17,9 @@ def index():
 def mensaje():
     return 'It Works!'
 
+
+##################### RESUMEN MENSUAL #################
+
 @app.route('/ExeResMens/', methods=['POST']) 
 def ExeResMens():
 
@@ -46,6 +49,8 @@ def ExeResMens():
     print(script)
     return 'robot ejecutado'
 
+##################### GESTION DE SII ##################
+
 @app.route('/ExeGestSii/', methods=['POST']) 
 def ExeGestSii():
 
@@ -64,7 +69,7 @@ def ExeGestSii():
     file = 'archivo.xls'
     # path = os.path.abspath(file)
     archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
-    print('recibido desde el cliente')                                                                           #VOOOOOOOY AQUIIIIIIIII
+    print('recibido desde el cliente')                                                                
     script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Pago de facturas/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_sii+"', 'user_wind':'"+windows_user+"', 'pass_mixtos':'"+pass_sii+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
     # "C:\Users\sala2_jltpucon\AppData\Local\Programs\UiPath\Studio\UiRobot.exe"
     os.system(script)                             
@@ -73,7 +78,24 @@ def ExeGestSii():
     print(script)
     return 'robot ejecutado'
 
+################### INGRESO DE EXHORTO #################
+
+@app.route('/ExeIngresoExhorto/', methods=['POST']) 
+def ExeIngresoExhorto():
+
+    windows_user = getuser()
+    id_robot = request.values['id_robot']
+    id_tribunal = request.values['id_tribunal']
+    juez = request.values['juez']
+
+    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos para plataforma/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
+    # "C:\Users\sala2_jltpucon\AppData\Local\Programs\UiPath\Studio\UiRobot.exe"
+    os.system(script)                             
+    
+    #os.system('start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Informe Mensual/Main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_mixtos+"', 'pass_mixtos':'"+pass_mixtos+"', 'user_familia':'"+user_familia+"', 'pass_familia':'"+pass_familia+"', 'user_siagj':'"+user_siagj+"', 'pass_siagj':'"+pass_siagj+"', 'ruta':'"+path+"'}"+'"')      
+    print(script)
+    return 'robot ejecutado'
 
 
 if __name__ == '__main__': 
-    app.run(debug=True, host = '0.0.0.0', port=5001)  
+    app.run(debug=True, host = '0.0.0.0', port=5001)    

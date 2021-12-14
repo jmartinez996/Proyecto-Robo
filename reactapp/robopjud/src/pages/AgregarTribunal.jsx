@@ -61,7 +61,7 @@ function AgregarTribunal() {
     const [sArea, setSArea] = useState([]);
     const [iArea, setIArea] = useState([]);
     const getAreas = async() => {
-        const areas = await axios(`http://10.13.18.84:5000/getAreas`,{
+        const areas = await axios(`http://127.0.0.1:5000/getAreas`,{
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer `+token
@@ -97,6 +97,7 @@ function AgregarTribunal() {
         f.append("ciudad", data.ciudad);
         f.append("s_area",sArea);
         f.append("i_area",iArea);
+        f.append('ip', data.ip)
         MySwal.fire({
           title: 'Agregar',
           text: "¿Desea agregar el tribunal "+ data.nombre +"?",
@@ -107,7 +108,7 @@ function AgregarTribunal() {
           reverseButtons: true
         }).then((result) => {
           if (result.isConfirmed) {
-            axios.post(`http://10.13.18.84:5000/createTribunal/`, f, {
+            axios.post(`http://127.0.0.1:5000/createTribunal/`, f, {
               headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer `+token
@@ -233,6 +234,28 @@ function AgregarTribunal() {
                     helperText={error ? error.message : null}
                     label="Ingresa la Ciudad del Tribunal"
                     autoComplete="Ciudad de Tribunal"
+                    onChange={onChange}
+                    />
+                )}
+                rules={{ required: 'El campo telefono Tribunal esta vacío',
+                        //  validate: (value) => validation(value) 
+                        }}
+                />
+                <Controller
+                name="ip"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                    variant="outlined"
+                    margin="dense"
+                    fullWidth
+                    id="ip"
+                    value={value}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    label="Ingresa la dirección IP del equipo que ejecuta."
+                    autoComplete="IP del equipo del Tribunal"
                     onChange={onChange}
                     />
                 )}

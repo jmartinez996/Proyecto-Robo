@@ -43,31 +43,26 @@ def getRobot():
     session.close()
     return jsonify({'message': data})
 
-@routes.route('/getRobotArea/<nombre>')
+@routes.route('/getRobotArea/<nombre>/<id_tribunal>')
 @jwt_required()
-def getRobotArea(nombre):
-    #return {"mensaje": "Saludos"}
+def getRobotArea(nombre, id_tribunal):
+    print(nombre)
     current_user_id = get_jwt_identity()
     
-    query = session.query(Robots, Tribunal, Area).join(Tribunal).join(Area).filter_by(nombre_area = nombre)
-    
+    query = session.query(Robots, Tribunal, Area).join(Area).filter_by(nombre_area = nombre).join(Tribunal).filter_by(id_tribunal=id_tribunal)
     data = []
     for robots, tribunales, areas in query:
         aux = {
             'id_robot':robots.id_robot,
             'id_area':robots.id_area,
             'nombre_robot':robots.nombre_robot,
-            'desc_robot':robots.desc_robot,
-            'exe_robot':robots.exe_robot,
-            'estado_robot':robots.estado_robot,
             'id_tribunal': robots.id_tribunal,
             'nombre_tribunal': tribunales.nombre,
-            'nombre_area': areas.nombre_area,
             'disponibilidad': robots.disponibilidad,
-            'link': robots.nombre_robot.lower().replace(' ', '_')
+            'link': robots.nombre_robot.lower().replace(' ', '_'),
+            'ip': tribunales.ip
         }
         data.append(aux)
-
     session.close()
     return jsonify({'message': data})
 

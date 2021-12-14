@@ -20,15 +20,15 @@ const alert = () => {
   });
 };
 
-function Administracion(nombre) {
+function Administracion(props) {
+  
   const [robots, setRobots] = useState([]);
   const token = window.localStorage.getItem("robo-jwt-token");
   const test = '<ProductCard titulo="Resumen mensual." />';
   const state = true;
-  // console.log(nombre.nombre)
   const getRobots = async () => {
     const robots = await axios(
-      `http://10.13.18.84:5000/getRobotArea/` + nombre.nombre,
+      `http://127.0.0.1:5000/getRobotArea/`+props.props.nombre+'/'+props.props.id_tribunal,
       {
         headers: {
           "Content-Type": "application/json",
@@ -37,7 +37,6 @@ function Administracion(nombre) {
       }
     )
       .then((res) => {
-        // console.log(res.data.message);
         setRobots(res.data.message);
       })
       .catch((error) => {
@@ -47,7 +46,6 @@ function Administracion(nombre) {
 
   useEffect(() => {
     getRobots();
-    console.log(robots);
   }, []);
 
   return (
@@ -75,7 +73,7 @@ function Administracion(nombre) {
           {robots.map((robo) => (
             <Grid item lg={4} md={6} xs={12}>
               <Link
-                to={robo.disponibilidad ? "/administracion/"+robo.link+`/${robo.id_tribunal}/${robo.id_robot}` : "#"}
+                to={robo.disponibilidad ? "/administracion/"+robo.link+`/${robo.id_tribunal}/${robo.id_robot}/${robo.ip}` : "#"}
                 style={{ textDecoration: "none", width: "100%" }}
               >
                 <JsxParser

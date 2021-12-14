@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   const MySwal = withReactContent(Swal)
   const {idT} = useParams()
   const {idR} = useParams()
+  const {ip} = useParams()
   const classes = useStyles();
   const [errMssg, setErrMssg] = useState('');
   const { handleSubmit, control} = useForm();
@@ -97,6 +98,7 @@ const useStyles = makeStyles((theme) => ({
     f.append("pass_sii", data.pass_mixtos);
     f.append("id_tribunal", idT);
     f.append("id_robot", idR); 
+    f.append("ip", ip)
     
     Swal.fire({
       title: 'Estas seguro que los datos son correctos?',
@@ -111,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
     }).then((result) => {
       if (result.isConfirmed) {
 
-        axios.post(`http://10.13.18.84:5000/ejecutaRobotGestSii/`, f, {headers: {'Content-Type': 'multipart/form-data','Authorization': `Bearer `+token}})
+        axios.post(`http://127.0.0.1:5000/ejecutaRobotGestSii/`, f, {headers: {'Content-Type': 'multipart/form-data','Authorization': `Bearer `+token}})
         .then(response=>{
 
             MySwal.fire({

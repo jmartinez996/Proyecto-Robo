@@ -19,6 +19,7 @@ class Tribunal(Base):
     nombre_area = Column(ARRAY(String))
     id_area = Column(ARRAY(Integer))
     ciudad = Column(String())
+    ip = Column(String())
     
 
     def __repr__(self):

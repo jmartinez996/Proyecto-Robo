@@ -1,19 +1,18 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from sqlalchemy import Column, Integer, String, ARRAY
+from sqlalchemy.sql.schema import ForeignKey
+from sqlalchemy.sql.sqltypes import Boolean
+from sqlalchemy.types import Date
+from database import Base
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:ywtg.9819@localhost/robot'
-db = SQLAlchemy(app)
 
-class Jueces(db.Model):
+class Jueces(Base):
     __tablename__ = 'jueces'
 
-    id_juez = db.Column(db.Integer, primary_key=True)
-    id_tribunal = db.Column(db.Integer)
-    nombre_juez = db.Column(db.String())
-    apellido_juez = db.Column(db.String())
-    correo_juez = db.Column(db.String())
+    id_juez = Column(Integer, primary_key=True)
+    id_tribunal = Column(Integer)
+    nombre_juez = Column(String())
+    apellido_juez = Column(String())
+    correo_juez = Column(String())
 
     def __repr__(self):
         return f"<Nombre {self.id_juez}>"

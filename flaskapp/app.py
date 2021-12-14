@@ -10,6 +10,9 @@ from datetime import timedelta
 from database import Base, SessionLocal, engine
 from flask_mail import Mail, Message
 from flask_apscheduler import APScheduler
+from Classes.Robots import Robots
+from Classes.Jueces import Jueces
+import requests as req
 # from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -74,7 +77,7 @@ def userState():
     try:
         current_user_id = get_jwt_identity()
         user = session.query(User).filter_by(id_usuario=current_user_id).first()
-        return jsonify({"id_usuario": user.id_usuario, "nombre": user.nombre}), 200
+        return jsonify({"id_usuario": user.id_usuario, "nombre": user.nombre, 'id_tribunal':user.id_tribunal}), 200
     except:
         return jsonify({'message':'No esta logeado'}), 422
     finally:
@@ -106,11 +109,45 @@ def agregauser():
     finally:
         session.close()
 
+@app.route('/IngresoDeExhorto')
+def IngresoDeExhorto():
+    try:
+        print('ejecutando')
+        query = session.query(Robots, Tribunal, Jueces).join(Tribunal).join(Jueces).all()
+        # print(query)
+        data = []
+        for robots, tribunal, jueces in query:
+            # print(robots)
+            aux = {
+                'id_robot':robots.id_robot,
+                'id_tribunal':tribunal.id_tribunal,
+                'ip':tribunal.ip,
+                'juez':jueces.apellido_juez + ', ' + jueces.nombre_juez
+            }
+            # print(aux)
+            data.append(aux)
+        
+        if (len(data) != 0):
+            for i in data:
+                print (i)
+                resp = req.post('http://'+i['ip']+':5001/ExeIngresoExhorto/', data=i)
 
-def scheduledTask():
-    print('EJECUTADO A LAS 3 de la mañana')
+        
+        return 'ejecutado'
+    except:
+        return ''
+    finally:
+        session.close()
+        return 'Conexion finalizada'
+
+# @app.route('/Ejecuta', methods=['GET','POST'])
+# def Ejecuta():
+#     IngresoDeExhorto()
+#     return 'ejecutado aca'
 
 if __name__ == '__main__': 
-    scheduler.add_job(id='Scheduled task', func = scheduledTask, trigger = 'cron', hour = 15, minute = 00)
+    scheduler.add_job(id='Scheduled task', func = IngresoDeExhorto, trigger = 'cron', hour = 1, minute = 5)
     scheduler.start()
-    app.run(debug=True, host='0.0.0.0')     
+    app.run(debug=True)     
+
+

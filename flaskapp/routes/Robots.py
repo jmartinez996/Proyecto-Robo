@@ -1,3 +1,4 @@
+from sqlalchemy.sql.functions import current_user
 from . import routes
 from operator import countOf
 import re
@@ -35,6 +36,7 @@ def ejecutaRobotResMens():
         archivo = request.files['archivo']
         id_tribunal = request.values['id_tribunal']
         id_robot = request.values['id_robot']
+        ip = request.values['ip']
         
         fichero = {'file1': archivo}
         dataForm = {
@@ -46,9 +48,9 @@ def ejecutaRobotResMens():
             'user_siagj': user_siagj,
             'pass_siagj': pass_siagj,
             'id_robot': id_robot,
-            'id_tribunal': id_tribunal
+            'id_tribunal': id_tribunal,
         } 
-        resp = req.post('http://127.0.0.1:5001/ExeResMens/',files=fichero, data=dataForm)
+        resp = req.post('http://'+ip+':5001/ExeResMens/',files=fichero, data=dataForm)
         # session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(False)})
         # session.commit()
         return ''
@@ -147,6 +149,29 @@ def stateRobotGestSii():
         session.close()
         return ''
         # 
+
+################################# INGRESO DE EXHORTOS ######################################
+
+@routes.route('/setJuezIngresoExhorto/', methods=['POST'])
+@jwt_required()
+def setJuezIngresoExhorto():
+    try:
+        current_user_id = get_jwt_identity()
+        id_tribunal = request.values['id_tribunal']
+        id_robot = request.values['id_robot']
+        id_juez = request.values['id_juez']
+
+        print(id_juez)
+
+        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'id_juez':(id_juez)})
+        session.commit()
+
+        return ''
+    except:
+        return ''
+    finally:
+        session.close()
+        return ''
 
 ####################### ------------- #########################
 

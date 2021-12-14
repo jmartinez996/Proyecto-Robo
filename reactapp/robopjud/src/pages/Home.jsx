@@ -40,6 +40,7 @@ import GestionSii from "./landingrobots/administracion/Gestion_sii";
 import AgregaRobot from "./AgregaRobot";
 import UpdateTribunal from "./UpdateTribunal";
 import RemoveIcon from "@material-ui/icons/Remove";
+import IngresoExhorto from "./landingrobots/civil/Ingreso_exhortos";
 
 const drawerWidth = 240;
 
@@ -118,12 +119,14 @@ const renderHome = (nombre) => {
 function Home() {
   let query = useQuery();
   const [nombre, setNombre] = useState(null);
+  const [idTribunal, setIdTribunal] = useState(null);
+  const [idUser, setIdUser] = useState(null);
   const token = window.localStorage.getItem("robo-jwt-token");
   const [areas, setAreas] = useState([]);
 
   const getUserState = () => {
     axios
-      .get(`http://10.13.18.84:5000/userState`, {
+      .get(`http://127.0.0.1:5000/userState`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -132,6 +135,8 @@ function Home() {
       .then((res) => {
         console.log(res.data);
         setNombre(res.data.nombre);
+        setIdTribunal(res.data.id_tribunal)
+        setIdUser(res.data.id_usuario)
       })
       .catch((error) => {
         console.log(error.message);
@@ -139,7 +144,7 @@ function Home() {
   };
 
   const getAreas = () => {
-    axios(`http://10.13.18.84:5000/getAreas`, {
+    axios(`http://127.0.0.1:5000/getAreas`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -163,7 +168,7 @@ function Home() {
   // const [estado, setEstado] = useState({});
 
   // const pasaDato = async () => {
-  //   const res = await axios.post(`http://10.13.18.84:5000/ejerobot`);
+  //   const res = await axios.post(`http://127.0.0.1:5000/ejerobot`);
   //   // .then(res => {
   //   //   console.log(res.data);
   //   // }).catch(error => {
@@ -295,24 +300,29 @@ function Home() {
           <div className={classes.drawerHeader} />
 
           <Switch>
+
+            <Route path="/civil/ingreso_de_exhortos/:idT/:idR/:ip" exact>
+              <IngresoExhorto />
+            </Route>
+
             <Route path="/civil" exact>
-              <Civil />
+              <Civil props={{'nombre':'Civil', 'id_tribunal':idTribunal}} />
             </Route>
 
             <Route path="/familia" exact>
               <Familia />
             </Route>
 
-            <Route path="/administracion/resumen_mensual/:idT/:idR" exact>
+            <Route path="/administracion/resumen_mensual/:idT/:idR/:ip" exact>
               <ResumenMensual />
             </Route>
 
-            <Route path="/administracion/gestion_de_sii/:idT/:idR" exact>
+            <Route path="/administracion/gestion_de_sii/:idT/:idR/:ip" exact>
               <GestionSii />
             </Route>
 
             <Route path="/administracion" exact>
-              <Administracion nombre="Administracion" />
+              <Administracion props={{'nombre':'Administracion', 'id_tribunal':idTribunal}} />
             </Route>
 
             <Route path="/home">

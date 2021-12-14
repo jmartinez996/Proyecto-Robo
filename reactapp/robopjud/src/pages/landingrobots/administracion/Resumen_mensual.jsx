@@ -48,12 +48,12 @@ const useStyles = makeStyles((theme) => ({
   // console.log(useParams())
   const {idT} = useParams()
   const {idR} = useParams()
+  const {ip} = useParams()
   const classes = useStyles();
   const [errMssg, setErrMssg] = useState('');
   const { handleSubmit, control} = useForm();
   const [archivo, setArchivo] = useState(null);
   const [formState, setFormState] = useState(false);
-
   const subirArchivo = e => {
     setArchivo(e);
     console.log(e.size);
@@ -101,6 +101,7 @@ const useStyles = makeStyles((theme) => ({
     f.append("pass_siagj", data.pass_siagj);
     f.append("id_tribunal", idT);
     f.append("id_robot", idR); 
+    f.append("ip", ip)
     
     Swal.fire({
       title: 'Estas seguro que los datos son correctos?',
@@ -115,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
     }).then((result) => {
       if (result.isConfirmed) {
 
-        axios.post(`http://10.13.18.84:5000/ejecutaRobotResMens/`, f, {headers: {'Content-Type': 'multipart/form-data','Authorization': `Bearer `+token}})
+        axios.post(`http://127.0.0.1:5000/ejecutaRobotResMens/`, f, {headers: {'Content-Type': 'multipart/form-data','Authorization': `Bearer `+token}})
         .then(response=>{
 
             // seteaError("");
