@@ -60,7 +60,7 @@ function AgregaRobot() {
         f.append("ruta",data.exe);
         f.append("id_tribunal",data.tribunal);
         f.append("id_area",data.area);
-        axios.post(`http://127.0.0.1:5000/createRobot/`, f, {
+        axios.post(`http://10.13.18.84:5000/createRobot/`, f, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer `+token
@@ -72,7 +72,7 @@ function AgregaRobot() {
     };
 
     useEffect(async () => {
-        await axios.get(`http://127.0.0.1:5000/getTribunal`,{
+        await axios.get(`http://10.13.18.84:5000/getTribunal`,{
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer `+token
@@ -87,7 +87,7 @@ function AgregaRobot() {
     }, []);
 
     useEffect(async() => {
-        await axios.get(`http://127.0.0.1:5000/getAreas`,{
+        await axios.get(`http://10.13.18.84:5000/getAreas`,{
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer `+token

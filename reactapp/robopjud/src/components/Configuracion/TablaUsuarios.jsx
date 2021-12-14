@@ -15,7 +15,7 @@ export default function Tablausuarios() {
 	const { handleSubmit, control } = useForm();
 	const getUser = async () => {
 		const users = await axios
-			.get(`http://127.0.0.1:5000/getUsers`, {
+			.get(`http://10.13.18.84:5000/getUsers`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ` + token,
@@ -49,7 +49,7 @@ export default function Tablausuarios() {
 		}).then((result) => {
 			if (result.isConfirmed) {
 				axios
-					.post(`http://127.0.0.1:5000/deleteUser/`, form, {
+					.post(`http://10.13.18.84:5000/deleteUser/`, form, {
 						headers: {
 							"Content-Type": "application/json",
 							Authorization: `Bearer ` + token,

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {usuarios} from './pages/Login';
 import Typography from "@material-ui/core/Typography";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import clsx from "clsx";
@@ -77,14 +78,35 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
 }));
+function settoken() {
+	const user = localStorage.getItem("robo-jwt-token");
+  return user;
+}
+function getrole(){
+  const datauser = usuarios;
+  return datauser.role;
+}
+getrole();
 
+const hasrole1 = (user,roles)=>{
+  if(!user){
+    return false
+  }else{
+    const valida = user.includes(roles);
+    return valida
+  }
+}
 
 
 
 function App() {
   const classes = useStyles();
   const [nombre, setNombre] = useState('hola');
+  settoken();
 
+	if(!settoken()){
+	  return <SignIn/>
+	}
 
   return (
     <Router>
@@ -101,17 +123,49 @@ function App() {
         </AppBar>
 
         <Switch>
+        {/* Para agregar una ruta nueva solo hay que llamar a la función hasrole que verifica
+          si el usuario tiene el rol, y con el operador logico para ver si existe la rura
+          dando true el route y si tiene el rol puede acceder a la vista de la pagina.
 
+        */}
+        
+        {hasrole1(getrole(),"algo") && <Route path='/home' component={Home}/>}
+        
+        {hasrole1(getrole(),"algo") && <Route path='/civil' component={Civil}/>}
+        {hasrole1(getrole(),"algo") && <Route path='/familia' component={Familia}/>}
+        
+        {hasrole1(getrole(),"algo") && <Route path='/administracion/resumen_mensual/:idT/:idR' component={ResumenMensual} exact/>}
+        {hasrole1(getrole(),"algo") && <Route path='/administracion/gestion_de_sii/:idT/:idR' component={GestionSii} exact/>}
+        {hasrole1(getrole(),"algo") && <Route path="/administracion" exact>
+                                          <Administracion nombre="Administracion" />
+                                        </Route>}
+
+        {hasrole1(getrole(),"algo") && <Route path='/configuracion/agregarusuario' component={AgregarUsuario} exact/>}
+        {hasrole1(getrole(),"algo") && <Route path='/configuracion/agregartribunal' component={AgregarTribunal} exact/>}
+        {hasrole1(getrole(),"algo") &&  <Route
+              path="/configuracion/updatetribunal/:id"
+              children={<UpdateTribunal />}
+              exact
+            >
+              <UpdateTribunal />
+            </Route>}
+        {hasrole1(getrole(),"algo") && <Route path='/configuracion/agregarobot' component={AgregaRobot} exact/>}
+        {hasrole1(getrole(),"algo") && <Route path='/configuracion' component={Configuracion} exact />}
+        
+					{/* <Route path='/home' exact>
+						<Home />
+					</Route>
           
-
-          <Route path="/home" exact>
-            <Home />
-          </Route>
-
-          <Route path="/">
-            <SignIn />
-          </Route>
-        </Switch>
+					<Route path='/' exact>
+						<SignIn />
+					</Route>
+					<Route path='/configuracion' exact>
+						<Configuracion />
+					</Route>
+          <Route path='/familia' exact>
+						<Familia />
+					</Route> */}
+				</Switch>
       </div>
     </Router>
   );
