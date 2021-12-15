@@ -16,7 +16,7 @@ function Configuracion() {
     // const [dataAreas, setDataAreas] = useState([]);
 
     // useEffect(async() => {
-    //     const datos = await axios.get(`http://10.13.18.84:5000/getDataConf`,{
+    //     const datos = await axios.get(`http://127.0.0.1:5000/getDataConf`,{
     //     headers: {
     //       'Content-Type': 'application/json',
     //       'Authorization': `Bearer `+token

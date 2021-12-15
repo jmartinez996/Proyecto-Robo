@@ -71,7 +71,7 @@ export default function IngresoExhorto(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5000/setJuezIngresoExhorto/`, f, {
+          .post(`http://127.0.0.1:5000/setJuezIngresoExhorto/`, f, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ` + token,

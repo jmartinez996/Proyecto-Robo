@@ -126,7 +126,7 @@ function Home() {
 
   const getUserState = () => {
     axios
-      .get(`http://10.13.18.84:5000/userState`, {
+      .get(`http://127.0.0.1:5000/userState`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -144,7 +144,7 @@ function Home() {
   };
 
   const getAreas = () => {
-    axios(`http://10.13.18.84:5000/getAreas`, {
+    axios(`http://127.0.0.1:5000/getAreas`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -168,7 +168,7 @@ function Home() {
   // const [estado, setEstado] = useState({});
 
   // const pasaDato = async () => {
-  //   const res = await axios.post(`http://10.13.18.84:5000/ejerobot`);
+  //   const res = await axios.post(`http://127.0.0.1:5000/ejerobot`);
   //   // .then(res => {
   //   //   console.log(res.data);
   //   // }).catch(error => {
