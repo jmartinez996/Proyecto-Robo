@@ -8,6 +8,10 @@ import Tablausuarios from "../components/Configuracion/TablaUsuarios";
 import Tablaareas from "../components/Configuracion/TablaAreas";
 import Tablatribunales from "../components/Configuracion/TablaTribunales";
 import TablaRobot from "../components/Configuracion/TablaRobot";
+
+export const name = {
+    name:"asd"
+}
 function Configuracion() {
 
     // const token = window.localStorage.getItem('robo-jwt-token')
