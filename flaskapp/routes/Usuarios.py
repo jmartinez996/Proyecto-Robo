@@ -51,7 +51,22 @@ def deleteUser():
     except:
         return ""
 
-
+@routes.route('/getUserbyId/<id>')
+#@jwt_required()
+def getUserbyId(id):
+    #current_user_id = get_jwt_identity()
+    print(id)
+    sql = session.query(User).filter(User.id_usuario == id).all()
+    data = []
+    for usuario in sql:
+        aux = {
+            'role':usuario.tipo_usuario
+        }
+        data.append(aux)
+    session.close()
+    return jsonify({'message':data})
+    #return(id)
+    
 @routes.route('/upusers')
 def upusers():
     print("data")

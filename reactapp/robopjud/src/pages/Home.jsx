@@ -41,13 +41,14 @@ import AgregaRobot from "./AgregaRobot";
 import UpdateTribunal from "./UpdateTribunal";
 import RemoveIcon from "@material-ui/icons/Remove";
 import IngresoExhorto from "./landingrobots/civil/Ingreso_exhortos";
+import { usuario } from "./Login";
 
 const drawerWidth = 240;
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
-
+console.log(usuario);
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -115,8 +116,21 @@ const renderHome = (nombre) => {
     </Container>
   );
 };
-
+function getrole(){
+  const datauser = usuario;
+  return datauser.role;
+}
+getrole();
+const hasrole1 = (user,roles)=>{
+  if(!user){
+    return false
+  }else{
+    const valida = user.includes(roles);
+    return valida
+  }
+}
 function Home() {
+  console.log(usuario);
   let query = useQuery();
   const [nombre, setNombre] = useState(null);
   const [idTribunal, setIdTribunal] = useState(null);
@@ -126,7 +140,7 @@ function Home() {
 
   const getUserState = () => {
     axios
-      .get(`http://127.0.0.1:5000/userState`, {
+      .get(`http://10.13.18.84:5000/userState`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -144,7 +158,7 @@ function Home() {
   };
 
   const getAreas = () => {
-    axios(`http://127.0.0.1:5000/getAreas`, {
+    axios(`http://10.13.18.84:5000/getAreas`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -168,7 +182,7 @@ function Home() {
   // const [estado, setEstado] = useState({});
 
   // const pasaDato = async () => {
-  //   const res = await axios.post(`http://127.0.0.1:5000/ejerobot`);
+  //   const res = await axios.post(`http://10.13.18.84:5000/ejerobot`);
   //   // .then(res => {
   //   //   console.log(res.data);
   //   // }).catch(error => {
@@ -301,62 +315,62 @@ function Home() {
 
           <Switch>
 
-            <Route path="/civil/ingreso_de_exhortos/:idT/:idR/:ip" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/civil/ingreso_de_exhortos/:idT/:idR/:ip" exact>
               <IngresoExhorto />
-            </Route>
+            </Route>}
 
-            <Route path="/civil" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/civil" exact>
               <Civil props={{'nombre':'Civil', 'id_tribunal':idTribunal}} />
-            </Route>
+            </Route>}
 
-            <Route path="/familia" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/familia" exact>
               <Familia />
-            </Route>
+            </Route>}
 
-            <Route path="/administracion/resumen_mensual/:idT/:idR/:ip" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/administracion/resumen_mensual/:idT/:idR/:ip" exact>
               <ResumenMensual />
-            </Route>
+            </Route>}
 
-            <Route path="/administracion/gestion_de_sii/:idT/:idR/:ip" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/administracion/gestion_de_sii/:idT/:idR/:ip" exact>
               <GestionSii />
-            </Route>
+            </Route>}
 
-            <Route path="/administracion" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/administracion" exact>
               <Administracion props={{'nombre':'Administracion', 'id_tribunal':idTribunal}} />
-            </Route>
+            </Route>}
 
-            <Route path="/home">
+            {hasrole1(getrole(),"algo") && <Route path="/home">
               {nombre !== null && renderHome(nombre)}
-              {nombre === null && <NoLogged />}
-            </Route>
+              
+            </Route>}
 
-            <Route path="/configuracion/agregarusuario" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/configuracion/agregarusuario" exact>
               <AgregarUsuario />
-            </Route>
+            </Route>}
 
-            <Route path="/configuracion/agregartribunal" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/configuracion/agregartribunal" exact>
               <AgregarTribunal />
-            </Route>
+            </Route>}
 
-            <Route path="/configuracion/editartribunal" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/configuracion/editartribunal" exact>
               <AgregarTribunal />
-            </Route>
+            </Route>}
 
-            <Route path="/configuracion/agregarobot" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/configuracion/agregarobot" exact>
               <AgregaRobot />
-            </Route>
+            </Route>}
 
-            <Route
+            {hasrole1(getrole(),"algo") && <Route
               path="/configuracion/updatetribunal/:id"
               children={<UpdateTribunal />}
               exact
             >
               <UpdateTribunal />
-            </Route>
+            </Route>}
 
-            <Route path="/configuracion" exact>
+            {hasrole1(getrole(),"algo") && <Route path="/configuracion" exact>
               <Configuracion />
-            </Route>
+            </Route>}
 
             <Route path="/">
               <SignIn />

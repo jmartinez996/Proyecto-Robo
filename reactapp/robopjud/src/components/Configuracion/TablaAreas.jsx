@@ -35,7 +35,7 @@ import ReactDOM from "react-dom";
     const [data, setData] = useState([{id_area:'',nombre_usuario:''}]);
 
     const getAreas = async() => {
-        const areas = await axios(`http://127.0.0.1:5000/getAreas`,{
+        const areas = await axios(`http://10.13.18.84:5000/getAreas`,{
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer `+token
@@ -69,7 +69,7 @@ import ReactDOM from "react-dom";
             preConfirm: (nombre) => {
 
               f.append("nombre_area", nombre);
-              return axios.post(`http://127.0.0.1:5000/createArea/`, f, {headers: {'Content-Type': 'application/json','Authorization': `Bearer `+token}})
+              return axios.post(`http://10.13.18.84:5000/createArea/`, f, {headers: {'Content-Type': 'application/json','Authorization': `Bearer `+token}})
                 .then(response => {
                     // console.log(response.data.message)
                     var aux = data;
@@ -121,7 +121,7 @@ import ReactDOM from "react-dom";
           f.append("nombre_area_nuevo",nombre)
           console.log("se modifico");
           console.log(name);
-          return axios.post(`http://127.0.0.1:5000/updateArea/`, f, {
+          return axios.post(`http://10.13.18.84:5000/updateArea/`, f, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer `+token
@@ -165,7 +165,7 @@ import ReactDOM from "react-dom";
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          axios.post(`http://127.0.0.1:5000/deleteArea/`, f, {
+          axios.post(`http://10.13.18.84:5000/deleteArea/`, f, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer `+token
@@ -195,7 +195,7 @@ import ReactDOM from "react-dom";
           })
     })
       /*
-      return axios.post(`http://127.0.0.1:5000/deleteArea/`, f, {
+      return axios.post(`http://10.13.18.84:5000/deleteArea/`, f, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer `+token
