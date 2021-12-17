@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState,useContext } from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
+import { BrowserRouter as Router, Switch, Route, Link, useLocation, Redirect } from "react-router-dom";
+import Context from "../context/Context";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,9 +39,8 @@ export default function SignIn() {
   const classes = useStyles();
   const [errMssg, setErrMssg] = useState('');
   const { handleSubmit, control} = useForm();
-
+  const [context, setContext] = useContext(Context);
   const onSubmit = async (data) => {
-    
     const f = new FormData();
     f.append("rut", data.rut);
     f.append("contrasena", data.contrasena);
@@ -47,8 +48,17 @@ export default function SignIn() {
     .then(response=>{
       seteaError("");
       window.localStorage.setItem("robo-jwt-token", response.data.token)
-      window.location.href="/home"
-
+      window.localStorage.setItem("robo-jwt-name", response.data.name)
+      window.localStorage.setItem("robo-jwt-role", response.data.role)
+      {<Router>
+        <Redirect to="/home" />
+      </Router>}
+      //window.location.href="/home"
+      setContext({
+        name: response.data.name,
+        token: response.data.token,
+        role: response.data.role,
+    });
     }).catch(error=>{
       seteaError(error.response.data.message);
 
