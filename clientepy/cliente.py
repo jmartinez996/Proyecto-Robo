@@ -4,10 +4,21 @@ import os
 import requests as req
 from getpass import getuser
 from datetime import date, timedelta
-
+import wmi
+import pythoncom
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './'
 CORS(app)
+
+
+def cierraIExplore():
+    pythoncom.CoInitialize()
+    f = wmi.WMI()
+    for process in f.Win32_Process():
+        if(process.name == 'iexplore.exe'):
+            process.Terminate()
+            print('Internet Explorer Cerrado') 
+
 
 @app.route('/')
 def index():
@@ -42,6 +53,9 @@ def ExeResMens():
     path = os.path.abspath(file)
     archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
     print('recibido desde el cliente')
+
+
+    cierraIExplore()  
     script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Informe Mensual/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_mixtos+"', 'pass_mixtos':'"+pass_mixtos+"', 'user_familia':'"+user_familia+"', 'pass_familia':'"+pass_familia+"', 'user_siagj':'"+user_siagj+"', 'pass_siagj':'"+pass_siagj+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
     os.system(script)                             
     
@@ -69,7 +83,8 @@ def ExeGestSii():
     file = 'archivo.xls'
     # path = os.path.abspath(file)
     archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
-    print('recibido desde el cliente')                                                                
+    print('recibido desde el cliente') 
+    cierraIExplore()                                                             
     script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Pago de facturas/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_sii+"', 'user_wind':'"+windows_user+"', 'pass_mixtos':'"+pass_sii+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
     # "C:\Users\sala2_jltpucon\AppData\Local\Programs\UiPath\Studio\UiRobot.exe"
     os.system(script)                             
@@ -80,15 +95,17 @@ def ExeGestSii():
 
 ################### INGRESO DE EXHORTO #################
 
+
 @app.route('/ExeIngresoExhorto/', methods=['POST']) 
 def ExeIngresoExhorto():
-
+    
     windows_user = getuser()
     id_robot = request.values['id_robot']
     id_tribunal = request.values['id_tribunal']
     juez = request.values['juez']
 
-    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos para plataforma/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
+    cierraIExplore()                                                                   
+    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
     # "C:\Users\sala2_jltpucon\AppData\Local\Programs\UiPath\Studio\UiRobot.exe"
     os.system(script)                             
     
