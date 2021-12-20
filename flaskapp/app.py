@@ -65,7 +65,7 @@ def login():
         
         if usuario.rut == rut and checkph(usuario.contrasena, contrasena):
             access_token = create_access_token(identity=usuario.id_usuario)
-            return jsonify(message="Usuario correcto.", token=access_token, id_usuario=usuario.id_usuario), 200
+            return jsonify(message="Usuario correcto.", token=access_token, id_usuario=usuario.id_usuario,role=usuario.tipo_usuario,name = usuario.nombre), 200
     except:
         return jsonify(message="Usuario o contrasena son incorrectos."), 400
     finally:

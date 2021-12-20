@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Container from "@material-ui/core/Container";
+
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import NoLogged from "./NoLogged";
@@ -48,7 +48,6 @@ const drawerWidth = 240;
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
-console.log(usuario);
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -107,15 +106,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const renderHome = (nombre) => {
-  return (
-    <Container>
-      <Typography variant="h3" color="initial">
-        Bienvenido {nombre}
-      </Typography>
-    </Container>
-  );
-};
+
 function getrole(){
   const datauser = usuario;
   return datauser.role;
@@ -130,7 +121,7 @@ const hasrole1 = (user,roles)=>{
   }
 }
 function Home() {
-  console.log(usuario);
+  
   let query = useQuery();
   const [nombre, setNombre] = useState(null);
   const [idTribunal, setIdTribunal] = useState(null);
@@ -167,7 +158,6 @@ function Home() {
       .then((res) => {
         //console.log(res.data.message)
         setAreas(res.data.message);
-        console.log(areas);
       })
       .catch((error) => {
         //console.log(error.message)
@@ -215,7 +205,10 @@ function Home() {
   };
 
   return (
-    <div><h1>hola</h1></div>
+    <div>
+      <h1>Bienvenido n.</h1>
+      <h3>Historial</h3>
+      </div>
     
   );
 }

@@ -9,7 +9,9 @@ import Swal from "sweetalert2";
 import { useForm, Controller } from "react-hook-form";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
+
 export default function Tablausuarios() {
+
 	const token = window.localStorage.getItem("robo-jwt-token");
 	const [data, setData] = useState([]);
 	const { handleSubmit, control } = useForm();
