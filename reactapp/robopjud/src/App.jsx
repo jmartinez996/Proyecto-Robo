@@ -144,7 +144,7 @@ function App() {
 	};
 	const getUserState = () => {
 		axios
-			.get(`http://10.13.18.84:5000/userState`, {
+			.get(`http://127.0.0.1:5000/userState`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ` + token,
@@ -162,7 +162,7 @@ function App() {
 	};
 
 	const getAreas = () => {
-		axios(`http://10.13.18.84:5000/getAreas`, {
+		axios(`http://127.0.0.1:5000/getAreas`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,
@@ -286,7 +286,7 @@ function App() {
 							<Route path='/' exact>
 								{token === null ? <SignIn /> : <Redirect to='/home' />}
 							</Route>
-							{hasrole1(context.role, "algo") && (
+							{hasrole1(context.role, "user") && (
 								<Route path='/civil/ingreso_de_exhortos/:idT/:idR/:ip' exact>
 									{token !== null && <IngresoExhorto />}
 									{token === null && <NoLogged />}

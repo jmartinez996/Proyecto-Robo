@@ -48,15 +48,18 @@ export default function IngresoExhorto(props) {
   const classes = useStyles();
   const [errMssg, setErrMssg] = useState("");
   const { handleSubmit, control } = useForm();
-
+  const { formState, setFormState } = useState(true);
 
   const onSubmit = (data) => {
     const token = window.localStorage.getItem("robo-jwt-token");
     const f = new FormData();
-    f.append("id_juez", data.juez)
+    f.append("user_sitci", data.user_sitci);
+    f.append("pass_sitci", data.pass_sitci);
+    f.append("id_juez", data.juez);
     f.append("id_tribunal", idT);
     f.append("id_robot", idR);
     f.append("ip", ip);
+    f.append("correo", data.correo);
 
     Swal.fire({
       title: "Estas seguro que los datos son correctos?",
@@ -71,7 +74,7 @@ export default function IngresoExhorto(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5000/setJuezIngresoExhorto/`, f, {
+          .post(`http://127.0.0.1:5000/ejecutaIngresoExhorto/`, f, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ` + token,
@@ -128,7 +131,89 @@ export default function IngresoExhorto(props) {
                   onSubmit={handleSubmit(onSubmit)}
                   encType="multipart/form-data"
                 >
-                  
+                  <Controller
+                    name="correo"
+                    control={control}
+                    defaultValue=""
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <TextField
+                        variant="outlined"
+                        margin="dense"
+                        fullWidth
+                        id="nombre"
+                        value={value}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        label="Correo Electronico"
+                        autoComplete="Correo Electronico"
+                        autoFocus
+                        onChange={onChange}
+                        disabled={formState}
+                      />
+                    )}
+                    rules={{
+                      required: "El campo Correo Electronico esta vacío",
+                      pattern: /^\S+@\S+$/i,
+                      //  validate: (value) => validation(value)
+                    }}
+                  />
+                  <Controller
+                    name="user_sitci"
+                    control={control}
+                    defaultValue=""
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <TextField
+                        variant="outlined"
+                        margin="dense"
+                        fullWidth
+                        id="user_sitci"
+                        value={value}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        label="Usuario de la plataforma civil.pjud"
+                        autoComplete="usuario mixtos"
+                        onChange={onChange}
+                        disabled={formState}
+                      />
+                    )}
+                    rules={{
+                      required: "El campo usuario civil esta vacío",
+                      //  validate: (value) => validation(value)
+                    }}
+                  />
+                  <Controller
+                    name="pass_sitci"
+                    control={control}
+                    defaultValue=""
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <TextField
+                        variant="outlined"
+                        margin="dense"
+                        fullWidth
+                        id="pass_sitci"
+                        value={value}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        label="Contraseña plataforma civil.pjud"
+                        autoComplete="contrasena"
+                        type="password"
+                        onChange={onChange}
+                        disabled={formState}
+                      />
+                    )}
+                    rules={{
+                      required: "El campo Contrasena civil esta vacío",
+                    }}
+                  />
 
                   <Controller
                     name="juez"
@@ -180,12 +265,8 @@ export default function IngresoExhorto(props) {
                     justify="center"
                     style={{ marginTop: "10px" }}
                   >
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                    >
-                      Seleccionar Juez
+                    <Button type="submit" variant="contained" color="primary">
+                      Iniciar Robot
                     </Button>
                   </Grid>
                 </form>

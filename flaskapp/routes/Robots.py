@@ -9,6 +9,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests as req
 from sqlalchemy import and_
 from Classes.Robots import Robots
+from Classes.Jueces import Jueces
 from database import Base, SessionLocal, engine
 from flask_mail import Message
 from app import mail
@@ -58,11 +59,12 @@ def ejecutaRobotResMens():
         return ''
     finally:
         session.close()
+        return 'Proceso Finaliado.'
 
 @routes.route('/stateRobotResMens/', methods=['POST', 'GET'])
 def stateRobotResMens():
     try:
-        estado = request.values['i']
+        estado = request.values['estado']
         id_robot = request.values['id_robot']
         id_tribunal = request.values['id_tribunal']
         correo = request.values['correo']
@@ -71,21 +73,26 @@ def stateRobotResMens():
         archivo = request.files['archivo']
         archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file_name))
 
-        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(True)})
-        session.commit()
+        if estado == 'error':
+            msg = Message('RPA: Hubo un error ejecutando Resumen Mensual', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg.body = "Pruebe revisando la plantilla para verificar que corresponda con los requerimientos establecidos."
+            mail.send(msg)
 
-        msg = Message('RPA: Resumen Mensual ejecutado con éxito-', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
-        msg.body = "Se adjunta a este correo un excel con el resultado."
-        with routes.open_resource('../Archivos/'+file_name) as fp:  
-            msg.attach(file_name,'application/vnd.ms-excel',fp.read())  
-        mail.send(msg)
-
+        if estado == 'success':
+            msg = Message('RPA: Resumen Mensual ejecutado con éxito-', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg.body = "Se adjunta a este correo un excel con el resultado."
+            with routes.open_resource('../Archivos/'+file_name) as fp:  
+                msg.attach(file_name,'application/vnd.ms-excel',fp.read())  
+            mail.send(msg)
+        
     except:
         print('no se pudo enviar nada')
         return ''
     finally:
+        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(True)})
+        session.commit()
         session.close()
-        return ''
+        return 'Proceso Finalizado'
 
 ####################### GESTION DE SII #########################
 
@@ -100,6 +107,7 @@ def ejecutaRobotGestSii():
         archivo = request.files['archivo']
         id_tribunal = request.values['id_tribunal']
         id_robot = request.values['id_robot']
+        ip = request.values['ip']
         
         fichero = {'file1': archivo}
         dataForm = {
@@ -109,7 +117,7 @@ def ejecutaRobotGestSii():
             'id_robot': id_robot,
             'id_tribunal': id_tribunal
         } 
-        resp = req.post('http://127.0.0.1:5001/ExeGestSii/',files=fichero, data=dataForm)
+        resp = req.post('http://'+ip+':5001/ExeGestSii/',files=fichero, data=dataForm)
         session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(False)})
         session.commit()
         return ''
@@ -117,12 +125,13 @@ def ejecutaRobotGestSii():
         return ''
     finally:
         session.close()
+        return 'Proceso Finalizado.'
 
 @routes.route('/stateRobotGestSii/', methods=['POST', 'GET'])
 def stateRobotGestSii():
     try:
 
-        estado = request.values['i']
+        estado = request.values['estado']
         id_robot = request.values['id_robot']
         id_tribunal = request.values['id_tribunal']
         correo = request.values['correo']
@@ -133,45 +142,100 @@ def stateRobotGestSii():
         archivo = request.files['archivo']
         archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file_name))
 
-        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(True)})
-        session.commit()
-
-        msg = Message('RPA: Gestión de SII ejecutado con Éxito.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
-        msg.body = "Se adjunta a este correo un archivo comprimido con el resultado."
-        with routes.open_resource('../Archivos/'+file_name) as fp:  
-            msg.attach(file_name,'application/zip',fp.read())  
-        mail.send(msg)
+        if estado == 'error':
+            msg = Message('RPA: Hubo un error ejecutando Gestión de SII.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg.body = "Pruebe revisando la plantilla para verificar que corresponda con los requerimientos establecidos."
+            mail.send(msg)
+        
+        if estado == 'success':
+            msg = Message('RPA: Gestión de SII ejecutado con Éxito.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg.body = "Se adjunta a este correo un archivo comprimido con el resultado."
+            with routes.open_resource('../Archivos/'+file_name) as fp:  
+                msg.attach(file_name,'application/zip',fp.read())  
+            mail.send(msg)
  
     except:
         print('no se pudo enviar nada')
         return ''
     finally:
+        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(True)})
+        session.commit()
         session.close()
-        return ''
+        return 'Proceso finalizado'
         # 
 
 ################################# INGRESO DE EXHORTOS ######################################
 
-@routes.route('/setJuezIngresoExhorto/', methods=['POST'])
+@routes.route('/ejecutaIngresoExhorto/', methods=['POST'])
 @jwt_required()
 def setJuezIngresoExhorto():
     try:
         current_user_id = get_jwt_identity()
+        user_sitci = request.values['user_sitci']
+        pass_sitci = request.values['pass_sitci']
         id_tribunal = request.values['id_tribunal']
         id_robot = request.values['id_robot']
         id_juez = request.values['id_juez']
+        ip = request.values['ip']
+        correo = request.values['correo']
 
-        print(id_juez)
+        query = session.query(Jueces).filter_by(id_juez=id_juez).first()
 
-        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'id_juez':(id_juez)})
+        dataForm = {
+            'user_sitci': user_sitci,
+            'pass_sitci': pass_sitci,
+            'id_tribunal': id_tribunal,
+            'id_robot': id_robot,
+            'juez':query.apellido_juez + ', ' + query.nombre_juez,
+            'correo':correo
+        } 
+
+        resp = req.post('http://'+ip+':5001/ExeIngresoExhorto/', data=dataForm)
+        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(False)})
         session.commit()
+
+        print(dataForm)
 
         return ''
     except:
-        return ''
+        print('no se pudo enviar nada')
+        return 'Hubo un problema'
     finally:
         session.close()
-        return ''
+        return 'Proceso finalizado.'
+
+@routes.route('/stateRobotIngresoExhorto/', methods=['POST', 'GET'])
+def stateRobotIngresoExhorto():
+    try:
+        print('se llego')
+        id_robot = request.values['id_robot']
+        id_tribunal = request.values['id_tribunal']
+        correo = request.values['correo']
+        estado = request.values['estado']
+        rits = request.values['rits']
+        print(estado)
+        print(rits)
+
+        if estado == 'error':
+            msg = Message('RPA: Hubo un problema ejecutando Ingreso de exhortos.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            if rits != "":
+                msg.body = "Los ingresos de exhortos que se pudieron realizar son: " + rits[1:]
+            else:
+                msg.body = "No se pudo realizar ningún exhorto."
+            mail.send(msg)
+        
+        if estado == 'success':
+            msg = Message('RPA: Ingreso de Exhortos se ha ejecutado con éxito.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg.body = "Los Ingresos de exhorto que se realizaron son: " + rits[1:]
+            mail.send(msg)
+    except:
+        print('no se pudo enviar nada')
+        return 'Hubo un problema'
+    finally:
+        session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(True)})
+        session.commit()
+        session.close()
+        return 'Proceso finalizado.'
 
 ####################### ------------- #########################
 

@@ -103,9 +103,12 @@ def ExeIngresoExhorto():
     id_robot = request.values['id_robot']
     id_tribunal = request.values['id_tribunal']
     juez = request.values['juez']
+    user_sitci = request.values['user_sitci']
+    pass_sitci = request.values['pass_sitci']
+    correo = request.values['correo']
 
     cierraIExplore()                                                                   
-    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
+    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'contrasena':'"+pass_sitci+"', 'correo':'"+correo+"', 'usuario':'"+user_sitci+"'}"+'"'                                                               
     # "C:\Users\sala2_jltpucon\AppData\Local\Programs\UiPath\Studio\UiRobot.exe"
     os.system(script)                             
     

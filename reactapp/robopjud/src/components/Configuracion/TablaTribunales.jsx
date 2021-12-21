@@ -28,7 +28,7 @@ export default function Tablatribunales() {
   const token = window.localStorage.getItem("robo-jwt-token");
   const [data, setData] = useState([]);
   const getTribunal = async () => {
-    const tribunal = await axios(`http://10.13.18.84:5000/getTribunal`, {
+    const tribunal = await axios(`http://127.0.0.1:5000/getTribunal`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -75,7 +75,7 @@ export default function Tablatribunales() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5000/deleteTribunal/`, f, {
+          .post(`http://127.0.0.1:5000/deleteTribunal/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
