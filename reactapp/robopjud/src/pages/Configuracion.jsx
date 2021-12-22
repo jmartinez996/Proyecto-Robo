@@ -1,4 +1,4 @@
-import React, { useEffect,useContext } from "react";
+import React, { useEffect, useContext } from "react";
 
 import { Box, Container, Grid } from "@material-ui/core";
 import Tablausuarios from "../components/Configuracion/TablaUsuarios";
@@ -6,13 +6,11 @@ import Tablaareas from "../components/Configuracion/TablaAreas";
 import Tablatribunales from "../components/Configuracion/TablaTribunales";
 import TablaRobot from "../components/Configuracion/TablaRobot";
 import Context from "../context/Context";
-
+import AppbarMenu from "../components/AppbarMenu";
 export const name = {
 	name: "asd",
 };
 function Configuracion(props) {
-	// const vari = useContext(Context);
-	// console.log(vari)
 	const [context, setContext] = useContext(Context);
 	const token = window.localStorage.getItem("robo-jwt-token");
 	const name = window.localStorage.getItem("robo-jwt-name");
@@ -33,6 +31,7 @@ function Configuracion(props) {
 	}, []);
 	return (
 		<>
+			<AppbarMenu />
 			<Box
 				sx={{
 					backgroundColor: "background.default",
@@ -41,7 +40,6 @@ function Configuracion(props) {
 				}}
 			>
 				<Container maxWidth={false}>
-					<button onClick={() => funsion()}>Change Context Value</button>
 					<Grid container spacing={2}>
 						<Grid item lg={12} sm={12} xl={12} xs={12}>
 							<Tablausuarios />

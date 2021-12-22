@@ -22,23 +22,23 @@ import NoLogged from "./pages/NoLogged";
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import HomeIcon from "@material-ui/icons/Home";
-import AppbarMenu from "./components/AppbarMenu";
-import RemoveIcon from "@material-ui/icons/Remove";
+// import Drawer from "@material-ui/core/Drawer";
+// import CssBaseline from "@material-ui/core/CssBaseline";
+// import AppBar from "@material-ui/core/AppBar";
+// import Toolbar from "@material-ui/core/Toolbar";
+// import List from "@material-ui/core/List";
+// import Divider from "@material-ui/core/Divider";
+// import IconButton from "@material-ui/core/IconButton";
+// import MenuIcon from "@material-ui/icons/Menu";
+// import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+// import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+// import ListItem from "@material-ui/core/ListItem";
+// import ListItemIcon from "@material-ui/core/ListItemIcon";
+// import ListItemText from "@material-ui/core/ListItemText";
+// import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+// import HomeIcon from "@material-ui/icons/Home";
+// import AppbarMenu from "./components/AppbarMenu";
+// import RemoveIcon from "@material-ui/icons/Remove";
 
 import { name } from "./pages/Configuracion";
 
@@ -103,25 +103,16 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-
-
-const hasrole1 = (user, roles) => {
-	if (!user) {
+const hasrole1 = (arr, val) => {
+	if (!arr) {
 		return false;
 	} else {
-		const valida = user.includes(roles);
+		const valida = val.some((arrVal) => arr === arrVal);
+		console.log(valida);
 		return valida;
 	}
 };
-// const renderHome = (nombre) => {
-// 	return (
-// 		<Container>
-// 			<Typography variant='h3' color='initial'>
-// 				Bienvenido {nombre}
-// 			</Typography>
-// 		</Container>
-// 	);
-// };
+
 function App() {
 	const [nombre, setNombre] = useState(null);
 	const [idTribunal, setIdTribunal] = useState(null);
@@ -129,11 +120,12 @@ function App() {
 	const token = window.localStorage.getItem("robo-jwt-token");
 	const name = window.localStorage.getItem("robo-jwt-name");
 	const role = window.localStorage.getItem("robo-jwt-role");
+	const idT = window.localStorage.getItem("robo-jwt-idT");
 	const [areas, setAreas] = useState([]);
 	const [context, setContext] = useState({
-		name: "",
-		role: "",
-		token: "",
+		name: null,
+		role: null,
+		token: null,
 	});
 	const getData = () => {
 		setContext({
@@ -144,7 +136,7 @@ function App() {
 	};
 	const getUserState = () => {
 		axios
-			.get(`http://127.0.0.1:5000/userState`, {
+			.get(`http://10.13.18.84:5000/userState`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ` + token,
@@ -161,27 +153,10 @@ function App() {
 			});
 	};
 
-	const getAreas = () => {
-		axios(`http://127.0.0.1:5000/getAreas`, {
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ` + token,
-			},
-		})
-			.then((res) => {
-				//console.log(res.data.message)
-				setAreas(res.data.message);
-				console.log(areas);
-			})
-			.catch((error) => {
-				//console.log(error.message)
-			});
-	};
 
 	useEffect(() => {
 		getData();
 		getUserState();
-		getAreas();
 	}, []);
 
 	const classes = useStyles();
@@ -208,177 +183,104 @@ function App() {
 
 	return (
 		<Router>
-			<div className={classes.root}>
-				<CssBaseline />
-				<AppBar
-					position='fixed'
-					className={clsx(classes.appBar, {
-						[classes.appBarShift]: open,
-					})}
-				>
-					<Toolbar>
-						<IconButton color='inherit' aria-label='open drawer' onClick={handleDrawerOpen} edge='start' className={clsx(classes.menuButton, open && classes.hide)}>
-							<MenuIcon />
-						</IconButton>
-						<Link to='/home' style={{ textDecoration: "none", color: "white", flexGrow: 1 }}>
-							<Typography variant='h6' noWrap>
-								Robo Pjud
-							</Typography>
-						</Link>
-						<AppbarMenu />
-					</Toolbar>
-				</AppBar>
-
-				<Drawer
-					className={classes.drawer}
-					variant='persistent'
-					anchor='left'
-					open={open}
-					classes={{
-						paper: classes.drawerPaper,
-					}}
-				>
-					<div className={classes.drawerHeader}>
-						<Typography style={{ paddingRight: "120px" }} variant='subtitle1' color='initial'>
-							Menu
-						</Typography>
-						<IconButton onClick={handleDrawerClose}>{theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}</IconButton>
-					</div>
-
-					<Divider />
-
-					<List>
-						<ListItem component={Link} to='/home' button key={"home"}>
-							<ListItemIcon>
-								<HomeIcon />
-							</ListItemIcon>
-							<ListItemText primary='Home' />
-						</ListItem>
-
-						{areas.map((area) => (
-							<ListItem component={Link} to={"/" + area.nombre_area.toLowerCase()} button key={area.nombre_area.toLowerCase()}>
-								<ListItemIcon>
-									<RemoveIcon />
-								</ListItemIcon>
-								<ListItemText primary={area.nombre_area} />
-							</ListItem>
-						))}
-
-						<ListItem button onClick={cerrarSesion} key={"Cerrar sesion"}>
-							<ListItemIcon>
-								<ExitToAppIcon />
-							</ListItemIcon>
-							<ListItemText primary='Cerrar sesion' />
-						</ListItem>
-						<Divider />
-					</List>
-				</Drawer>
-
-				<main
-					className={clsx(classes.content, {
-						[classes.contentShift]: open,
-					})}
-				>
-					<div className={classes.drawerHeader} />
-
-					<Switch>
-						<Context.Provider value={[context, setContext]}>
-							<Route path='/' exact>
-								{token === null ? <SignIn /> : <Redirect to='/home' />}
+			<div>
+				<Switch>
+					<Context.Provider value={[context, setContext]}>
+						<Route path='/' exact>
+							{context.token === null ? <SignIn /> : <Redirect to='/home' />}
+						</Route>
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/civil/ingreso_de_exhortos/:idT/:idR/:ip' exact>
+								{context.token !== null && <IngresoExhorto />}
+								{context.token === null && <NoLogged />}
 							</Route>
-							{hasrole1(context.role, "user") && (
-								<Route path='/civil/ingreso_de_exhortos/:idT/:idR/:ip' exact>
-									{token !== null && <IngresoExhorto />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/civil' exact>
-									{token !== null && <Civil props={{ nombre: "Civil", id_tribunal: idTribunal }} />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/civil' exact>
+								{context.token !== null && <Civil props={{ nombre: "Civil", id_tribunal: idT }} />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/familia' exact>
-									{token !== null && <Familia />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/familia' exact>
+								{context.token !== null && <Familia />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/administracion/resumen_mensual/:idT/:idR/:ip' exact>
-									{token !== null && <ResumenMensual />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/administracion/resumen_mensual/:idT/:idR/:ip' exact>
+								{context.token !== null && <ResumenMensual />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/administracion/gestion_de_sii/:idT/:idR/:ip' exact>
-									{token !== null && <GestionSii />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/administracion/gestion_de_sii/:idT/:idR/:ip' exact>
+								{context.token !== null && <GestionSii />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/administracion' exact>
-									{token !== null && <Administracion props={{ nombre: "Administracion", id_tribunal: idTribunal }} />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/administracion' exact>
+								{context.token !== null && <Administracion props={{ nombre: "Administracion", id_tribunal: idT }} />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/home'>
-									{token !== null && <Home />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["admin", "user"]) && (
+							<Route path='/home'>
+								{context.token !== null && <Home />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/configuracion/agregarusuario' exact>
-									{token !== null && <AgregarUsuario />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/configuracion/agregarusuario' exact>
+								{context.token !== null && <AgregarUsuario />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/configuracion/agregartribunal' exact>
-									{token !== null && <AgregarTribunal />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/configuracion/agregartribunal' exact>
+								{context.token !== null && <AgregarTribunal />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/configuracion/editartribunal' exact>
-									{token !== null && <AgregarTribunal />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/configuracion/editartribunal' exact>
+								{context.token !== null && <AgregarTribunal />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/configuracion/agregarobot' exact>
-									{token !== null && <AgregaRobot />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/configuracion/agregarobot' exact>
+								{context.token !== null && <AgregaRobot />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/configuracion/updatetribunal/:id' children={<UpdateTribunal />} exact>
-									{token !== null && <UpdateTribunal />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
+						{hasrole1(context.role, ["user"]) && (
+							<Route path='/configuracion/updatetribunal/:id' children={<UpdateTribunal />} exact>
+								{context.token !== null && <UpdateTribunal />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
 
-							{hasrole1(context.role, "user") && (
-								<Route path='/configuracion' exact>
-									{token !== null && <Configuracion />}
-									{token === null && <NoLogged />}
-								</Route>
-							)}
-						</Context.Provider>
-					</Switch>
-				</main>
+						{hasrole1(context.role, ["user", "admin"]) && (
+							<Route path='/configuracion' exact>
+								{context.token !== null && <Configuracion />}
+								{context.token === null && <NoLogged />}
+							</Route>
+						)}
+					</Context.Provider>
+				</Switch>
 			</div>
 		</Router>
 	);
