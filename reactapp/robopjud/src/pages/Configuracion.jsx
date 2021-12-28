@@ -16,9 +16,6 @@ function Configuracion(props) {
 	const name = window.localStorage.getItem("robo-jwt-name");
 	const role = window.localStorage.getItem("robo-jwt-role");
 
-	const funsion = () => {
-		console.log(context);
-	};
 	const getData = () => {
 		setContext({
 			name: name,

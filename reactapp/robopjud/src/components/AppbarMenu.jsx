@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -23,6 +20,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import HomeIcon from "@material-ui/icons/Home";
 import RemoveIcon from "@material-ui/icons/Remove";
+import Context from "../context/Context";
 
 const drawerWidth = 240;
 const ITEM_HEIGHT = 48;
@@ -108,14 +106,27 @@ export default function AppbarMenu() {
 	const cerrarSesion = () => {
 		window.location.href = "/";
 		window.localStorage.removeItem("robo-jwt-token");
+		window.localStorage.removeItem("robo-jwt-name");
+		window.localStorage.removeItem("robo-jwt-role");
+		window.localStorage.removeItem("robo-jwt-idT");
 	};
 
 	const [areas, setAreas] = useState([]);
-  const [nombre, setNombre] = useState(null);
-  const [idTribunal, setIdTribunal] = useState(null);
-  const [idUser, setIdUser] = useState(null);
+	const [nombre, setNombre] = useState(null);
+	const [idTribunal, setIdTribunal] = useState(null);
+	const [idUser, setIdUser] = useState(null);
 	const token = window.localStorage.getItem("robo-jwt-token");
-  const getUserState = () => {
+	const [context, setContext] = useContext(Context);
+	const name = window.localStorage.getItem("robo-jwt-name");
+	const role = window.localStorage.getItem("robo-jwt-role");
+	const getData = () => {
+		setContext({
+			name: name,
+			token: token,
+			role: role,
+		});
+	};
+	const getUserState = () => {
 		axios
 			.get(`http://10.13.18.84:5000/userState`, {
 				headers: {
@@ -124,11 +135,10 @@ export default function AppbarMenu() {
 				},
 			})
 			.then((res) => {
-				console.log(res.data);
 				setNombre(res.data.nombre);
 				setIdTribunal(res.data.id_tribunal);
 				setIdUser(res.data.id_usuario);
-				window.localStorage.setItem("robo-jwt-idT", res.data.id_tribunal)
+				window.localStorage.setItem("robo-jwt-idT", res.data.id_tribunal);
 			})
 			.catch((error) => {
 				console.log(error.message);
@@ -144,7 +154,6 @@ export default function AppbarMenu() {
 			.then((res) => {
 				//console.log(res.data.message)
 				setAreas(res.data.message);
-				console.log(areas);
 			})
 			.catch((error) => {
 				//console.log(error.message)
@@ -152,7 +161,8 @@ export default function AppbarMenu() {
 	};
 	useEffect(() => {
 		getAreas();
-    getUserState();
+		getUserState();
+		getData();
 	}, []);
 	return (
 		<div>
@@ -171,9 +181,11 @@ export default function AppbarMenu() {
 							Robo Pjud
 						</Typography>
 					</Link>
-					<IconButton component={Link} to='/configuracion' aria-label='more' aria-controls='long-menu' aria-haspopup='true' onClick={handleClick} style={{ color: "white" }}>
-						<SettingsIcon />
-					</IconButton>
+					{context.role === "user" && (
+						<IconButton component={Link} to='/configuracion' aria-label='more' aria-controls='long-menu' aria-haspopup='true' onClick={handleClick} style={{ color: "white" }}>
+							<SettingsIcon />
+						</IconButton>
+					)}
 				</Toolbar>
 			</AppBar>
 

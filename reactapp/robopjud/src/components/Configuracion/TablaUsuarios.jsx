@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { Link } from "react-router-dom";
 import { Box, Button, Card, CardHeader, Divider, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel, Tooltip, Grid, IconButton } from "@material-ui/core";
@@ -9,10 +9,20 @@ import Swal from "sweetalert2";
 import { useForm, Controller } from "react-hook-form";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
+import Context from "../../context/Context";
 
 export default function Tablausuarios() {
-
+	const [context, setContext] = useContext(Context);
 	const token = window.localStorage.getItem("robo-jwt-token");
+	const name = window.localStorage.getItem("robo-jwt-name");
+	const role = window.localStorage.getItem("robo-jwt-role");
+	const getData = () => {
+		setContext({
+			name: name,
+			token: token,
+			role: role,
+		});
+	};
 	const [data, setData] = useState([]);
 	const { handleSubmit, control } = useForm();
 	const getUser = async () => {
@@ -34,6 +44,7 @@ export default function Tablausuarios() {
 
 	useEffect(() => {
 		getUser();
+		getData();
 	}, []);
 	// console.log(data.data_usuarios)
 	const delete_Tribunal = ($id, $name) => {
@@ -72,7 +83,6 @@ export default function Tablausuarios() {
 	const update_usuario = ($id) => {
 		const token = window.localStorage.getItem("robo-jwt-token");
 		console.log($id);
-
 	};
 	return (
 		<Card>
@@ -80,20 +90,22 @@ export default function Tablausuarios() {
 				<Grid item>
 					<CardHeader title='Usuarios' />
 				</Grid>
-				<Grid item>
-					<Link to='/configuracion/agregarusuario' style={{ textDecoration: "none" }}>
-						<Button
-							variant='contained'
-							color='primary'
-							style={{
-								marginRight: "10px",
-								marginTop: "15px",
-							}}
-						>
-							Agregar Usuario
-						</Button>
-					</Link>
-				</Grid>
+				{context.role === "user" && (
+					<Grid item>
+						<Link to='/configuracion/agregarusuario' style={{ textDecoration: "none" }}>
+							<Button
+								variant='contained'
+								color='primary'
+								style={{
+									marginRight: "10px",
+									marginTop: "15px",
+								}}
+							>
+								Agregar Usuario
+							</Button>
+						</Link>
+					</Grid>
+				)}
 			</Grid>
 			<Divider />
 			<PerfectScrollbar>
@@ -106,7 +118,7 @@ export default function Tablausuarios() {
 								<TableCell>Rut</TableCell>
 								<TableCell>Correo</TableCell>
 								<TableCell>Tribunal</TableCell>
-								<TableCell>Acciones</TableCell>
+								{context.role === "user" && <TableCell>Acciones</TableCell>}
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -117,14 +129,16 @@ export default function Tablausuarios() {
 									<TableCell>{user.rut}</TableCell>
 									<TableCell>{user.correo}</TableCell>
 									<TableCell>{user.tribunal}</TableCell>
-									<TableCell>
-										<IconButton aria-label='Eliminar' onClick={() => delete_Tribunal(user.id_usuario, user.nombre)}>
-											<DeleteIcon />
-										</IconButton>
-										<IconButton aria-label='Editar' onClick={() => update_usuario(user.id_usuario)}>
-											<EditIcon />
-										</IconButton>
-									</TableCell>
+									{context.role === "user" && (
+										<TableCell>
+											<IconButton aria-label='Eliminar' onClick={() => delete_Tribunal(user.id_usuario, user.nombre)}>
+												<DeleteIcon />
+											</IconButton>
+											<IconButton aria-label='Editar' onClick={() => update_usuario(user.id_usuario)}>
+												<EditIcon />
+											</IconButton>
+										</TableCell>
+									)}
 								</TableRow>
 							))}
 						</TableBody>

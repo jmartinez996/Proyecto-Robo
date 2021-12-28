@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   Box,
@@ -22,10 +22,22 @@ import EditIcon from "@material-ui/icons/Edit";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Link } from "react-router-dom";
+import Context from "../../context/Context";
 
 export default function Tablatribunales() {
-  const MySwal = withReactContent(Swal);
+  const [context, setContext] = useContext(Context);
   const token = window.localStorage.getItem("robo-jwt-token");
+	const name = window.localStorage.getItem("robo-jwt-name");
+	const role = window.localStorage.getItem("robo-jwt-role");
+  
+  const getData = () => {
+		setContext({
+			name: name,
+			token: token,
+			role: role,
+		});
+	};
+  const MySwal = withReactContent(Swal);
   const [data, setData] = useState([]);
   const getTribunal = async () => {
     const tribunal = await axios(`http://10.13.18.84:5000/getTribunal`, {
@@ -44,6 +56,7 @@ export default function Tablatribunales() {
   };
   useEffect(() => {
     getTribunal();
+    getData();
   }, []);
   const prueba = ($id) => {
     var sendT = {
@@ -54,8 +67,6 @@ export default function Tablatribunales() {
       areas: [81, 91, 3],
     };
     sendT = JSON.stringify(sendT);
-
-    console.log(sendT);
     return sendT;
   };
   const showAlert = () => {};
@@ -102,7 +113,7 @@ export default function Tablatribunales() {
         <Grid item>
           <CardHeader title="Tribunales" />
         </Grid>
-        <Grid item>
+        {context.role === "user" && <Grid item>
           <Link
             to="/configuracion/agregartribunal"
             style={{ textDecoration: "none" }}
@@ -118,7 +129,7 @@ export default function Tablatribunales() {
               Agregar Tribunal
             </Button>
           </Link>
-        </Grid>
+        </Grid>}
       </Grid>
       <Divider />
       <PerfectScrollbar>
@@ -129,7 +140,7 @@ export default function Tablatribunales() {
                 <TableCell>Nombre</TableCell>
                 <TableCell>Telefono</TableCell>
                 <TableCell>Area</TableCell>
-                <TableCell>Acciones</TableCell>
+                {context.role === "user" && <TableCell>Acciones</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -144,7 +155,7 @@ export default function Tablatribunales() {
                       ))}
                     </List>
                   </TableCell>
-                  <TableCell>
+                  {context.role === "user" && <TableCell>
                     <IconButton
                       aria-label="Eliminar"
                       onClick={() =>
@@ -164,7 +175,7 @@ export default function Tablatribunales() {
                         <EditIcon />
                       </IconButton>
                     </Link>
-                  </TableCell>
+                  </TableCell>}
                 </TableRow>
               ))}
             </TableBody>

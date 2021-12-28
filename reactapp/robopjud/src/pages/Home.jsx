@@ -36,6 +36,7 @@ import RemoveIcon from "@material-ui/icons/Remove";
 import IngresoExhorto from "./landingrobots/civil/Ingreso_exhortos";
 import { usuario } from "./Login";
 import AppbarMenu from "../components/AppbarMenu";
+import Context from "../context/Context";
 const drawerWidth = 240;
 
 function useQuery() {
@@ -160,23 +161,6 @@ function Home() {
 		
 	}, []);
 
-	// const [estado, setEstado] = useState({});
-
-	// const pasaDato = async () => {
-	//   const res = await axios.post(`http://10.13.18.84:5000/ejerobot`);
-	//   // .then(res => {
-	//   //   console.log(res.data);
-	//   // }).catch(error => {
-	//   //   console.log(error);
-	//   // })
-	//   console.log(res.data);
-
-	//   if (res.data.mensaje === "Ejecutado") {
-	//     const act = 1;
-	//     console.log(act);
-	//     setEstado(res.data);
-	//   }
-	// };
 
 	const classes = useStyles();
 	const theme = useTheme();
@@ -201,7 +185,7 @@ function Home() {
 				<AppbarMenu />
 			</div>
 			<div>
-				<h1>Bienvenido Usuario.</h1>
+				<h1>Bienvenido {Context.user}.</h1>
 			</div>
 		</div>
 	);

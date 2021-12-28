@@ -108,7 +108,6 @@ const hasrole1 = (arr, val) => {
 		return false;
 	} else {
 		const valida = val.some((arrVal) => arr === arrVal);
-		console.log(valida);
 		return valida;
 	}
 };
@@ -143,7 +142,6 @@ function App() {
 				},
 			})
 			.then((res) => {
-				console.log(res.data);
 				setNombre(res.data.nombre);
 				setIdTribunal(res.data.id_tribunal);
 				setIdUser(res.data.id_usuario);
@@ -171,114 +169,95 @@ function App() {
 		setOpen(false);
 	};
 
-	const cerrarSesion = () => {
-		setContext({
-			name: null,
-			token: null,
-			role: null,
-		});
-		window.location.href = "/";
-		window.localStorage.removeItem("robo-jwt-token");
-	};
-
 	return (
 		<Router>
 			<div>
 				<Switch>
 					<Context.Provider value={[context, setContext]}>
-						<Route path='/' exact>
-							{context.token === null ? <SignIn /> : <Redirect to='/home' />}
-						</Route>
+						
+						
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/civil/ingreso_de_exhortos/:idT/:idR/:ip' exact>
-								{context.token !== null && <IngresoExhorto />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <IngresoExhorto />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/civil' exact>
-								{context.token !== null && <Civil props={{ nombre: "Civil", id_tribunal: idT }} />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <Civil props={{ nombre: "Civil", id_tribunal: idT }} />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/familia' exact>
-								{context.token !== null && <Familia />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <Familia />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/administracion/resumen_mensual/:idT/:idR/:ip' exact>
-								{context.token !== null && <ResumenMensual />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <ResumenMensual />}
+
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/administracion/gestion_de_sii/:idT/:idR/:ip' exact>
-								{context.token !== null && <GestionSii />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <GestionSii />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/administracion' exact>
-								{context.token !== null && <Administracion props={{ nombre: "Administracion", id_tribunal: idT }} />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <Administracion props={{ nombre: "Administracion", id_tribunal: idT }} />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["admin", "user"]) && (
 							<Route path='/home'>
-								{context.token !== null && <Home />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <Home />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/agregarusuario' exact>
-								{context.token !== null && <AgregarUsuario />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <AgregarUsuario />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/agregartribunal' exact>
-								{context.token !== null && <AgregarTribunal />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <AgregarTribunal />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/editartribunal' exact>
-								{context.token !== null && <AgregarTribunal />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <AgregarTribunal />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/agregarobot' exact>
-								{context.token !== null && <AgregaRobot />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <AgregaRobot />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/updatetribunal/:id' children={<UpdateTribunal />} exact>
-								{context.token !== null && <UpdateTribunal />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <UpdateTribunal />}
 							</Route>
 						)}
 
 						{hasrole1(context.role, ["user", "admin"]) && (
 							<Route path='/configuracion' exact>
-								{context.token !== null && <Configuracion />}
-								{context.token === null && <NoLogged />}
+								{token !== null && <Configuracion />}
 							</Route>
 						)}
+						<Route path='/' exact>
+							{context.token === null ? <SignIn /> : <Redirect to='/home' />}
+						</Route>
+						{context.token !== null ?  <Redirect to='/home' /> :<Redirect to = '/' />  }
 					</Context.Provider>
 				</Switch>
 			</div>

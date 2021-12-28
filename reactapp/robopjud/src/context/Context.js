@@ -11,9 +11,9 @@
 import React,{createContext} from "react";
 
 const Context = createContext({
-    name:'null',
-    token:'null',
-    role:'null'
+    name:null,
+    token:null,
+    role:null
 });
 
 export default Context;
