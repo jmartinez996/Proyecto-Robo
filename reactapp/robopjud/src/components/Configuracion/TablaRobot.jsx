@@ -46,7 +46,7 @@ export default function TablaRobot() {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
   const getrobot = async () => {
-    const robots = await axios(`http://127.0.0.1:5000/getRobot`, {
+    const robots = await axios(`http://10.13.18.84:5000/getRobot`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -82,7 +82,7 @@ export default function TablaRobot() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://127.0.0.1:5000/deleteRobot/`, f, {
+          .post(`http://10.13.18.84:5000/deleteRobot/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,

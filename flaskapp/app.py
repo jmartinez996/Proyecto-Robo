@@ -147,7 +147,9 @@ def IngresoDeExhorto():
 
 if __name__ == '__main__': 
     # scheduler.add_job(id='Scheduled task', func = IngresoDeExhorto, trigger = 'cron', hour = 1, minute = 5)
-    # scheduler.start()
-    app.run(debug=True)     
+
+    scheduler.start()
+    app.run(host='0.0.0.0',debug=True)     
+
 
 

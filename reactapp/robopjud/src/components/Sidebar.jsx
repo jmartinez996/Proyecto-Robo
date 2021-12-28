@@ -93,7 +93,7 @@ function Sidebar() {
 
   const pasaDato = async () => {
     
-    const res = await axios.post(`http://127.0.0.1:5000/ejerobot`)
+    const res = await axios.post(`http://10.13.18.84:5000/ejerobot`)
     // .then(res => {
     //   console.log(res.data);
     // }).catch(error => {
