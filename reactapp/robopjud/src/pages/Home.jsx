@@ -6,34 +6,6 @@ import NoLogged from "./NoLogged";
 import { BrowserRouter as Router, Switch, Route, Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import SignIn from "./Login";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import HomeIcon from "@material-ui/icons/Home";
-import Civil from "./Civil";
-import Familia from "./Familia";
-import Administracion from "./Administracion";
-import Configuracion from "./Configuracion";
-import AgregarUsuario from "./AgregarUsuario";
-import AgregarTribunal from "./AgregarTribunal";
-import ResumenMensual from "./landingrobots/administracion/Resumen_mensual";
-import GestionSii from "./landingrobots/administracion/Gestion_sii";
-import AgregaRobot from "./AgregaRobot";
-import UpdateTribunal from "./UpdateTribunal";
-import RemoveIcon from "@material-ui/icons/Remove";
-import IngresoExhorto from "./landingrobots/civil/Ingreso_exhortos";
 import { usuario } from "./Login";
 import AppbarMenu from "../components/AppbarMenu";
 import Context from "../context/Context";
@@ -118,7 +90,7 @@ function Home() {
 	const [nombre, setNombre] = useState(null);
 	const [idTribunal, setIdTribunal] = useState(null);
 	const [idUser, setIdUser] = useState(null);
-	const token = window.localStorage.getItem("robo-jwt-token");
+	const token = window.localStorage.getItem("R-61757468-x");
 	const [areas, setAreas] = useState([]);
 	const [r,setR] = useState(1);
 	const getUserState = () => {
@@ -176,7 +148,7 @@ function Home() {
 	
 	const cerrarSesion = () => {
 		window.location.href = "/";
-		window.localStorage.removeItem("robo-jwt-token");
+		window.localStorage.removeItem("R-61757468-x");
 	};
 	
 	return (

@@ -24,11 +24,12 @@ import withReactContent from "sweetalert2-react-content";
 import { Link } from "react-router-dom";
 import Context from "../../context/Context";
 
-export default function Tablatribunales() {
+export default function Tablatribunales( props ) {
+  console.log(props.name)
   const [context, setContext] = useContext(Context);
-  const token = window.localStorage.getItem("robo-jwt-token");
-	const name = window.localStorage.getItem("robo-jwt-name");
-	const role = window.localStorage.getItem("robo-jwt-role");
+  const token = window.localStorage.getItem("R-61757468-x");
+	const name = window.localStorage.getItem("R-6E616D65-x");
+	const role = window.localStorage.getItem("R-726F6C65-x");
   
   const getData = () => {
 		setContext({
@@ -72,7 +73,7 @@ export default function Tablatribunales() {
   const showAlert = () => {};
   const delete_Tribunal = ($id, $name) => {
     console.log("Delete id: " + $id);
-    const token = window.localStorage.getItem("robo-jwt-token");
+    const token = window.localStorage.getItem("R-61757468-x");
     const f = new FormData();
     f.append("id_tribunal", $id);
     Swal.fire({
@@ -107,13 +108,22 @@ export default function Tablatribunales() {
   const update_Tribunal = ($name, $id) => {
     console.log("Update");
   };
+
+  const hasrole = (arr, val) => {
+		if (!arr) {
+			return false;
+		} else {
+			const valida = val.some((arrVal) => arr === arrVal);
+			return valida;
+		}
+	};
   return (
     <Card>
       <Grid container align-content-center justify="space-between">
         <Grid item>
           <CardHeader title="Tribunales" />
         </Grid>
-        {context.role === "user" && <Grid item>
+        {hasrole(context.role,["V-7375646F-r"]) && <Grid item>
           <Link
             to="/configuracion/agregartribunal"
             style={{ textDecoration: "none" }}
@@ -140,7 +150,7 @@ export default function Tablatribunales() {
                 <TableCell>Nombre</TableCell>
                 <TableCell>Telefono</TableCell>
                 <TableCell>Area</TableCell>
-                {context.role === "user" && <TableCell>Acciones</TableCell>}
+                {hasrole(context.role,["V-7375646F-r"]) && <TableCell>Acciones</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -155,7 +165,7 @@ export default function Tablatribunales() {
                       ))}
                     </List>
                   </TableCell>
-                  {context.role === "user" && <TableCell>
+                  {hasrole(context.role,["V-7375646F-r"]) &&<TableCell>
                     <IconButton
                       aria-label="Eliminar"
                       onClick={() =>

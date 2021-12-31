@@ -83,7 +83,7 @@ export default function GestionSii(props) {
 	}
 
 	const onSubmit = (data) => {
-		const token = window.localStorage.getItem("robo-jwt-token");
+		const token = window.localStorage.getItem("R-61757468-x");
 		const f = new FormData();
 		//console.log(data.archivo[9])
 		f.append("correo", data.correo);

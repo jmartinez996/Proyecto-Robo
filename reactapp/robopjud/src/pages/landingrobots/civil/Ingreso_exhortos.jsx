@@ -53,7 +53,7 @@ export default function IngresoExhorto(props) {
 	const { formState, setFormState } = useState(true);
 
 	const onSubmit = (data) => {
-		const token = window.localStorage.getItem("robo-jwt-token");
+		const token = window.localStorage.getItem("R-61757468-x");
 		const f = new FormData();
 		f.append("user_sitci", data.user_sitci);
 		f.append("pass_sitci", data.pass_sitci);
