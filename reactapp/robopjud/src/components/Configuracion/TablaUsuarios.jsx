@@ -13,9 +13,9 @@ import Context from "../../context/Context";
 
 export default function Tablausuarios() {
 	const [context, setContext] = useContext(Context);
-	const token = window.localStorage.getItem("robo-jwt-token");
-	const name = window.localStorage.getItem("robo-jwt-name");
-	const role = window.localStorage.getItem("robo-jwt-role");
+	const token = window.localStorage.getItem("R-61757468-x");
+	const name = window.localStorage.getItem("R-6E616D65-x");
+	const role = window.localStorage.getItem("R-726F6C65-x");
 	const getData = () => {
 		setContext({
 			name: name,
@@ -46,9 +46,8 @@ export default function Tablausuarios() {
 		getUser();
 		getData();
 	}, []);
-	// console.log(data.data_usuarios)
 	const delete_Tribunal = ($id, $name) => {
-		const token = window.localStorage.getItem("robo-jwt-token");
+		const token = window.localStorage.getItem("R-61757468-x");
 		const form = new FormData();
 		form.append("id_usuario", $id);
 		Swal.fire({
@@ -81,16 +80,25 @@ export default function Tablausuarios() {
 		});
 	};
 	const update_usuario = ($id) => {
-		const token = window.localStorage.getItem("robo-jwt-token");
-		console.log($id);
+		const token = window.localStorage.getItem("R-61757468-x");
 	};
+
+	const hasrole = (arr, val) => {
+		if (!arr) {
+			return false;
+		} else {
+			const valida = val.some((arrVal) => arr === arrVal);
+			return valida;
+		}
+	};
+	// si se quiere dar atributo a otro tipo de usuario solo se agrega al array el tipo user ["type","type"]
 	return (
 		<Card>
 			<Grid container align-content-center justify='space-between'>
 				<Grid item>
 					<CardHeader title='Usuarios' />
 				</Grid>
-				{context.role === "user" && (
+				{hasrole(context.role,["V-7375646F-r"]) && (
 					<Grid item>
 						<Link to='/configuracion/agregarusuario' style={{ textDecoration: "none" }}>
 							<Button
@@ -118,7 +126,7 @@ export default function Tablausuarios() {
 								<TableCell>Rut</TableCell>
 								<TableCell>Correo</TableCell>
 								<TableCell>Tribunal</TableCell>
-								{context.role === "user" && <TableCell>Acciones</TableCell>}
+								{hasrole(context.role,["V-7375646F-r"]) && <TableCell>Acciones</TableCell>}
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -129,7 +137,7 @@ export default function Tablausuarios() {
 									<TableCell>{user.rut}</TableCell>
 									<TableCell>{user.correo}</TableCell>
 									<TableCell>{user.tribunal}</TableCell>
-									{context.role === "user" && (
+									{hasrole(context.role,["V-7375646F-r"]) && (
 										<TableCell>
 											<IconButton aria-label='Eliminar' onClick={() => delete_Tribunal(user.id_usuario, user.nombre)}>
 												<DeleteIcon />

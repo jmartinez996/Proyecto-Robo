@@ -53,7 +53,7 @@ const GreenCheckbox = withStyles({
 })((props) => <Checkbox color='default' {...props} />);
 
 function AgregarTribunal() {
-	const token = window.localStorage.getItem("robo-jwt-token");
+	const token = window.localStorage.getItem("R-61757468-x");
 	const MySwal = withReactContent(Swal);
 	const classes = useStyles();
 	const [errMssg, setErrMssg] = useState("");
@@ -90,7 +90,7 @@ function AgregarTribunal() {
 	};
 
 	const onSubmit = async (data) => {
-		const token = window.localStorage.getItem("robo-jwt-token");
+		const token = window.localStorage.getItem("R-61757468-x");
 		const f = new FormData();
 		console.log(data);
 		f.append("nombre", data.nombre);

@@ -52,16 +52,18 @@ export default function IngresoExhorto(props) {
   const { handleSubmit, control } = useForm();
   const [formState, setFormState] = useState(false);
 
-  const onSubmit = (data) => {
-    const token = window.localStorage.getItem("robo-jwt-token");
-    const f = new FormData();
-    f.append("user_sitci", data.user_sitci);
-    f.append("pass_sitci", data.pass_sitci);
-    f.append("id_juez", data.juez);
-    f.append("id_tribunal", idT);
-    f.append("id_robot", idR);
-    f.append("ip", ip);
-    f.append("correo", data.correo);
+
+	const onSubmit = (data) => {
+		const token = window.localStorage.getItem("R-61757468-x");
+		const f = new FormData();
+		f.append("user_sitci", data.user_sitci);
+		f.append("pass_sitci", data.pass_sitci);
+		f.append("id_juez", data.juez);
+		f.append("id_tribunal", idT);
+		f.append("id_robot", idR);
+		f.append("ip", ip);
+		f.append("correo", data.correo);
+
 
     Swal.fire({
       title: "Estas seguro que los datos son correctos?",
