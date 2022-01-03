@@ -7,3 +7,4 @@ from .Tribunal import *
 from .Robots import *
 from .crudrobot import *
 from .Usuarios import *
+from .Historial import *

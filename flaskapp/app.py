@@ -30,7 +30,6 @@ app.config['MAIL_USERNAME'] = 'sgc_pucon@pjud.cl'
 app.config['MAIL_PASSWORD'] = 'letras2021'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
-# db = SQLAlchemy(app)
 
 Base.metadata.create_all(engine)
 session = SessionLocal()
@@ -38,7 +37,7 @@ session = SessionLocal()
 jwt = JWTManager(app)
 mail = Mail(app)
 
-scheduler = APScheduler()
+# scheduler = APScheduler()
 
 CORS(app)
 
@@ -108,7 +107,7 @@ def agregauser():
         return jsonify({'message':'No se pudo agregar el Usuario '+ nombre}), 422
     finally:
         session.close()
-
+ 
 @app.route('/IngresoDeExhorto')
 def IngresoDeExhorto():
     try:
@@ -148,8 +147,8 @@ def IngresoDeExhorto():
 if __name__ == '__main__': 
     # scheduler.add_job(id='Scheduled task', func = IngresoDeExhorto, trigger = 'cron', hour = 1, minute = 5)
 
-    scheduler.start()
-    app.run(host='0.0.0.0',debug=True)     
+    # scheduler.start()
+    app.run(debug=True)      
 
 
 

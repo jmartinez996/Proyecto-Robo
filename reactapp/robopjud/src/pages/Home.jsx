@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { Box, Container, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import NoLogged from "./NoLogged";
@@ -37,6 +37,8 @@ import IngresoExhorto from "./landingrobots/civil/Ingreso_exhortos";
 import { usuario } from "./Login";
 import AppbarMenu from "../components/AppbarMenu";
 import Context from "../context/Context";
+import TablaHistorial from "../components/Home/TablaHistorial";
+
 const drawerWidth = 240;
 
 function useQuery() {
@@ -123,7 +125,7 @@ function Home() {
 	const [r,setR] = useState(1);
 	const getUserState = () => {
 		axios
-			.get(`http://10.13.18.84:5000/userState`, {
+			.get(`http://127.0.0.1:5000/userState`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ` + token,
@@ -141,7 +143,7 @@ function Home() {
 	};
 
 	const getAreas = () => {
-		axios(`http://10.13.18.84:5000/getAreas`, {
+		axios(`http://127.0.0.1:5000/getAreas`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,
@@ -180,14 +182,24 @@ function Home() {
 	};
 	
 	return (
-		<div>
-			<div>
-				<AppbarMenu />
-			</div>
-			<div>
-				<h1>Bienvenido {Context.user}.</h1>
-			</div>
-		</div>
+		<>
+			<AppbarMenu />
+			<Box
+				sx={{
+					backgroundColor: "background.default",
+					minHeight: "100%",
+					py: 3,
+				}}
+			>
+				<Container maxWidth={false}>
+					<Grid container spacing={2}>
+						<Grid item lg={12} sm={12} xl={12} xs={12}>
+							<TablaHistorial/>
+						</Grid>
+					</Grid>
+				</Container>
+			</Box>
+		</>
 	);
 }
 
