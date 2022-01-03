@@ -23,12 +23,11 @@ const alert = () => {
 
 function Administracion(props) {
 	const [robots, setRobots] = useState([]);
-	const token = window.localStorage.getItem("R-61757468-x");
+	const token = window.localStorage.getItem("robo-jwt-token");
 	const test = '<ProductCard titulo="Resumen mensual." />';
 	const state = true;
-	const idT = window.localStorage.getItem("R-69645F74-x");
 	const getRobots = async () => {
-		const robots = await axios(`http://10.13.18.84:5000/getRobotArea/` + props.props.nombre + "/" + idT, {
+		const robots = await axios(`http://10.13.18.84:5000/getRobotArea/` + props.props.nombre + "/" + props.props.id_tribunal, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,

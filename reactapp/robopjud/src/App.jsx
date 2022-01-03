@@ -116,10 +116,10 @@ function App() {
 	const [nombre, setNombre] = useState(null);
 	const [idTribunal, setIdTribunal] = useState(null);
 	const [idUser, setIdUser] = useState(null);
-	const token = window.localStorage.getItem("R-61757468-x");
-	const name = window.localStorage.getItem("R-6E616D65-x");
-	const role = window.localStorage.getItem("R-726F6C65-x");
-	const idT = window.localStorage.getItem("R-69645F74-x");
+	const token = window.localStorage.getItem("robo-jwt-token");
+	const name = window.localStorage.getItem("robo-jwt-name");
+	const role = window.localStorage.getItem("robo-jwt-role");
+	const idT = window.localStorage.getItem("robo-jwt-idT");
 	const [areas, setAreas] = useState([]);
 	const [context, setContext] = useState({
 		name: null,
@@ -145,7 +145,6 @@ function App() {
 				setNombre(res.data.nombre);
 				setIdTribunal(res.data.id_tribunal);
 				setIdUser(res.data.id_usuario);
-				const idT = window.localStorage.getItem("R-69645F74-x");
 			})
 			.catch((error) => {
 				console.log(error.message);
@@ -177,80 +176,80 @@ function App() {
 					<Context.Provider value={[context, setContext]}>
 						
 						
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/civil/ingreso_de_exhortos/:idT/:idR/:ip' exact>
 								{token !== null && <IngresoExhorto />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/civil' exact>
 								{token !== null && <Civil props={{ nombre: "Civil", id_tribunal: idT }} />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/familia' exact>
 								{token !== null && <Familia />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/administracion/resumen_mensual/:idT/:idR/:ip' exact>
 								{token !== null && <ResumenMensual />}
 
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/administracion/gestion_de_sii/:idT/:idR/:ip' exact>
 								{token !== null && <GestionSii />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/administracion' exact>
 								{token !== null && <Administracion props={{ nombre: "Administracion", id_tribunal: idT }} />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["admin", "user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["admin", "user"]) && (
 							<Route path='/home'>
 								{token !== null && <Home />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/agregarusuario' exact>
 								{token !== null && <AgregarUsuario />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/agregartribunal' exact>
 								{token !== null && <AgregarTribunal />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/editartribunal' exact>
 								{token !== null && <AgregarTribunal />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/agregarobot' exact>
 								{token !== null && <AgregaRobot />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user","V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user"]) && (
 							<Route path='/configuracion/updatetribunal/:id' children={<UpdateTribunal />} exact>
 								{token !== null && <UpdateTribunal />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user", "V-7375646F-r"]) && (
+						{hasrole1(context.role, ["user", "admin"]) && (
 							<Route path='/configuracion' exact>
 								{token !== null && <Configuracion />}
 							</Route>
