@@ -47,9 +47,10 @@ export default function SignIn() {
     await axios.post(`http://10.13.18.84:5000/login`, f, {'Content-Type': 'application/json'})
     .then(response=>{
       seteaError("");
-      window.localStorage.setItem("robo-jwt-token", response.data.token)
-      window.localStorage.setItem("robo-jwt-name", response.data.name)
-      window.localStorage.setItem("robo-jwt-role", response.data.role)
+      window.localStorage.setItem("R-61757468-x", response.data.token)
+      window.localStorage.setItem("R-6E616D65-x", response.data.name)
+      window.localStorage.setItem("R-726F6C65-x", response.data.role)
+      window.localStorage.setItem("R-69645F74-x", response.data.id_tribunal)
       {<Router>
         <Redirect to="/home" />
       </Router>}

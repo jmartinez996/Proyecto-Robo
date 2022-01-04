@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,6 +16,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import AppbarMenu from "../components/AppbarMenu";
+import Context from "../context/Context";
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -43,22 +44,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AgregarUsuario() {
+	const [context, setContext] = useContext(Context);
+	const token = window.localStorage.getItem("R-61757468-x");
+	const name = window.localStorage.getItem("R-6E616D65-x");
+	const role = window.localStorage.getItem("R-726F6C65-x");
+
 	const MySwal = withReactContent(Swal);
 	const classes = useStyles();
 	const [errMssg, setErrMssg] = useState("");
 	const [tribunales, setTribunales] = useState([]);
 	const { handleSubmit, control } = useForm();
-	const token = window.localStorage.getItem("robo-jwt-token");
-
+	const getData = () => {
+		setContext({
+			name: name,
+			token: token,
+			role: role,
+		});
+	};
 	const onSubmit = async (data) => {
 		const f = new FormData();
 		f.append("nombre", data.nombre);
 		f.append("apellido", data.apellido);
 		f.append("rut", data.rut);
 		f.append("correo", data.correo);
+		f.append("tipoUser", data.tipoUser);
 		f.append("contrasena", data.contrasena);
 		f.append("repcontrasena", data.repcontrasena);
 		f.append("tribunal", data.tribunal);
+		console.log(data);
 		await axios
 			.post(`http://10.13.18.84:5000/agregauser/`, f, { headers: { "Content-Type": "application/json", Authorization: `Bearer ` + token } })
 			.then((response) => {
@@ -93,8 +106,16 @@ function AgregarUsuario() {
 			.catch((error) => {
 				console.log(error.message);
 			});
+		getData();
 	}, []);
-
+	const hasrole = (arr, val) => {
+		if (!arr) {
+			return false;
+		} else {
+			const valida = val.some((arrVal) => arr === arrVal);
+			return valida;
+		}
+	};
 	return (
 		<React.Fragment>
 			<AppbarMenu />
@@ -138,6 +159,51 @@ function AgregarUsuario() {
 								//  validate: (value) => validation(value)
 							}}
 						/>
+						{/* Select para crear solo vista user, que son de tipo ADMIN */}
+						{hasrole(context.role, ["V-73746F-r"]) && (
+							<Controller
+								name='tipoUser'
+								control={control}
+								defaultValue=''
+								render={({ field: { onChange, value }, fieldState: { error } }) => (
+									<>
+										<FormControl variant='outlined' className={classes.formControl} fullWidth>
+											<InputLabel id='demo-simple-select-outlined-label'>Seleccione tipo de Usuario</InputLabel>
+											<Select labelId='demo-simple-select-outlined-label' id='demo-simple-select-outlined' label='Age' margin='dense' error={!!error} helperText={error ? error.message : null} onChange={onChange} name='juez'>
+												<MenuItem value={"V-75736572-r"}>Usuario</MenuItem>
+												<MenuItem value={"V-61646D69-r"}>Administrador</MenuItem>
+											</Select>
+										</FormControl>
+									</>
+								)}
+								rules={{
+									required: "El campo Repite Contrasena esta vacío",
+								}}
+							/>
+						)}
+						{/* Select para crear cualquier Role */}
+						{hasrole(context.role, ["V-7375646F-r"]) && (
+							<Controller
+								name='tipoUser'
+								control={control}
+								defaultValue=''
+								render={({ field: { onChange, value }, fieldState: { error } }) => (
+									<>
+										<FormControl variant='outlined' className={classes.formControl} fullWidth>
+											<InputLabel id='demo-simple-select-outlined-label'>Seleccione tipo de Usuario</InputLabel>
+											<Select labelId='demo-simple-select-outlined-label' id='demo-simple-select-outlined' label='Age' margin='dense' error={!!error} helperText={error ? error.message : null} onChange={onChange} name='juez'>
+												<MenuItem value={"V-75736572-r"}>Usuario</MenuItem>
+												<MenuItem value={"V-61646D69-r"}>Administrador</MenuItem>
+												<MenuItem value={"V-7375646F-r"}>Super Usuario</MenuItem>
+											</Select>
+										</FormControl>
+									</>
+								)}
+								rules={{
+									required: "El campo Repite Contrasena esta vacío",
+								}}
+							/>
+						)}
 						<Controller
 							name='correo'
 							control={control}

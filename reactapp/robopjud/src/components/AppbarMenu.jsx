@@ -105,20 +105,27 @@ export default function AppbarMenu() {
 
 	const cerrarSesion = () => {
 		window.location.href = "/";
-		window.localStorage.removeItem("robo-jwt-token");
-		window.localStorage.removeItem("robo-jwt-name");
-		window.localStorage.removeItem("robo-jwt-role");
-		window.localStorage.removeItem("robo-jwt-idT");
+		window.localStorage.removeItem("R-61757468-x");
+		window.localStorage.removeItem("R-6E616D65-x");
+		window.localStorage.removeItem("R-726F6C65-x");
+		window.localStorage.removeItem("R-69645F74-x");
 	};
-
+	const hasrole = (arr, val) => {
+		if (!arr) {
+			return false;
+		} else {
+			const valida = val.some((arrVal) => arr === arrVal);
+			return valida;
+		}
+	};
 	const [areas, setAreas] = useState([]);
 	const [nombre, setNombre] = useState(null);
 	const [idTribunal, setIdTribunal] = useState(null);
 	const [idUser, setIdUser] = useState(null);
-	const token = window.localStorage.getItem("robo-jwt-token");
+	const token = window.localStorage.getItem("R-61757468-x");
 	const [context, setContext] = useContext(Context);
-	const name = window.localStorage.getItem("robo-jwt-name");
-	const role = window.localStorage.getItem("robo-jwt-role");
+	const name = window.localStorage.getItem("R-6E616D65-x");
+	const role = window.localStorage.getItem("R-726F6C65-x");
 	const getData = () => {
 		setContext({
 			name: name,
@@ -138,7 +145,7 @@ export default function AppbarMenu() {
 				setNombre(res.data.nombre);
 				setIdTribunal(res.data.id_tribunal);
 				setIdUser(res.data.id_usuario);
-				window.localStorage.setItem("robo-jwt-idT", res.data.id_tribunal);
+				window.localStorage.setItem("R-69645F74-x", res.data.id_tribunal);
 			})
 			.catch((error) => {
 				console.log(error.message);
@@ -181,7 +188,7 @@ export default function AppbarMenu() {
 							Robo Pjud
 						</Typography>
 					</Link>
-					{context.role === "user" && (
+					{hasrole(context.role,["V-61646D69-r","V-7375646F-r"]) && (
 						<IconButton component={Link} to='/configuracion' aria-label='more' aria-controls='long-menu' aria-haspopup='true' onClick={handleClick} style={{ color: "white" }}>
 							<SettingsIcon />
 						</IconButton>
