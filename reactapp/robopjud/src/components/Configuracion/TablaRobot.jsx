@@ -15,9 +15,9 @@ import Context from "../../context/Context";
 export default function TablaRobot() {
 	const MySwal = withReactContent(Swal);
 	const [context, setContext] = useContext(Context);
-	const token = window.localStorage.getItem("R-61757468-x");
-	const name = window.localStorage.getItem("R-6E616D65-x");
-	const role = window.localStorage.getItem("R-726F6C65-x");
+	const token = window.localStorage.getItem("robo-jwt-token");
+	const name = window.localStorage.getItem("robo-jwt-name");
+	const role = window.localStorage.getItem("robo-jwt-role");
 
 	const getData = () => {
 		setContext({
@@ -63,7 +63,7 @@ export default function TablaRobot() {
 	const showAlert = () => {};
 	const delete_Robot = ($id, $name) => {
 		console.log("delete id: " + $id);
-		const token = window.localStorage.getItem("R-61757468-x");
+		const token = window.localStorage.getItem("robo-jwt-token");
 		const f = new FormData();
 		f.append("id_robot", $id);
 		Swal.fire({
@@ -98,21 +98,13 @@ export default function TablaRobot() {
 	const update_Robot = ($name, $id) => {
 		console.log("Update");
 	};
-	const hasrole = (arr, val) => {
-		if (!arr) {
-			return false;
-		} else {
-			const valida = val.some((arrVal) => arr === arrVal);
-			return valida;
-		}
-	};
 	return (
 		<Card>
 			<Grid container align-content-center justify='space-between'>
 				<Grid item>
 					<CardHeader title='Robots' />
 				</Grid>
-				{hasrole(context.role,["V-7375646F-r"]) && (
+				{context.role === "user" && (
 					<Grid item>
 						<Link to='/configuracion/agregarobot' style={{ textDecoration: "none" }}>
 							<Button
@@ -153,7 +145,7 @@ export default function TablaRobot() {
 									{/* <TableCell>{robot.desc_robot}</TableCell> */}
 									<TableCell>{robot.nombre_tribunal}</TableCell>
 									<TableCell>{robot.nombre_area}</TableCell>
-									{hasrole(context.role,["V-7375646F-r"]) &&  (
+									{context.role === "user" && (
 										<TableCell>
 											<IconButton aria-label='Eliminar' onClick={() => delete_Robot(robot.id_robot, robot.nombre_robot)}>
 												<DeleteIcon />

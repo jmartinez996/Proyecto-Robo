@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AgregaRobot() {
-	const token = window.localStorage.getItem("R-61757468-x");
+	const token = window.localStorage.getItem("robo-jwt-token");
 	const MySwal = withReactContent(Swal);
 	const classes = useStyles();
 	const [errMssg, setErrMssg] = useState("");
