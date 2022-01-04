@@ -10,17 +10,14 @@ Base.metadata.create_all(engine)
 
 session = SessionLocal()
 
-@routes.route('/stateRobots')
-def stateRobots():
+@routes.route('/testrobot') 
+def testrobot(): 
+    return {"mensaje":"saludo"}
     try:
-        current_user_id = get_jwt_identity()
-        
-        return ''
-    except:
-        return ''
-    finally:
-        return current_user_id
+        return ""
 
+    except:
+        return ""
 @routes.route('/getRobot')
 @jwt_required()
 def getRobot():
@@ -51,16 +48,8 @@ def getRobot():
 def getRobotArea(nombre, id_tribunal):
     print(nombre)
     current_user_id = get_jwt_identity()
-
-    q = session.query(Robots).filter_by(disponibilidad = False).first()
-    # for r in q:
-    #     print(r.disponibilidad)
     
-    if(q == None):
-        disponibilidad = True
-    else: disponibilidad  = False
-    
-    query = session.query(Robots, Tribunal, Area).join(Area).filter_by(nombre_area = nombre).join(Tribunal).filter_by(id_tribunal=int(id_tribunal))
+    query = session.query(Robots, Tribunal, Area).join(Area).filter_by(nombre_area = nombre).join(Tribunal).filter_by(id_tribunal=id_tribunal)
     data = []
     for robots, tribunales, areas in query:
         aux = {
@@ -69,7 +58,7 @@ def getRobotArea(nombre, id_tribunal):
             'nombre_robot':robots.nombre_robot,
             'id_tribunal': robots.id_tribunal,
             'nombre_tribunal': tribunales.nombre,
-            'disponibilidad': disponibilidad,
+            'disponibilidad': robots.disponibilidad,
             'link': robots.nombre_robot.lower().replace(' ', '_'),
             'ip': tribunales.ip
         }
@@ -110,6 +99,7 @@ def deleteRobot():
     session.commit()
     try:
         return ""
+
     except:
        return ""
     finally:

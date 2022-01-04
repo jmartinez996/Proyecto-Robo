@@ -10,11 +10,9 @@ import requests as req
 from sqlalchemy import and_
 from Classes.Robots import Robots
 from Classes.Jueces import Jueces
-from Classes.Historial import Historial
 from database import Base, SessionLocal, engine
 from flask_mail import Message
 from app import mail
-from datetime import datetime
 
 Base.metadata.create_all(engine)
 session = SessionLocal()
@@ -189,13 +187,13 @@ def setJuezIngresoExhorto():
             'id_tribunal': id_tribunal,
             'id_robot': id_robot,
             'juez':query.apellido_juez + ', ' + query.nombre_juez,
-            'correo':correo,
-            'id_usuario':current_user_id
+            'correo':correo
         } 
 
+        resp = req.post('http://'+ip+':5001/ExeIngresoExhorto/', data=dataForm)
         session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(False)})
         session.commit()
-        resp = req.post('http://'+ip+':5001/ExeIngresoExhorto/', data=dataForm)
+
         print(dataForm)
 
         return ''
@@ -209,12 +207,14 @@ def setJuezIngresoExhorto():
 @routes.route('/stateRobotIngresoExhorto/', methods=['POST', 'GET'])
 def stateRobotIngresoExhorto():
     try:
+        print('se llego')
         id_robot = request.values['id_robot']
         id_tribunal = request.values['id_tribunal']
         correo = request.values['correo']
         estado = request.values['estado']
         rits = request.values['rits']
-        id_usuario = request.values['id_usuario']
+        print(estado)
+        print(rits)
 
         if estado == 'error':
             msg = Message('RPA: Hubo un problema ejecutando Ingreso de exhortos.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
@@ -223,26 +223,15 @@ def stateRobotIngresoExhorto():
             else:
                 msg.body = "No se pudo realizar ningún exhorto."
             mail.send(msg)
-            new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=False, fecha=datetime.today().strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
-            session.add(new_register) 
-            session.commit()
         
         if estado == 'success':
             msg = Message('RPA: Ingreso de Exhortos se ha ejecutado con éxito.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
             msg.body = "Los Ingresos de exhorto que se realizaron son: " + rits[1:]
             mail.send(msg)
-            
-            new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=True, fecha=datetime.today().strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
-            session.add(new_register) 
-            session.commit()
     except:
         print('no se pudo enviar nada')
-        new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=False, fecha=datetime.today().strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
-        session.add(new_register) 
-        session.commit()
         return 'Hubo un problema'
     finally:
-        print('se cambia a true')
         session.query(Robots).filter(and_(Robots.id_tribunal==id_tribunal, Robots.id_robot==id_robot)).update({'disponibilidad':(True)})
         session.commit()
         session.close()
