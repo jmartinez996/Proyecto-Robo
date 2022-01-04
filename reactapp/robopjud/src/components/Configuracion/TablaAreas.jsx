@@ -14,10 +14,10 @@ import Context from "../../context/Context";
 export default function Tablaareas() {
 	const [context, setContext] = useContext(Context);
 	const MySwal = withReactContent(Swal);
-	// const token = window.localStorage.getItem('R-61757468-x');
-	const token = window.localStorage.getItem("R-61757468-x");
-	const name = window.localStorage.getItem("R-6E616D65-x");
-	const role = window.localStorage.getItem("R-726F6C65-x");
+	// const token = window.localStorage.getItem('robo-jwt-token');
+	const token = window.localStorage.getItem("robo-jwt-token");
+	const name = window.localStorage.getItem("robo-jwt-name");
+	const role = window.localStorage.getItem("robo-jwt-role");
 	const getData = () => {
 		setContext({
 			name: name,
@@ -48,7 +48,7 @@ export default function Tablaareas() {
 		getData();
 	}, []);
 	const showAlert = () => {
-		const token = window.localStorage.getItem("R-61757468-x");
+		const token = window.localStorage.getItem("robo-jwt-token");
 		const f = new FormData();
 		MySwal.fire({
 			title: "Ingresa Nombre Area",
@@ -95,7 +95,7 @@ export default function Tablaareas() {
 	const change_Area = ($id, $name) => {
 		const id = $id;
 		const name = $name;
-		const token = window.localStorage.getItem("R-61757468-x");
+		const token = window.localStorage.getItem("robo-jwt-token");
 		const f = new FormData();
 		f.append("id_area", id);
 		f.append("nombre_area", name);
@@ -145,7 +145,7 @@ export default function Tablaareas() {
 		const id = $id;
 		const name = $name;
 		console.log(name);
-		const token = window.localStorage.getItem("R-61757468-x");
+		const token = window.localStorage.getItem("robo-jwt-token");
 		const f = new FormData();
 		console.log("aca");
 		f.append("id_area", id);
@@ -197,21 +197,13 @@ export default function Tablaareas() {
         });*/
 		return "";
 	};
-	const hasrole = (arr, val) => {
-		if (!arr) {
-			return false;
-		} else {
-			const valida = val.some((arrVal) => arr === arrVal);
-			return valida;
-		}
-	};
 	return (
 		<Card>
 			<Grid container align-content-center justify='space-between'>
 				<Grid item>
 					<CardHeader title='Areas' />
 				</Grid>
-				{hasrole(context.role,["V-7375646F-r"]) &&(
+				{context.role === "user" && (
 					<Grid item>
 						<Button
 							variant='contained'
@@ -235,14 +227,14 @@ export default function Tablaareas() {
 							<TableRow>
 								<TableCell>Nombre</TableCell>
 								{/* Cambiar estos role a sudo */}
-								{hasrole(context.role,["V-7375646F-r"]) && <TableCell>Acciones</TableCell>}
+								{context.role === "user" && <TableCell>Acciones</TableCell>}
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{data.map((area) => (
 								<TableRow hover key={area && area.id_area}>
 									<TableCell>{area && area.nombre_area}</TableCell>
-									{hasrole(context.role,["V-7375646F-r"]) &&(
+									{context.role === "user" && (
 										<TableCell>
 											<IconButton aria-label='Eliminar' onClick={() => delete_Area(area.id_area, area.nombre_area)}>
 												<DeleteIcon />

@@ -63,7 +63,7 @@ const GreenCheckbox = withStyles({
 })((props) => <Checkbox color='default' {...props} />);
 
 function UpdateTribunal() {
-	const token = window.localStorage.getItem("R-61757468-x");
+	const token = window.localStorage.getItem("robo-jwt-token");
 	let { id } = useParams();
 	var myObject = JSON.parse(id);
 	console.log(myObject);
@@ -95,7 +95,7 @@ function UpdateTribunal() {
 
 	// const getTribunal = async () => {
 	//     console.log(id);
-	//     const token = window.localStorage.getItem('R-61757468-x')
+	//     const token = window.localStorage.getItem('robo-jwt-token')
 	//     const f = new FormData();
 	//     f.append("id", id);
 	//     const tribun = await axios.post(`http://10.13.18.84:5000/getTribunalId`, f, {
@@ -116,7 +116,7 @@ function UpdateTribunal() {
 	};
 
 	const onSubmit = async (data) => {
-		const token = window.localStorage.getItem("R-61757468-x");
+		const token = window.localStorage.getItem("robo-jwt-token");
 		console.log(data);
 		console.log(sArea);
 		const f = new FormData();
