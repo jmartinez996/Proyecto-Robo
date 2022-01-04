@@ -27,7 +27,9 @@ function Civil(props) {
 	const test = '<ProductCard titulo="Resumen mensual." />';
 	const state = true;
 	const getRobots = async () => {
-		const robots = await axios(`http://10.13.18.84:5000/getRobotArea/` + props.props.nombre + "/" + props.props.id_tribunal, {
+
+		const robots = await axios(`http://127.0.0.1:5000/getRobotArea/` + props.props.nombre + "/" + props.props.id_tribunal, {
+
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,

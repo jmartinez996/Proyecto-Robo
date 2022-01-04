@@ -30,6 +30,7 @@ app.config['MAIL_USERNAME'] = 'sgc_pucon@pjud.cl'
 app.config['MAIL_PASSWORD'] = 'letras2021'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
+# db = SQLAlchemy(app)
 
 Base.metadata.create_all(engine)
 session = SessionLocal()
@@ -37,7 +38,7 @@ session = SessionLocal()
 jwt = JWTManager(app)
 mail = Mail(app)
 
-# scheduler = APScheduler()
+scheduler = APScheduler()
 
 CORS(app)
 
@@ -64,7 +65,7 @@ def login():
         
         if usuario.rut == rut and checkph(usuario.contrasena, contrasena):
             access_token = create_access_token(identity=usuario.id_usuario)
-            return jsonify(message="Usuario correcto.", token=access_token, id_usuario=usuario.id_usuario,role=usuario.tipo_usuario,name = usuario.nombre), 200
+            return jsonify(message="Usuario correcto.", token=access_token, id_usuario=usuario.id_usuario,role=usuario.tipo_usuario,name = usuario.nombre, id_tribunal = usuario.id_tribunal), 200
     except:
         return jsonify(message="Usuario o contrasena son incorrectos."), 400
     finally:
@@ -107,7 +108,7 @@ def agregauser():
         return jsonify({'message':'No se pudo agregar el Usuario '+ nombre}), 422
     finally:
         session.close()
- 
+
 @app.route('/IngresoDeExhorto')
 def IngresoDeExhorto():
     try:
@@ -147,8 +148,8 @@ def IngresoDeExhorto():
 if __name__ == '__main__': 
     # scheduler.add_job(id='Scheduled task', func = IngresoDeExhorto, trigger = 'cron', hour = 1, minute = 5)
 
-    # scheduler.start()
-    app.run(debug=True)      
+    scheduler.start()
+    app.run(host='0.0.0.0',debug=True)     
 
 
 

@@ -27,7 +27,11 @@ function Administracion(props) {
 	const test = '<ProductCard titulo="Resumen mensual." />';
 	const state = true;
 	const getRobots = async () => {
+<<<<<<< HEAD
+		const robots = await axios(`http://127.0.0.1:5000/getRobotArea/` + props.props.nombre + "/" + props.props.id_tribunal, {
+=======
 		const robots = await axios(`http://10.13.18.84:5000/getRobotArea/` + props.props.nombre + "/" + props.props.id_tribunal, {
+>>>>>>> a84a054f3f17e3b55442cf61d02e691114220317
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,

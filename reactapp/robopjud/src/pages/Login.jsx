@@ -44,12 +44,15 @@ export default function SignIn() {
     const f = new FormData();
     f.append("rut", data.rut);
     f.append("contrasena", data.contrasena);
-    await axios.post(`http://10.13.18.84:5000/login`, f, {'Content-Type': 'application/json'})
+    await axios.post(`http://127.0.0.1:5000/login`, f, {'Content-Type': 'application/json'})
     .then(response=>{
       seteaError("");
       window.localStorage.setItem("robo-jwt-token", response.data.token)
       window.localStorage.setItem("robo-jwt-name", response.data.name)
       window.localStorage.setItem("robo-jwt-role", response.data.role)
+      window.localStorage.setItem("robo-jwt-idT", response.data.id_tribunal)
+      console.log(response.data.id_tribunal)
+
       {<Router>
         <Redirect to="/home" />
       </Router>}

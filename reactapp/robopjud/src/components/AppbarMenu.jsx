@@ -128,7 +128,7 @@ export default function AppbarMenu() {
 	};
 	const getUserState = () => {
 		axios
-			.get(`http://10.13.18.84:5000/userState`, {
+			.get(`http://127.0.0.1:5000/userState`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ` + token,
@@ -145,7 +145,7 @@ export default function AppbarMenu() {
 			});
 	};
 	const getAreas = () => {
-		axios(`http://10.13.18.84:5000/getAreas`, {
+		axios(`http://127.0.0.1:5000/getAreas`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,
