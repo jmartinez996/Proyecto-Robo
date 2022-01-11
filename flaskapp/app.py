@@ -9,10 +9,12 @@ from routes import *
 from datetime import timedelta
 from database import Base, SessionLocal, engine
 from flask_mail import Mail, Message
-from flask_apscheduler import APScheduler
+# from flask_apscheduler import APScheduler
 from Classes.Robots import Robots
 from Classes.Jueces import Jueces
+from Classes.Tribunal import Tribunal
 import requests as req
+import cx_Oracle
 # from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -38,7 +40,7 @@ session = SessionLocal()
 jwt = JWTManager(app)
 mail = Mail(app)
 
-scheduler = APScheduler()
+# scheduler = APScheduler()
 
 CORS(app)
 
@@ -140,6 +142,50 @@ def IngresoDeExhorto():
         session.close()
         return 'Conexion finalizada'
 
+@app.route('/checkConnect', methods=['POST'])
+def checkConnect():
+    try:
+        idTribunal = request.values['idTribunal']
+        
+        ip = session.query(Tribunal.ip).filter_by(id_tribunal=idTribunal).first()
+        # print(ip[0])
+        resp = req.get('http://'+ip[0]+':5001/checkConnection')
+        # print(resp._content)
+        return 'True'
+    except:
+        return 'False'
+    finally:
+        session.close()
+
+@app.route('/getJueces/<idT>', methods=['GET'])
+@jwt_required()
+def getJueces(idT):
+    try:
+        jueces = []
+        codigo_tribunal = session.query(Tribunal.codigo_tribunal).filter_by(id_tribunal=idT).first()
+        connection = cx_Oracle.connect(user="ROBOTIZACION", password="PJUD#211125",dsn="civiprod.bdd.pjud:3455/CIVIPROD")
+        cur = connection.cursor()
+        cur.execute('select * from TAUD_JUECESHAB where COD_TRIBUNAL =' + str(codigo_tribunal[0]))
+        for row in cur.fetchall():
+            aux = {
+                'nombres':row[0],
+                'apellido_paterno':row[1],
+                'apellido_materno':row[2],
+                'cargo':row[3],
+                'codigo_tribunal':row[5],
+                'nombre_tribunal':row[6]
+            }
+            jueces.append(aux)
+
+        cur.close()
+        connection.close()
+
+        return jsonify({'message':jueces})
+
+    except Exception as ex:
+        print(ex)
+        return 'hubo un problema'
+
 # @app.route('/Ejecuta', methods=['GET','POST'])
 # def Ejecuta():
 #     IngresoDeExhorto()
@@ -148,8 +194,6 @@ def IngresoDeExhorto():
 if __name__ == '__main__': 
     # scheduler.add_job(id='Scheduled task', func = IngresoDeExhorto, trigger = 'cron', hour = 1, minute = 5)
 
-    scheduler.start()
+    # scheduler.start()
     app.run(host='0.0.0.0',debug=True)     
-
-
 

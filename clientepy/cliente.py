@@ -6,7 +6,6 @@ from getpass import getuser
 from datetime import date, timedelta
 import wmi
 import pythoncom
-# from robots import EjecutaIngresoExhorto
 import threading, queue
 import time
 import random as ra
@@ -16,16 +15,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './'
 CORS(app)
 q = queue.Queue()
-
-
-def worker(arreglo):
-    while len(arr) > 0:
-        time.sleep(1)
-        print(arreglo)
-        sys.stdout.flush()
-
-
-
 
 def cierraIExplore():
     pythoncom.CoInitialize()
@@ -56,8 +45,8 @@ def mensaje():
 
 ##################### RESUMEN MENSUAL #################
 
-# @app.route('/ExeResMens/', methods=['POST']) 
-# def ExeResMens():
+@app.route('/ExeResMens/', methods=['POST']) 
+def ExeResMens():
 
     windows_user = getuser()
 
@@ -82,7 +71,7 @@ def mensaje():
 
     cierraIExplore()  
     script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Informe Mensual/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_mixtos+"', 'pass_mixtos':'"+pass_mixtos+"', 'user_familia':'"+user_familia+"', 'pass_familia':'"+pass_familia+"', 'user_siagj':'"+user_siagj+"', 'pass_siagj':'"+pass_siagj+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'                                                               
-    print(os.system(script))                             
+    os.system(script)
 
     #os.system('start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Informe Mensual/Main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_mixtos+"', 'pass_mixtos':'"+pass_mixtos+"', 'user_familia':'"+user_familia+"', 'pass_familia':'"+pass_familia+"', 'user_siagj':'"+user_siagj+"', 'pass_siagj':'"+pass_siagj+"', 'ruta':'"+path+"'}"+'"')      
     print(script)
@@ -121,33 +110,17 @@ def ExeGestSii():
     
     
     script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Pago de facturas/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_sii+"', 'user_wind':'"+windows_user+"', 'pass_mixtos':'"+pass_sii+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'
-    flag = True
-    while flag:
-        if CheckUiPath() == True:
-            cierraIExplore()
-            os.system(script)
-            flag = False
+    os.system(script)
+    # flag = True
+    # while flag:
+    #     if CheckUiPath() == True:
+    #         cierraIExplore()
+    #         os.system(script)
+    #         flag = False
     
     return 'robot ejecutado'
 
 ################### INGRESO DE EXHORTO #################
-
-def EjecutaIngresoExhorto(data):
-    flag = True
-    cierraIExplore() 
-    script = 'start "" /min "C:/Users/'+data['windows_user']+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+data['windows_user']+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+data['juez']+"', 'id_tribunal':'"+data['id_tribunal']+"', 'id_robot':'"+data['id_robot']+"', 'contrasena':'"+data['pass_sitci']+"', 'correo':'"+data['correo']+"', 'usuario':'"+data['user_sitci']+"'}"+'"'                                                                   
-    os.system(script)
-    time.sleep(5)
-    while flag:
-        ui = CheckUiPath()
-        if (ui == True):
-            print('se ejecuta uipath')
-            flag = False
-    
-    
-    return 'Robot Ingreso de exhorto ejecutado'
-
-
 
 @app.route('/ExeIngresoExhorto/', methods=['POST']) 
 def ExeIngresoExhorto():
@@ -158,6 +131,7 @@ def ExeIngresoExhorto():
     user_sitci = request.values['user_sitci']
     pass_sitci = request.values['pass_sitci']
     correo = request.values['correo']
+    id_usuario = request.values['id_usuario']
 
     data = {
         'windows_user': windows_user,
@@ -169,38 +143,26 @@ def ExeIngresoExhorto():
         'correo':correo
     }
     
-    script = 'start /w "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'contrasena':'"+pass_sitci+"', 'correo':'"+correo+"', 'usuario':'"+user_sitci+"'}"+'"'                                                               
-    flag = True
-    # arr.append('1')
-    while flag:
-        if CheckUiPath() == True:
+    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'contrasena':'"+pass_sitci+"', 'correo':'"+correo+"', 'id_usuario':'"+id_usuario+"', 'usuario':'"+user_sitci+"'}"+'"'                                                                 
+    os.system(script)
+    # flag = True
+    # # arr.append('1')
+    # while flag:
+    #     if CheckUiPath() == True:
             
-            cierraIExplore()
-            os.system(script)
-            flag = False
-    
-    # print('Robot Ingreso de exhortos ejecutado.')
-    # print(q.empty())
-    # globals()['q'].put(cierraIExplore())
-    
-    
-    # q.put(cierraIExplore())
-    # q.put(os.system(script))
-    
-    # globals()['q'].put(EjecutaIngresoExhorto(data))
-    # globals()['q'].join()  
-    # print(q.get())
-    
-
-    
+    #         cierraIExplore()
+    #         os.system(script)
+    #         flag = False
     return 'robot ejecutado' 
+
+@app.route('/checkConnection', methods=['GET'])
+def checkConnection():
+    print('Funciona la conexion')
+    return 'Funciona la conexion'
 
 
 
 if __name__ == '__main__':
-    arr = []    
-    threading.Thread(target=worker, args=(arr)).start()
-    
     app.run(debug=True, host = '0.0.0.0', port=5001)
 
     

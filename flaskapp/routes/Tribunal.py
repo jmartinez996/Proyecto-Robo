@@ -19,13 +19,14 @@ def createTribunal():
     fono = request.values['telefono']
     ciudad = request.values['ciudad']
     ip = request.values['ip']
+    codigo_tribunal = request.values['codigo_tribunal']
     s_area = request.values['s_area']
     s_area = s_area.split(',')
     i_area = []
     for x in s_area:
         query = session.query(Area).filter_by(nombre_area=x).first()
         i_area.append(query.id_area)
-    newTribunal = Tribunal(nombre=nombre,fono=fono,nombre_area=s_area,id_area=i_area,ciudad=ciudad, ip=ip)
+    newTribunal = Tribunal(nombre=nombre,fono=fono,nombre_area=s_area,id_area=i_area,ciudad=ciudad, ip=ip, codigo_tribunal=codigo_tribunal)
     session.add(newTribunal) 
     session.commit()
     session.close()
@@ -71,6 +72,7 @@ def getTribunal():
             'nombre':tribunal.nombre,
             'fono':tribunal.fono,
             'nombre_area':tribunal.nombre_area,
+            'codigo_tribunal':tribunal.codigo_tribunal
         }
         data.append(aux)
     session.close()

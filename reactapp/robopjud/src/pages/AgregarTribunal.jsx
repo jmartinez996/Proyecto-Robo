@@ -18,231 +18,327 @@ import Checkbox from "@material-ui/core/Checkbox";
 import AppbarMenu from "../components/AppbarMenu";
 
 const useStyles = makeStyles((theme) => ({
-	paper: {
-		marginTop: theme.spacing(1),
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-	},
-	avatar: {
-		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main,
-	},
-	form: {
-		width: "100%", // Fix IE 11 issue.
-		marginTop: theme.spacing(1),
-	},
-	submit: {
-		margin: theme.spacing(3, 0, 2),
-		marginTop: theme.spacing(1),
-	},
-	formControl: {
-		paddingTop: theme.spacing(2),
-		marginBottom: theme.spacing(1),
-	},
+  paper: {
+    marginTop: theme.spacing(1),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    marginTop: theme.spacing(1),
+  },
+  formControl: {
+    paddingTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 const GreenCheckbox = withStyles({
-	root: {
-		color: green[400],
-		"&$checked": {
-			color: green[600],
-		},
-	},
-	checked: {},
-})((props) => <Checkbox color='default' {...props} />);
+  root: {
+    color: green[400],
+    "&$checked": {
+      color: green[600],
+    },
+  },
+  checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 
 function AgregarTribunal() {
-	const token = window.localStorage.getItem("robo-jwt-token");
-	const MySwal = withReactContent(Swal);
-	const classes = useStyles();
-	const [errMssg, setErrMssg] = useState("");
-	const { handleSubmit, control, getValues, errors } = useForm({});
-	const [areas, setAreas] = useState([]);
-	const [sArea, setSArea] = useState([]);
-	const [iArea, setIArea] = useState([]);
-	const getAreas = async () => {
-		const areas = await axios(`http://127.0.0.1:5000/getAreas`, {
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ` + token,
-			},
-		})
-			.then((res) => {
-				console.log(res.data.message);
-				setAreas(res.data.message);
-			})
-			.catch((error) => {
-				console.log(error.message);
-			});
-	};
+  const token = window.localStorage.getItem("robo-jwt-token");
+  const MySwal = withReactContent(Swal);
+  const classes = useStyles();
+  const [errMssg, setErrMssg] = useState("");
+  const { handleSubmit, control, getValues, errors } = useForm({});
+  const [areas, setAreas] = useState([]);
+  const [sArea, setSArea] = useState([]);
+  const [iArea, setIArea] = useState([]);
+  const getAreas = async () => {
+    const areas = await axios(`http://127.0.0.1:5000/getAreas`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ` + token,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.message);
+        setAreas(res.data.message);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 
-	useEffect(() => {
-		getAreas();
-	}, []);
+  useEffect(() => {
+    getAreas();
+  }, []);
 
-	const [state, setState] = React.useState({
-		checkedA: true,
-	});
+  const [state, setState] = React.useState({
+    checkedA: true,
+  });
 
-	const handleChange = (event) => {
-		setState({ ...state, [event.target.name]: event.target.checked });
-	};
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
 
-	const onSubmit = async (data) => {
-		const token = window.localStorage.getItem("robo-jwt-token");
-		const f = new FormData();
-		console.log(data);
-		f.append("nombre", data.nombre);
-		f.append("telefono", data.telefono);
-		f.append("ciudad", data.ciudad);
-		f.append("s_area", sArea);
-		f.append("i_area", iArea);
-		f.append("ip", data.ip);
-		MySwal.fire({
-			title: "Agregar",
-			text: "¿Desea agregar el tribunal " + data.nombre + "?",
-			icon: "warning",
-			showCancelButton: true,
-			confirmButtonText: "Agregar",
-			cancelButtonText: "Cancelar",
-			reverseButtons: true,
-		})
-			.then((result) => {
-				if (result.isConfirmed) {
-					axios.post(`http://127.0.0.1:5000/createTribunal/`, f, {
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ` + token,
-						},
-					});
-					MySwal.fire("Agregado", "El registro se ha agregado", "success");
-				} else if (
-					/* Read more about handling dismissals below */
-					result.dismiss === Swal.DismissReason.cancel
-				) {
-					MySwal.fire("Cancelado", "El registro no se ha eliminado", "error");
-				}
-			})
-			.catch((error) => {
-				MySwal.fire({
-					icon: "error",
-					title: "Error...",
-					text: "No se pudo Eliminar.",
-				});
-			});
-	};
-	const handleCheck = (checkedID) => {
-		const { areas: ids } = getValues();
-	};
+  const onSubmit = async (data) => {
+    const token = window.localStorage.getItem("robo-jwt-token");
+    const f = new FormData();
+    console.log(data);
+    f.append("nombre", data.nombre);
+    f.append("telefono", data.telefono);
+    f.append("ciudad", data.ciudad);
+    f.append("s_area", sArea);
+    f.append("i_area", iArea);
+    f.append("ip", data.ip);
+    f.append("codigo_tribunal", data.codigo_tribunal);
+    MySwal.fire({
+      title: "Agregar",
+      text: "¿Desea agregar el tribunal " + data.nombre + "?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Agregar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          axios.post(`http://127.0.0.1:5000/createTribunal/`, f, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ` + token,
+            },
+          });
+          MySwal.fire("Agregado", "El registro se ha agregado", "success");
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          MySwal.fire("Cancelado", "El registro no se ha eliminado", "error");
+        }
+      })
+      .catch((error) => {
+        MySwal.fire({
+          icon: "error",
+          title: "Error...",
+          text: "No se pudo Eliminar.",
+        });
+      });
+  };
+  const handleCheck = (checkedID) => {
+    const { areas: ids } = getValues();
+  };
 
-	const checked = (e, id) => {
-		if (e.target.checked == true) {
-			setSArea([...sArea, id]);
-			console.log(sArea);
-		} else {
-			setSArea((sArea) => sArea.filter((n) => n != id));
-			console.log(sArea);
-		}
-		//falso eliminar
-	};
+  const checked = (e, id) => {
+    if (e.target.checked == true) {
+      setSArea([...sArea, id]);
+      console.log(sArea);
+    } else {
+      setSArea((sArea) => sArea.filter((n) => n != id));
+      console.log(sArea);
+    }
+    //falso eliminar
+  };
 
-	const seteaError = (err) => {
-		setErrMssg(err);
-	};
+  const seteaError = (err) => {
+    setErrMssg(err);
+  };
 
-	// function validation(value){
-	//   if(value != "1234"){
-	//     return "el valor debe ser 1234"
-	//   }
-	// }
-	// https://codesandbox.io/s/material-demo-bzj4i?file=/demo.js
-	return (
-		<React.Fragment>
-			<AppbarMenu />
-			<Container component='main' maxWidth='xs'>
-				<CssBaseline />
-				<div className={classes.paper}>
-					<Avatar className={classes.avatar}>
-						<GavelIcon />
-					</Avatar>
-					<Typography component='h1' variant='h5'>
-						Agregar Tribunal
-					</Typography>
-					<form className={classes.form} onSubmit={handleSubmit(onSubmit)} encType='application/json'>
-						<Controller
-							name='nombre'
-							control={control}
-							defaultValue=''
-							render={({ field: { onChange, value }, fieldState: { error } }) => <TextField variant='outlined' margin='dense' fullWidth id='nombre' value={value} error={!!error} helperText={error ? error.message : null} label='Ingresa Nombre Tribunal' autoComplete='Nombre de Tribunal' autoFocus onChange={onChange} />}
-							rules={{
-								required: "El campo nombre Tribunal esta vacío",
-								//  validate: (value) => validation(value)
-							}}
-						/>
-						<Controller
-							name='telefono'
-							control={control}
-							defaultValue=''
-							render={({ field: { onChange, value }, fieldState: { error } }) => <TextField variant='outlined' margin='dense' fullWidth id='telefono' value={value} error={!!error} helperText={error ? error.message : null} label='Ingresa Telefono Tribunal' autoComplete='Telefono Tribunal' onChange={onChange} />}
-							rules={{
-								required: "El campo telefono Tribunal esta vacío",
-								//  validate: (value) => validation(value)
-							}}
-						/>
-						<Controller
-							name='ciudad'
-							control={control}
-							defaultValue=''
-							render={({ field: { onChange, value }, fieldState: { error } }) => <TextField variant='outlined' margin='dense' fullWidth id='ciudad' value={value} error={!!error} helperText={error ? error.message : null} label='Ingresa la Ciudad del Tribunal' autoComplete='Ciudad de Tribunal' onChange={onChange} />}
-							rules={{
-								required: "El campo telefono Tribunal esta vacío",
-								//  validate: (value) => validation(value)
-							}}
-						/>
-						<Controller
-							name='ip'
-							control={control}
-							defaultValue=''
-							render={({ field: { onChange, value }, fieldState: { error } }) => <TextField variant='outlined' margin='dense' fullWidth id='ip' value={value} error={!!error} helperText={error ? error.message : null} label='Ingresa la dirección IP del equipo que ejecuta.' autoComplete='IP del equipo del Tribunal' onChange={onChange} />}
-							rules={{
-								required: "El campo telefono Tribunal esta vacío",
-								//  validate: (value) => validation(value)
-							}}
-						/>
-						<Controller
-							name='item_ids'
-							render={({ field: { onChange, value }, fieldState: { error } }) =>
-								areas.map((area) => (
-									<FormControlLabel
-										control={
-											<Checkbox
-												//checked = {true}
-												onChange={(e) => checked(e, area.nombre_area)}
-												//defaultChecked={defaultIds.includes(item.id)}
-											/>
-										}
-										key={area.id_area}
-										label={area.nombre_area}
-									/>
-								))
-							}
-							control={control}
-						/>
+  // function validation(value){
+  //   if(value != "1234"){
+  //     return "el valor debe ser 1234"
+  //   }
+  // }
+  // https://codesandbox.io/s/material-demo-bzj4i?file=/demo.js
+  return (
+    <React.Fragment>
+      <AppbarMenu />
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <GavelIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Agregar Tribunal
+          </Typography>
+          <form
+            className={classes.form}
+            onSubmit={handleSubmit(onSubmit)}
+            encType="application/json"
+          >
+            <Controller
+              name="nombre"
+              control={control}
+              defaultValue=""
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  fullWidth
+                  id="nombre"
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Ingresa Nombre Tribunal"
+                  autoComplete="Nombre de Tribunal"
+                  autoFocus
+                  onChange={onChange}
+                />
+              )}
+              rules={{
+                required: "El campo nombre Tribunal esta vacío",
+                //  validate: (value) => validation(value)
+              }}
+            />
+            <Controller
+              name="telefono"
+              control={control}
+              defaultValue=""
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  fullWidth
+                  id="telefono"
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Ingresa Telefono Tribunal"
+                  autoComplete="Telefono Tribunal"
+                  onChange={onChange}
+                />
+              )}
+              rules={{
+                required: "El campo telefono Tribunal esta vacío",
+                //  validate: (value) => validation(value)
+              }}
+            />
+            <Controller
+              name="codigo_tribunal"
+              control={control}
+              defaultValue=""
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  fullWidth
+                  id="codigo_tribunal"
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Ingresa Código del Tribunal"
+                  autoComplete="Código Tribunal"
+                  onChange={onChange}
+                />
+              )}
+              rules={{
+                required: "El campo Código Tribunal esta vacío",
+                //  validate: (value) => validation(value)
+              }}
+            />
+            <Controller
+              name="ciudad"
+              control={control}
+              defaultValue=""
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  fullWidth
+                  id="ciudad"
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Ingresa la Ciudad del Tribunal"
+                  autoComplete="Ciudad de Tribunal"
+                  onChange={onChange}
+                />
+              )}
+              rules={{
+                required: "El campo telefono Tribunal esta vacío",
+                //  validate: (value) => validation(value)
+              }}
+            />
+            <Controller
+              name="ip"
+              control={control}
+              defaultValue=""
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  fullWidth
+                  id="ip"
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Ingresa la dirección IP del equipo que ejecuta."
+                  autoComplete="IP del equipo del Tribunal"
+                  onChange={onChange}
+                />
+              )}
+              rules={{
+                required: "El campo telefono Tribunal esta vacío",
+                //  validate: (value) => validation(value)
+              }}
+            />
+            <Controller
+              name="item_ids"
+              render={({ field: { onChange, value }, fieldState: { error } }) =>
+                areas.map((area) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        //checked = {true}
+                        onChange={(e) => checked(e, area.nombre_area)}
+                        //defaultChecked={defaultIds.includes(item.id)}
+                      />
+                    }
+                    key={area.id_area}
+                    label={area.nombre_area}
+                  />
+                ))
+              }
+              control={control}
+            />
 
-						<Typography variant='inherit' color='error'>
-							{errMssg}
-						</Typography>
-						<div>
-							<Button type='submit' variant='contained' color='primary'>
-								Agregar
-							</Button>
-						</div>
-					</form>
-				</div>
-			</Container>
-		</React.Fragment>
-	);
+            <Typography variant="inherit" color="error">
+              {errMssg}
+            </Typography>
+            <div>
+              <Button type="submit" variant="contained" color="primary">
+                Agregar
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Container>
+    </React.Fragment>
+  );
 }
 
 export default AgregarTribunal;

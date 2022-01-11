@@ -140,6 +140,7 @@ export default function Tablatribunales() {
                 <TableCell>Nombre</TableCell>
                 <TableCell>Telefono</TableCell>
                 <TableCell>Area</TableCell>
+                <TableCell>Código</TableCell>
                 {context.role === "user" && <TableCell>Acciones</TableCell>}
               </TableRow>
             </TableHead>
@@ -155,6 +156,7 @@ export default function Tablatribunales() {
                       ))}
                     </List>
                   </TableCell>
+                  <TableCell>{tribunal.codigo_tribunal}</TableCell>
                   {context.role === "user" && <TableCell>
                     <IconButton
                       aria-label="Eliminar"

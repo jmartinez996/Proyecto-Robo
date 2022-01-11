@@ -181,7 +181,12 @@ export default function AppbarMenu() {
 							Robo Pjud
 						</Typography>
 					</Link>
-					{context.role === "user" && (
+					{context.role === "sudo" && (
+						<IconButton component={Link} to='/configuracion' aria-label='more' aria-controls='long-menu' aria-haspopup='true' onClick={handleClick} style={{ color: "white" }}>
+							<SettingsIcon />
+						</IconButton>
+					)}
+					{context.role === "admin" && (
 						<IconButton component={Link} to='/configuracion' aria-label='more' aria-controls='long-menu' aria-haspopup='true' onClick={handleClick} style={{ color: "white" }}>
 							<SettingsIcon />
 						</IconButton>

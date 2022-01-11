@@ -18,12 +18,12 @@ def testrobot():
 
     except:
         return ""
-@routes.route('/getRobot')
+@routes.route('/getRobot/<idT>')
 @jwt_required()
-def getRobot():
+def getRobot(idT):
     #return {"mensaje": "Saludos"}
     current_user_id = get_jwt_identity()
-    query = session.query(Robots, Tribunal, Area).join(Tribunal).join(Area).all()
+    query = session.query(Robots, Tribunal, Area).join(Tribunal).filter(Tribunal.id_tribunal==idT).join(Area).all()
     print(query)
     data = []
     for robots, tribunales, areas in query:
@@ -40,6 +40,7 @@ def getRobot():
             'disponibilidad': robots.disponibilidad
         }
         data.append(aux)
+    print(data)
     session.close()
     return jsonify({'message': data})
 
@@ -49,7 +50,13 @@ def getRobotArea(nombre, id_tribunal):
     print(nombre)
     current_user_id = get_jwt_identity()
     
-    query = session.query(Robots, Tribunal, Area).join(Area).filter_by(nombre_area = nombre).join(Tribunal).filter_by(id_tribunal=id_tribunal)
+    # query = session.query(Robots, Tribunal, Area).join(Area).filter_by(nombre_area = nombre).join(Tribunal).filter_by(id_tribunal=id_tribunal)
+    q = session.query(Robots).filter_by(disponibilidad = False).first()
+    if(q == None):
+        disponibilidad = True
+    else: disponibilidad  = False
+    
+    query = session.query(Robots, Tribunal, Area).join(Area).filter_by(nombre_area = nombre).join(Tribunal).filter_by(id_tribunal=int(id_tribunal))
     data = []
     for robots, tribunales, areas in query:
         aux = {
@@ -58,7 +65,7 @@ def getRobotArea(nombre, id_tribunal):
             'nombre_robot':robots.nombre_robot,
             'id_tribunal': robots.id_tribunal,
             'nombre_tribunal': tribunales.nombre,
-            'disponibilidad': robots.disponibilidad,
+            'disponibilidad': disponibilidad,
             'link': robots.nombre_robot.lower().replace(' ', '_'),
             'ip': tribunales.ip
         }

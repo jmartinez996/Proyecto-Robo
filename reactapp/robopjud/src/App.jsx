@@ -22,23 +22,6 @@ import NoLogged from "./pages/NoLogged";
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-// import Drawer from "@material-ui/core/Drawer";
-// import CssBaseline from "@material-ui/core/CssBaseline";
-// import AppBar from "@material-ui/core/AppBar";
-// import Toolbar from "@material-ui/core/Toolbar";
-// import List from "@material-ui/core/List";
-// import Divider from "@material-ui/core/Divider";
-// import IconButton from "@material-ui/core/IconButton";
-// import MenuIcon from "@material-ui/icons/Menu";
-// import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-// import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-// import ListItem from "@material-ui/core/ListItem";
-// import ListItemIcon from "@material-ui/core/ListItemIcon";
-// import ListItemText from "@material-ui/core/ListItemText";
-// import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-// import HomeIcon from "@material-ui/icons/Home";
-// import AppbarMenu from "./components/AppbarMenu";
-// import RemoveIcon from "@material-ui/icons/Remove";
 
 import { name } from "./pages/Configuracion";
 
@@ -176,80 +159,80 @@ function App() {
 					<Context.Provider value={[context, setContext]}>
 						
 						
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/civil/ingreso_de_exhortos/:idT/:idR/:ip' exact>
 								{token !== null && <IngresoExhorto />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/civil' exact>
 								{token !== null && <Civil props={{ nombre: "Civil", id_tribunal: idT }} />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/familia' exact>
 								{token !== null && <Familia />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/administracion/resumen_mensual/:idT/:idR/:ip' exact>
 								{token !== null && <ResumenMensual />}
 
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/administracion/gestion_de_sii/:idT/:idR/:ip' exact>
 								{token !== null && <GestionSii />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/administracion' exact>
 								{token !== null && <Administracion props={{ nombre: "Administracion", id_tribunal: idT }} />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["admin", "user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/home'>
 								{token !== null && <Home />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/configuracion/agregarusuario' exact>
 								{token !== null && <AgregarUsuario />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/configuracion/agregartribunal' exact>
 								{token !== null && <AgregarTribunal />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/configuracion/editartribunal' exact>
 								{token !== null && <AgregarTribunal />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/configuracion/agregarobot' exact>
 								{token !== null && <AgregaRobot />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/configuracion/updatetribunal/:id' children={<UpdateTribunal />} exact>
 								{token !== null && <UpdateTribunal />}
 							</Route>
 						)}
 
-						{hasrole1(context.role, ["user", "admin"]) && (
+						{hasrole1(context.role, ["user", "admin", "sudo"]) && (
 							<Route path='/configuracion' exact>
 								{token !== null && <Configuracion />}
 							</Route>

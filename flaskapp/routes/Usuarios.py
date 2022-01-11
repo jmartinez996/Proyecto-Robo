@@ -11,12 +11,13 @@ Base.metadata.create_all(engine)
 
 session = SessionLocal()
 
-@routes.route('/getUsers', methods=['GET'])
+@routes.route('/getUsers/<idT>', methods=['GET'])
 @jwt_required()
-def getUsers():
+def getUsers(idT):
+    print('idT')
     # try:
     current_user_id = get_jwt_identity()
-    query = session.query(User, Tribunal).join(Tribunal).all()
+    query = session.query(User, Tribunal).join(Tribunal).filter(Tribunal.id_tribunal==idT).all()
     query_copy = query
     data = []
     for users, tribunal in query_copy:
@@ -33,8 +34,6 @@ def getUsers():
     session.close()
     print("Entre")
     return jsonify({'message': data})
-    # except:
-    #      return jsonify({'message':'No esta logeado'}), 422
 
 
 @routes.route('/deleteUser/', methods=['POST'])
