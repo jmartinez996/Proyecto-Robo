@@ -40,7 +40,7 @@ export default function Tablatribunales() {
   const MySwal = withReactContent(Swal);
   const [data, setData] = useState([]);
   const getTribunal = async () => {
-    const tribunal = await axios(`http://127.0.0.1:5000/getTribunal`, {
+    const tribunal = await axios(`http://10.13.18.84:5000/getTribunal`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -86,7 +86,7 @@ export default function Tablatribunales() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://127.0.0.1:5000/deleteTribunal/`, f, {
+          .post(`http://10.13.18.84:5000/deleteTribunal/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
@@ -113,7 +113,7 @@ export default function Tablatribunales() {
         <Grid item>
           <CardHeader title="Tribunales" />
         </Grid>
-        {context.role === "user" && <Grid item>
+        {context.role === "sudo" && <Grid item>
           <Link
             to="/configuracion/agregartribunal"
             style={{ textDecoration: "none" }}
@@ -141,7 +141,7 @@ export default function Tablatribunales() {
                 <TableCell>Telefono</TableCell>
                 <TableCell>Area</TableCell>
                 <TableCell>Código</TableCell>
-                {context.role === "user" && <TableCell>Acciones</TableCell>}
+                {context.role === "sudo" && <TableCell>Acciones</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -157,7 +157,7 @@ export default function Tablatribunales() {
                     </List>
                   </TableCell>
                   <TableCell>{tribunal.codigo_tribunal}</TableCell>
-                  {context.role === "user" && <TableCell>
+                  {context.role === "sudo" && <TableCell>
                     <IconButton
                       aria-label="Eliminar"
                       onClick={() =>

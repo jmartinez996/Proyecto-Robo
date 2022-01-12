@@ -28,7 +28,7 @@ export default function Tablaareas() {
 	const [data, setData] = useState([{ id_area: "", nombre_usuario: "" }]);
 
 	const getAreas = async () => {
-		const areas = await axios(`http://127.0.0.1:5000/getAreas`, {
+		const areas = await axios(`http://10.13.18.84:5000/getAreas`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,
@@ -63,7 +63,7 @@ export default function Tablaareas() {
 			preConfirm: (nombre) => {
 				f.append("nombre_area", nombre);
 				return axios
-					.post(`http://127.0.0.1:5000/createArea/`, f, { headers: { "Content-Type": "application/json", Authorization: `Bearer ` + token } })
+					.post(`http://10.13.18.84:5000/createArea/`, f, { headers: { "Content-Type": "application/json", Authorization: `Bearer ` + token } })
 					.then((response) => {
 						// console.log(response.data.message)
 						var aux = data;
@@ -115,7 +115,7 @@ export default function Tablaareas() {
 				console.log("se modifico");
 				console.log(name);
 				return axios
-					.post(`http://127.0.0.1:5000/updateArea/`, f, {
+					.post(`http://10.13.18.84:5000/updateArea/`, f, {
 						headers: {
 							"Content-Type": "application/json",
 							Authorization: `Bearer ` + token,
@@ -163,7 +163,7 @@ export default function Tablaareas() {
 			.then((result) => {
 				if (result.isConfirmed) {
 					axios
-						.post(`http://127.0.0.1:5000/deleteArea/`, f, {
+						.post(`http://10.13.18.84:5000/deleteArea/`, f, {
 							headers: {
 								"Content-Type": "application/json",
 								Authorization: `Bearer ` + token,
@@ -188,7 +188,7 @@ export default function Tablaareas() {
 				});
 			});
 		/*
-      return axios.post(`http://127.0.0.1:5000/deleteArea/`, f, {
+      return axios.post(`http://10.13.18.84:5000/deleteArea/`, f, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer `+token
@@ -203,7 +203,7 @@ export default function Tablaareas() {
 				<Grid item>
 					<CardHeader title='Areas' />
 				</Grid>
-				{context.role === "user" && (
+				{context.role === "sudo" && (
 					<Grid item>
 						<Button
 							variant='contained'
@@ -227,14 +227,14 @@ export default function Tablaareas() {
 							<TableRow>
 								<TableCell>Nombre</TableCell>
 								{/* Cambiar estos role a sudo */}
-								{context.role === "user" && <TableCell>Acciones</TableCell>}
+								{context.role === "sudo" && <TableCell>Acciones</TableCell>}
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{data.map((area) => (
 								<TableRow hover key={area && area.id_area}>
 									<TableCell>{area && area.nombre_area}</TableCell>
-									{context.role === "user" && (
+									{context.role === "sudo" && (
 										<TableCell>
 											<IconButton aria-label='Eliminar' onClick={() => delete_Area(area.id_area, area.nombre_area)}>
 												<DeleteIcon />

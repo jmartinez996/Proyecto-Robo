@@ -60,7 +60,7 @@ function AgregarUsuario() {
     f.append("repcontrasena", data.repcontrasena);
     f.append("tribunal", data.tribunal);
     await axios
-      .post(`http://127.0.0.1:5000/agregauser/`, f, {
+      .post(`http://10.13.18.84:5000/agregauser/`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -85,7 +85,7 @@ function AgregarUsuario() {
   };
 
   useEffect(async () => {
-    await axios.get(`http://127.0.0.1:5000/getTribunal`, {
+    await axios.get(`http://10.13.18.84:5000/getTribunal`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,

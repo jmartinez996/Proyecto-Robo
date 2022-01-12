@@ -151,7 +151,11 @@ def checkConnect():
         # print(ip[0])
         resp = req.get('http://'+ip[0]+':5001/checkConnection')
         # print(resp._content)
-        return 'True'
+        if(resp._content == b'funciona'):
+            print('funciona la comprobacion')
+            return 'True'
+        else:
+            return 'False'
     except:
         return 'False'
     finally:

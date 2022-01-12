@@ -46,7 +46,7 @@ export default function Tablausuarios(props) {
   const getUser = (id) => {
     if (id !== null) {
       const users = axios
-        .get(`http://127.0.0.1:5000/getUsers/` + id, {
+        .get(`http://10.13.18.84:5000/getUsers/` + id, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ` + token,
@@ -82,7 +82,7 @@ export default function Tablausuarios(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://127.0.0.1:5000/deleteUser/`, form, {
+          .post(`http://10.13.18.84:5000/deleteUser/`, form, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
@@ -110,7 +110,26 @@ export default function Tablausuarios(props) {
         <Grid item>
           <CardHeader title="Usuarios" />
         </Grid>
-        {context.role === "user" && (
+        {context.role === "sudo" && (
+          <Grid item>
+            <Link
+              to="/configuracion/agregarusuario"
+              style={{ textDecoration: "none" }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                style={{
+                  marginRight: "10px",
+                  marginTop: "15px",
+                }}
+              >
+                Agregar Usuario
+              </Button>
+            </Link>
+          </Grid>
+        )}
+        {context.role === "admin" && (
           <Grid item>
             <Link
               to="/configuracion/agregarusuario"
@@ -141,7 +160,8 @@ export default function Tablausuarios(props) {
                 <TableCell>Rut</TableCell>
                 <TableCell>Correo</TableCell>
                 {/* <TableCell>Tribunal</TableCell> */}
-                {context.role === "user" && <TableCell>Acciones</TableCell>}
+                {context.role === "sudo" && <TableCell>Acciones</TableCell>}
+                {context.role === "admin" && <TableCell>Acciones</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -152,7 +172,25 @@ export default function Tablausuarios(props) {
                   <TableCell>{user.rut}</TableCell>
                   <TableCell>{user.correo}</TableCell>
                   {/* <TableCell>{user.tribunal}</TableCell> */}
-                  {context.role === "user" && (
+                  {context.role === "sudo" && (
+                    <TableCell>
+                      <IconButton
+                        aria-label="Eliminar"
+                        onClick={() =>
+                          delete_Tribunal(user.id_usuario, user.nombre)
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="Editar"
+                        onClick={() => update_usuario(user.id_usuario)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </TableCell>
+                  )}
+                  {context.role === "admin" && (
                     <TableCell>
                       <IconButton
                         aria-label="Eliminar"

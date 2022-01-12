@@ -44,7 +44,7 @@ export default function Tablahistorial() {
 	};
 	const [data, setData] = useState([{ id_area: "", nombre_usuario: "" }]);
 	const getHistorial = async () => {
-		const historial = await axios(`http://127.0.0.1:5000/getHistorial`, {
+		const historial = await axios(`http://10.13.18.84:5000/getHistorial`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,

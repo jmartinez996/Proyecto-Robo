@@ -62,7 +62,7 @@ export default function TablaRobot(props) {
 //   };
 
   const getrobot = async () => {
-    const robots = await axios(`http://127.0.0.1:5000/getRobot`, {
+    const robots = await axios(`http://10.13.18.84:5000/getRobot`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -105,7 +105,7 @@ export default function TablaRobot(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://127.0.0.1:5000/deleteRobot/`, f, {
+          .post(`http://10.13.18.84:5000/deleteRobot/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
@@ -133,7 +133,7 @@ export default function TablaRobot(props) {
         <Grid item>
           <CardHeader title="Robots" />
         </Grid>
-        {context.role === "user" && (
+        {context.role === "sudo" && (
           <Grid item>
             <Link
               to="/configuracion/agregarobot"
@@ -163,7 +163,7 @@ export default function TablaRobot(props) {
                 {/* <TableCell>Descripción</TableCell> */}
                 <TableCell>Tribunal</TableCell>
                 <TableCell>Area</TableCell>
-                {context.role === "user" && <TableCell>Acciones</TableCell>}
+                {context.role === "sudo" && <TableCell>Acciones</TableCell>}
                 {/* <TableCell>Disp.</TableCell> */}
               </TableRow>
             </TableHead>
@@ -177,7 +177,7 @@ export default function TablaRobot(props) {
                   {/* <TableCell>{robot.desc_robot}</TableCell> */}
                   <TableCell>{robot.nombre_tribunal}</TableCell>
                   <TableCell>{robot.nombre_area} </TableCell>
-                  {context.role === "user" && (
+                  {context.role === "sudo" && (
                     <TableCell>
                       <IconButton
                         aria-label="Eliminar"

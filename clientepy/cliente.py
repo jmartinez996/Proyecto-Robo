@@ -158,7 +158,7 @@ def ExeIngresoExhorto():
 @app.route('/checkConnection', methods=['GET'])
 def checkConnection():
     print('Funciona la conexion')
-    return 'Funciona la conexion'
+    return 'funciona'
 
 
 
