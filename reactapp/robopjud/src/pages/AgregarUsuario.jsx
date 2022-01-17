@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,6 +16,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import AppbarMenu from "../components/AppbarMenu";
+import Context from "../context/Context";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,7 +49,18 @@ function AgregarUsuario() {
   const [errMssg, setErrMssg] = useState("");
   const [tribunales, setTribunales] = useState([]);
   const { handleSubmit, control } = useForm();
+  const [context, setContext] = useContext(Context);
   const token = window.localStorage.getItem("robo-jwt-token");
+  const name = window.localStorage.getItem("robo-jwt-name");
+  const role = window.localStorage.getItem("robo-jwt-role");
+  const idT = window.localStorage.getItem("robo-jwt-idT");
+  const getData = () => {
+    setContext({
+      name: name,
+      token: token,
+      role: role,
+    });
+  };
 
   const onSubmit = async (data) => {
     const f = new FormData();
@@ -58,9 +70,15 @@ function AgregarUsuario() {
     f.append("correo", data.correo);
     f.append("contrasena", data.contrasena);
     f.append("repcontrasena", data.repcontrasena);
-    f.append("tribunal", data.tribunal);
+    if(context.role === "sudo"){
+      f.append("tribunal", data.tribunal);
+    }
+    if(context.role === "admin"){
+      f.append("tribunal", idT);
+    }
+    f.append("tipo_usuario", data.tipo_usuario);
     await axios
-      .post(`http://10.13.18.84:5000/agregauser/`, f, {
+      .post(`http://127.0.0.1:5000/agregauser/`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -85,7 +103,8 @@ function AgregarUsuario() {
   };
 
   useEffect(async () => {
-    await axios.get(`http://10.13.18.84:5000/getTribunal`, {
+    await axios
+      .get(`http://127.0.0.1:5000/getTribunal`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -97,6 +116,10 @@ function AgregarUsuario() {
       .catch((error) => {
         console.log(error.message);
       });
+  }, []);
+
+  useEffect(() => {
+    getData();
   }, []);
 
   return (
@@ -269,8 +292,48 @@ function AgregarUsuario() {
               )}
               rules={{ required: "El campo Repite Contrasena esta vacío" }}
             />
+            {context.role === "sudo" && (
+              <Controller
+                name="tribunal"
+                control={control}
+                defaultValue=""
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <>
+                    <FormControl
+                      variant="outlined"
+                      className={classes.formControl}
+                      fullWidth
+                    >
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        Seleccione Tribunal
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        label="Age"
+                        margin="dense"
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        onChange={onChange}
+                        name="tribunal"
+                      >
+                        {tribunales.map((tribunal) => (
+                          <MenuItem value={tribunal.id_tribunal}>
+                            {tribunal.nombre}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </>
+                )}
+                rules={{ required: "El campo Repite Contrasena esta vacío" }}
+              />
+            )}
             <Controller
-              name="tribunal"
+              name="tipo_usuario"
               control={control}
               defaultValue=""
               render={({
@@ -284,7 +347,7 @@ function AgregarUsuario() {
                     fullWidth
                   >
                     <InputLabel id="demo-simple-select-outlined-label">
-                      Seleccione Tribunal
+                      Tipo de usuario
                     </InputLabel>
                     <Select
                       labelId="demo-simple-select-outlined-label"
@@ -294,13 +357,13 @@ function AgregarUsuario() {
                       error={!!error}
                       helperText={error ? error.message : null}
                       onChange={onChange}
-                      name="tribunal"
+                      name="tipo_usuario"
                     >
-                      {tribunales.map((tribunal) => (
-                        <MenuItem value={tribunal.id_tribunal}>
-                          {tribunal.nombre}
-                        </MenuItem>
-                      ))}
+                      {context.role === "sudo" && (
+                        <MenuItem value="sudo">sudo</MenuItem>
+                      )}
+                      <MenuItem value="admin">admin</MenuItem>
+                      <MenuItem value="user">user</MenuItem>
                     </Select>
                   </FormControl>
                 </>

@@ -51,7 +51,7 @@ def getRobotArea(nombre, id_tribunal):
     current_user_id = get_jwt_identity()
     
     # query = session.query(Robots, Tribunal, Area).join(Area).filter_by(nombre_area = nombre).join(Tribunal).filter_by(id_tribunal=id_tribunal)
-    q = session.query(Robots).filter_by(disponibilidad = False).first()
+    q = session.query(Robots).filter_by(id_tribunal=int(id_tribunal)).filter_by(disponibilidad = False).first()
     if(q == None):
         disponibilidad = True
     else: disponibilidad  = False

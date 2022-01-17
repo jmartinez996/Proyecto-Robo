@@ -35,6 +35,7 @@ export default function Tablahistorial() {
 	const token = window.localStorage.getItem("robo-jwt-token");
 	const name = window.localStorage.getItem("robo-jwt-name");
 	const role = window.localStorage.getItem("robo-jwt-role");
+	const idT = window.localStorage.getItem("robo-jwt-idT");
 	const getData = () => {
 		setContext({
 			name: name,
@@ -44,7 +45,10 @@ export default function Tablahistorial() {
 	};
 	const [data, setData] = useState([{ id_area: "", nombre_usuario: "" }]);
 	const getHistorial = async () => {
-		const historial = await axios(`http://10.13.18.84:5000/getHistorial`, {
+		const f = new FormData();
+		f.append("id_tribunal", idT);
+
+		const historial = await axios.post(`http://127.0.0.1:5000/getHistorial`, f, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,

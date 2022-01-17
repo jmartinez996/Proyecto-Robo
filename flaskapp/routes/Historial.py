@@ -9,17 +9,17 @@ from Classes.Historial import Historial
 from Classes.Robots import Robots
 import requests as req
 from database import Base, SessionLocal, engine
+from sqlalchemy import desc
 
 Base.metadata.create_all(engine)
 
 session = SessionLocal()
 
-@routes.route('/getHistorial')
+@routes.route('/getHistorial', methods=['POST'])
 @jwt_required()
 def gethistorial():
-
-    print('llegamos')
-    query = session.query(Historial, User, Tribunal, Robots).filter(Historial.id_usuario == User.id_usuario).filter(Historial.id_tribunal==Tribunal.id_tribunal).filter(Historial.id_robot==Robots.id_robot).all()
+    id_trib = request.values['id_tribunal']
+    query = session.query(Historial, User, Tribunal, Robots).filter(Historial.id_usuario == User.id_usuario).filter(Historial.id_tribunal==id_trib).filter(Historial.id_robot==Robots.id_robot).order_by(desc(Historial.fecha)).all()
     data = []
     for historial, users, tribunal, robots in query:
         aux = {
@@ -29,7 +29,7 @@ def gethistorial():
                 'correo':users.correo,
                 'tribunal':tribunal.nombre,
                 'nombre_robot':robots.nombre_robot,
-                'fecha':historial.fecha,
+                'fecha':str(historial.fecha.day)+'/'+str(historial.fecha.month)+'/'+str(historial.fecha.year),
                 'estado_final':historial.estado_final
                 }
         data.append(aux)

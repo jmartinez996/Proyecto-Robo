@@ -28,7 +28,7 @@ app.config['UPLOAD_FOLDER'] = './Archivos'
 
 app.config['MAIL_SERVER']='smtp.mail.pjud'
 app.config['MAIL_PORT'] = 25
-app.config['MAIL_USERNAME'] = 'sgc_pucon@pjud.cl'
+app.config['MAIL_USERNAME'] = 'rpa_araucania@pjud.cl'
 app.config['MAIL_PASSWORD'] = 'letras2021'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
@@ -47,7 +47,7 @@ CORS(app)
 
 @app.route('/') 
 def index(): 
-    # msg = Message('Hello', sender = 'sgc_pucon@pjud.cl', recipients = ['agmardones@pjud.cl'])
+    # msg = Message('Hello', sender = 'rpa_araucania@pjud.cl', recipients = ['agmardones@pjud.cl'])
     # msg.body = "Hello Flask message sent from Flask-Mail"
     # mail.send(msg)
     return {"mensaje":"saludo"}
@@ -97,12 +97,13 @@ def agregauser():
         contrasena = request.values['contrasena']
         repcontrasena = request.values['repcontrasena']
         tribunal = request.values['tribunal']
+        tipo_usuario = request.values['tipo_usuario']
         print(tribunal)
         if contrasena != repcontrasena:
             return jsonify({'message':'Contrasenas no coinciden.'}),422
         else:
             contrasena = genph(contrasena)
-            new_user = User(nombre=nombre, apellido=apellido, rut=rut, correo=correo, contrasena=contrasena, tipo_usuario=2, id_area=1, id_tribunal=tribunal) 
+            new_user = User(nombre=nombre, apellido=apellido, rut=rut, correo=correo, contrasena=contrasena, tipo_usuario=tipo_usuario, id_area=1, id_tribunal=tribunal) 
             session.add(new_user) 
             session.commit()
             return jsonify({'message':'Usuario Registrado con Exito'})
@@ -171,10 +172,12 @@ def getJueces(idT):
         cur = connection.cursor()
         cur.execute('select * from TAUD_JUECESHAB where COD_TRIBUNAL =' + str(codigo_tribunal[0]))
         for row in cur.fetchall():
+            nombres = row[0].split(" ")
             aux = {
-                'nombres':row[0],
-                'apellido_paterno':row[1],
-                'apellido_materno':row[2],
+                'primer_nombre':nombres[0].capitalize(),
+                'segundo_nombre':nombres[1].capitalize(),
+                'apellido_paterno':row[1].capitalize(),
+                'apellido_materno':row[2].capitalize(),
                 'cargo':row[3],
                 'codigo_tribunal':row[5],
                 'nombre_tribunal':row[6]
@@ -185,6 +188,32 @@ def getJueces(idT):
         connection.close()
 
         return jsonify({'message':jueces})
+
+    except Exception as ex:
+        print(ex)
+        return 'hubo un problema'
+
+@app.route('/getExhortos/<idT>', methods=['GET'])
+@jwt_required()
+def getExhortos(idT):
+    try:
+        exhortos = []
+        codigo_tribunal = session.query(Tribunal.codigo_tribunal).filter_by(id_tribunal=idT).first()
+        connection = cx_Oracle.connect(user="ROBOTIZACION", password="PJUD#211125",dsn="civiprod.bdd.pjud:3455/CIVIPROD")
+        cur = connection.cursor()
+        cur.execute('select * from TAUD_ESCRITOEXHORTO where COD_TRIBUNAL =' + str(codigo_tribunal[0]))
+        for row in cur.fetchall():
+            aux = {
+                'rit':row[0],
+                'relacionado':row[3],
+                'fecha':str(row[2].day)+'/'+str(row[2].month)+'/'+str(row[2].year)
+            }
+            exhortos.append(aux)
+        print(exhortos)
+        cur.close()
+        connection.close()
+
+        return jsonify({'message':exhortos})
 
     except Exception as ex:
         print(ex)

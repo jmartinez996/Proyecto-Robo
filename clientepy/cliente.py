@@ -143,16 +143,8 @@ def ExeIngresoExhorto():
         'correo':correo
     }
     
-    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'contrasena':'"+pass_sitci+"', 'correo':'"+correo+"', 'id_usuario':'"+id_usuario+"', 'usuario':'"+user_sitci+"'}"+'"'                                                                 
+    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'contrasena':'"+pass_sitci+"', 'correo':'"+correo+"', 'id_usuario':'"+id_usuario+"', 'windows_user':'"+windows_user+"', 'usuario':'"+user_sitci+"'}"+'"'                                                                 
     os.system(script)
-    # flag = True
-    # # arr.append('1')
-    # while flag:
-    #     if CheckUiPath() == True:
-            
-    #         cierraIExplore()
-    #         os.system(script)
-    #         flag = False
     return 'robot ejecutado' 
 
 @app.route('/checkConnection', methods=['GET'])

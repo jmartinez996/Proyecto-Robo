@@ -1,6 +1,19 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Box, Container, Grid, Typography } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Card,
+  CardHeader
+} from "@material-ui/core";
 import { useForm, Controller } from "react-hook-form";
 import { TextField } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
@@ -17,6 +30,7 @@ import Select from "@material-ui/core/Select";
 import { FormControl } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
 import AppbarMenu from "../../../components/AppbarMenu";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(1),
@@ -48,6 +62,7 @@ export default function IngresoExhorto(props) {
   const { idR } = useParams();
   const { ip } = useParams();
   const [jueces, setJueces] = useState([]);
+  const [exhortos, setExhortos] = useState([]);
   const classes = useStyles();
   const [errMssg, setErrMssg] = useState("");
   const { handleSubmit, control } = useForm();
@@ -70,7 +85,24 @@ export default function IngresoExhorto(props) {
       });
   };
 
+  const getExhortos = () => {
+    const exhortos = axios(`http://10.13.18.84:5000/getExhortos/` + idT, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ` + token,
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setExhortos(res.data.message);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   useEffect(() => {
+    getExhortos();
     getJueces();
   }, []);
 
@@ -263,8 +295,24 @@ export default function IngresoExhorto(props) {
                               name="juez"
                             >
                               {jueces.map((juez) => (
-                                <MenuItem value={2}>
-                                  {juez.apellido_paterno + ' ' + juez.apellido_materno + ', ' + juez.nombres}
+                                <MenuItem
+                                  value={
+                                    juez.apellido_paterno +
+                                    " " +
+                                    juez.apellido_materno +
+                                    ", " +
+                                    juez.primer_nombre +
+                                    " " +
+                                    juez.segundo_nombre
+                                  }
+                                >
+                                  {juez.apellido_paterno +
+                                    " " +
+                                    juez.apellido_materno +
+                                    ", " +
+                                    juez.primer_nombre +
+                                    " " +
+                                    juez.segundo_nombre}
                                 </MenuItem>
                               ))}
                             </Select>
@@ -345,6 +393,34 @@ export default function IngresoExhorto(props) {
                     </li>
                   </ul>
                 </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Card>
+                  <Grid container align-content-center justify="space-between">
+                    <Grid item>
+                      <CardHeader title="Rits disponibles para ejecutar." />
+                    </Grid>
+                  </Grid>
+                  <Divider />
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Rit</TableCell>
+                        <TableCell>Estado</TableCell>
+                        <TableCell>Fecha</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {exhortos.map((exh) => (
+                        <TableRow hover key={exh && exh.rit}>
+                          <TableCell>{exh && exh.rit}</TableCell>
+                          <TableCell>{exh && exh.relacionado}</TableCell>
+                          <TableCell>{exh && exh.fecha}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Card>
               </Grid>
             </Grid>
           </Container>

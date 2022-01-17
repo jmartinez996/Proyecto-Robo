@@ -52,17 +52,17 @@ export default function TablaRobot(props) {
     console.log(state);
   };
 
-//   const orderDisponibilidad = () => {
-//     {
-//       data.map((robot) =>
-//         setState((state["sw" + robot.id_robot] = robot.disponibilidad))
-//       );
-//     }
-//     return state;
-//   };
+  //   const orderDisponibilidad = () => {
+  //     {
+  //       data.map((robot) =>
+  //         setState((state["sw" + robot.id_robot] = robot.disponibilidad))
+  //       );
+  //     }
+  //     return state;
+  //   };
 
   const getrobot = async () => {
-    const robots = await axios(`http://10.13.18.84:5000/getRobot`, {
+    const robots = await axios(`http://127.0.0.1:5000/getRobot`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -71,11 +71,12 @@ export default function TablaRobot(props) {
       .then((res) => {
         console.log(res.data.message);
         setData(res.data.message);
-        data.map((robot) =>
+        data.map(
+          (robot) =>
             setState((state["sw" + robot.id_robot] = robot.disponibilidad))
-        //   setState({ ...state, ["sw" + robot.id_robot]: robot.disponibilidad })
+          //   setState({ ...state, ["sw" + robot.id_robot]: robot.disponibilidad })
         );
-		console.log(state)
+        console.log(state);
       })
       .catch((error) => {
         //console.log(error.message)
@@ -105,7 +106,7 @@ export default function TablaRobot(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5000/deleteRobot/`, f, {
+          .post(`http://127.0.0.1:5000/deleteRobot/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,

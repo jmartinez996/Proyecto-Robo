@@ -28,7 +28,7 @@ export default function Tablaareas() {
 	const [data, setData] = useState([{ id_area: "", nombre_usuario: "" }]);
 
 	const getAreas = async () => {
-		const areas = await axios(`http://10.13.18.84:5000/getAreas`, {
+		const areas = await axios(`http://127.0.0.1:5000/getAreas`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,
@@ -63,7 +63,7 @@ export default function Tablaareas() {
 			preConfirm: (nombre) => {
 				f.append("nombre_area", nombre);
 				return axios
-					.post(`http://10.13.18.84:5000/createArea/`, f, { headers: { "Content-Type": "application/json", Authorization: `Bearer ` + token } })
+					.post(`http://127.0.0.1:5000/createArea/`, f, { headers: { "Content-Type": "application/json", Authorization: `Bearer ` + token } })
 					.then((response) => {
 						// console.log(response.data.message)
 						var aux = data;
@@ -115,7 +115,7 @@ export default function Tablaareas() {
 				console.log("se modifico");
 				console.log(name);
 				return axios
-					.post(`http://10.13.18.84:5000/updateArea/`, f, {
+					.post(`http://127.0.0.1:5000/updateArea/`, f, {
 						headers: {
 							"Content-Type": "application/json",
 							Authorization: `Bearer ` + token,
@@ -147,7 +147,6 @@ export default function Tablaareas() {
 		console.log(name);
 		const token = window.localStorage.getItem("robo-jwt-token");
 		const f = new FormData();
-		console.log("aca");
 		f.append("id_area", id);
 		f.append("nombre_area", name);
 
@@ -163,7 +162,7 @@ export default function Tablaareas() {
 			.then((result) => {
 				if (result.isConfirmed) {
 					axios
-						.post(`http://10.13.18.84:5000/deleteArea/`, f, {
+						.post(`http://127.0.0.1:5000/deleteArea/`, f, {
 							headers: {
 								"Content-Type": "application/json",
 								Authorization: `Bearer ` + token,
@@ -188,7 +187,7 @@ export default function Tablaareas() {
 				});
 			});
 		/*
-      return axios.post(`http://10.13.18.84:5000/deleteArea/`, f, {
+      return axios.post(`http://127.0.0.1:5000/deleteArea/`, f, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer `+token

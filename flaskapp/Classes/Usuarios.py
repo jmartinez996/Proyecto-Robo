@@ -12,7 +12,7 @@ class User(Base):
     rut = Column(String())
     correo = Column(String())
     contrasena = Column(String())
-    tipo_usuario = Column(Integer)
+    tipo_usuario = Column(String())
     id_area = Column(Integer) 
     id_tribunal = Column(Integer, ForeignKey('tribunal.id_tribunal'))
 

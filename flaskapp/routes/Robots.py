@@ -76,12 +76,12 @@ def stateRobotResMens():
         archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file_name))
 
         if estado == 'error':
-            msg = Message('RPA: Hubo un error ejecutando Resumen Mensual', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg = Message('RPA: Hubo un error ejecutando Resumen Mensual', sender = 'rpa_araucania@pjud.cl', recipients = [correo])
             msg.body = "Pruebe revisando la plantilla para verificar que corresponda con los requerimientos establecidos."
             mail.send(msg)
 
         if estado == 'success':
-            msg = Message('RPA: Resumen Mensual ejecutado con éxito-', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg = Message('RPA: Resumen Mensual ejecutado con éxito-', sender = 'rpa_araucania@pjud.cl', recipients = [correo])
             msg.body = "Se adjunta a este correo un excel con el resultado."
             with routes.open_resource('../Archivos/'+file_name) as fp:  
                 msg.attach(file_name,'application/vnd.ms-excel',fp.read())  
@@ -138,19 +138,17 @@ def stateRobotGestSii():
         id_tribunal = request.values['id_tribunal']
         correo = request.values['correo']
         file_name = request.values['file_name']
-
-        print(estado)
         
         archivo = request.files['archivo']
         archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file_name))
 
         if estado == 'error':
-            msg = Message('RPA: Hubo un error ejecutando Gestión de SII.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg = Message('RPA: Hubo un error ejecutando Gestión de SII.', sender = 'rpa_araucania@pjud.cl', recipients = [correo])
             msg.body = "Pruebe revisando la plantilla para verificar que corresponda con los requerimientos establecidos."
             mail.send(msg)
         
         if estado == 'success':
-            msg = Message('RPA: Gestión de SII ejecutado con Éxito.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg = Message('RPA: Gestión de SII ejecutado con Éxito.', sender = 'rpa_araucania@pjud.cl', recipients = [correo])
             msg.body = "Se adjunta a este correo un archivo comprimido con el resultado."
             with routes.open_resource('../Archivos/'+file_name) as fp:  
                 msg.attach(file_name,'application/zip',fp.read())  
@@ -177,18 +175,18 @@ def setJuezIngresoExhorto():
         pass_sitci = request.values['pass_sitci']
         id_tribunal = request.values['id_tribunal']
         id_robot = request.values['id_robot']
-        id_juez = request.values['id_juez']
+        juez = request.values['id_juez']
         ip = request.values['ip']
         correo = request.values['correo']
-
-        query = session.query(Jueces).filter_by(id_juez=id_juez).first()
-
+        print(correo)
+        # query = session.query(Jueces).filter_by(id_juez=id_juez).first()
+        # print(query)
         dataForm = {
             'user_sitci': user_sitci,
             'pass_sitci': pass_sitci,
             'id_tribunal': id_tribunal,
             'id_robot': id_robot,
-            'juez':query.apellido_juez + ', ' + query.nombre_juez,
+            'juez':juez,
             'correo':correo,
             'id_usuario':current_user_id
         } 
@@ -200,9 +198,9 @@ def setJuezIngresoExhorto():
         print(dataForm)
 
         return ''
-    except:
-        print('no se pudo enviar nada')
-        return 'Hubo un problema'
+    except Exception as ex:
+        print(ex)
+        return 'hubo un problema'
     finally:
         session.close()
         return 'Proceso finalizado.'
@@ -217,20 +215,28 @@ def stateRobotIngresoExhorto():
         estado = request.values['estado']
         rits = request.values['rits']
         id_usuario = request.values['id_usuario']
+        archivo = request.files['imagen']
+        archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],'imgErrorExhortos'+str(id_tribunal)+'.png'))
 
         if estado == 'error':
-            msg = Message('RPA: Hubo un problema ejecutando Ingreso de exhortos.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg = Message('RPA: Hubo un problema ejecutando Ingreso de exhortos.', sender = 'rpa_araucania@pjud.cl', recipients = [correo])
             if rits != "":
                 msg.body = "Los ingresos de exhortos que se pudieron realizar son: " + rits[1:]
             else:
-                msg.body = "No se pudo realizar ningún exhorto."
+                msg.body = "Algo pudo haber fallado durante el proceso. Se adjunta una captura de pantalla para que se tomen medidas de manera manual."
+                with routes.open_resource('../Archivos/imgErrorExhortos'+str(id_tribunal)+'.png') as fp:  
+                    msg.attach('imgErrorExhortos'+str(id_tribunal)+'.png','image/png',fp.read())  
             mail.send(msg)
+            if os.path.exists('Archivos\imgErrorExhortos'+str(id_tribunal)+'.png'):
+                os.remove('Archivos\imgErrorExhortos'+str(id_tribunal)+'.png')
+            else: 
+                print('no existe el archivo')
             new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=False, fecha=datetime.today().strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
             session.add(new_register) 
             session.commit()
 
         if estado == 'success':
-            msg = Message('RPA: Ingreso de Exhortos se ha ejecutado con éxito.', sender = 'sgc_pucon@pjud.cl', recipients = [correo])
+            msg = Message('RPA: Ingreso de Exhortos se ha ejecutado con éxito.', sender = 'rpa_araucania@pjud.cl', recipients = [correo])
             msg.body = "Los Ingresos de exhorto que se realizaron son: " + rits[1:]
             mail.send(msg)
             new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=True, fecha=datetime.today().strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
