@@ -27,20 +27,21 @@ import Context from "../../context/Context";
 export default function Tablatribunales() {
   const [context, setContext] = useContext(Context);
   const token = window.localStorage.getItem("robo-jwt-token");
-	const name = window.localStorage.getItem("robo-jwt-name");
-	const role = window.localStorage.getItem("robo-jwt-role");
-  
+  const name = window.localStorage.getItem("robo-jwt-name");
+  const role = window.localStorage.getItem("robo-jwt-role");
+
   const getData = () => {
-		setContext({
-			name: name,
-			token: token,
-			role: role,
-		});
-	};
+    setContext({
+      name: name,
+      token: token,
+      role: role,
+    });
+  };
   const MySwal = withReactContent(Swal);
   const [data, setData] = useState([]);
+
   const getTribunal = async () => {
-    const tribunal = await axios(`http://127.0.0.1:5000/getTribunal`, {
+    const tribunal = await axios(`http://10.13.18.84:5000/getTribunal`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -58,6 +59,7 @@ export default function Tablatribunales() {
     getTribunal();
     getData();
   }, []);
+
   const prueba = ($id) => {
     var sendT = {
       id: 1,
@@ -86,7 +88,7 @@ export default function Tablatribunales() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://127.0.0.1:5000/deleteTribunal/`, f, {
+          .post(`http://10.13.18.84:5000/deleteTribunal/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
@@ -113,23 +115,25 @@ export default function Tablatribunales() {
         <Grid item>
           <CardHeader title="Tribunales" />
         </Grid>
-        {context.role === "sudo" && <Grid item>
-          <Link
-            to="/configuracion/agregartribunal"
-            style={{ textDecoration: "none" }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              style={{
-                marginRight: "10px",
-                marginTop: "15px",
-              }}
+        {context.role === "sudo" && (
+          <Grid item>
+            <Link
+              to="/configuracion/agregartribunal"
+              style={{ textDecoration: "none" }}
             >
-              Agregar Tribunal
-            </Button>
-          </Link>
-        </Grid>}
+              <Button
+                variant="contained"
+                color="primary"
+                style={{
+                  marginRight: "10px",
+                  marginTop: "15px",
+                }}
+              >
+                Agregar Tribunal
+              </Button>
+            </Link>
+          </Grid>
+        )}
       </Grid>
       <Divider />
       <PerfectScrollbar>
@@ -157,27 +161,29 @@ export default function Tablatribunales() {
                     </List>
                   </TableCell>
                   <TableCell>{tribunal.codigo_tribunal}</TableCell>
-                  {context.role === "sudo" && <TableCell>
-                    <IconButton
-                      aria-label="Eliminar"
-                      onClick={() =>
-                        delete_Tribunal(tribunal.id_tribunal, tribunal.nombre)
-                      }
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                    <Link
-                      // to={"/configuracion/updatetribunal/".concat(tribunal.id_tribunal)}
-                      to={`/configuracion/updatetribunal/${prueba(
-                        tribunal.id
-                      )}`}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <IconButton aria-label="Editar">
+                  {context.role === "sudo" && (
+                    <TableCell>
+                      <IconButton
+                        aria-label="Eliminar"
+                        onClick={() =>
+                          delete_Tribunal(tribunal.id_tribunal, tribunal.nombre)
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+
+                      <IconButton
+                        component={Link}
+                        to={"/configuracion/updatetribunal/"+tribunal.id_tribunal}
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
+                      >
                         <EditIcon />
                       </IconButton>
-                    </Link>
-                  </TableCell>}
+
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

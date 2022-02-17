@@ -138,9 +138,10 @@ function Home() {
   const [areas, setAreas] = useState([]);
   const [r, setR] = useState(1);
   const [checkTribunal, setCheckTribunal] = useState(null);
+
   const getUserState = () => {
     axios
-      .get(`http://127.0.0.1:5000/userState`, {
+      .get(`http://10.13.18.84:5000/userState`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -157,8 +158,8 @@ function Home() {
       });
   };
 
-  const getAreas = () => {
-    axios(`http://127.0.0.1:5000/getAreas`, {
+  const getAreas = async () => {
+    await axios(`http://10.13.18.84:5000/getAreas`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -176,14 +177,14 @@ function Home() {
     const f = new FormData();
     f.append("idTribunal", idTribunal);
     await axios
-      .post(`http://127.0.0.1:5000/checkConnect`, f, {
+      .post(`http://10.13.18.84:5000/checkConnect`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data === "True") {
           setCheckTribunal(res.data);
           MySwal.fire({

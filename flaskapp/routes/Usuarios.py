@@ -59,13 +59,46 @@ def getUserbyId(id):
     data = []
     for usuario in sql:
         aux = {
-            'role':usuario.tipo_usuario
+            'role':usuario.tipo_usuario,
+            'nombre':usuario.nombre,
+            'apellido':usuario.apellido,
+            'rut':usuario.rut,
+            'correo':usuario.correo,
+            'id_tribunal':usuario.id_tribunal
         }
         data.append(aux)
     session.close()
     return jsonify({'message':data})
     #return(id)
-    
+
+@routes.route('/updateUser/', methods=['POST'])
+@jwt_required()
+def updateUser():
+    try:
+        current_user_id = get_jwt_identity()
+        id_usuario = request.values['id']
+        nombre = request.values['nombre']
+        apellido = request.values['apellido']
+        rut = request.values['rut']
+        correo = request.values['correo']
+        tribunal = request.values['tribunal']
+        tipo_usuario = request.values['tipo_usuario']
+        old_data = session.query(User).get(id_usuario)
+        old_data.nombre = nombre
+        old_data.apellido = apellido
+        old_data.rut = rut
+        old_data.correo = correo
+        old_data.tribunal = tribunal
+        old_data.tipo_usuario = tipo_usuario
+        session.merge(old_data)
+        session.commit()  
+        return {"mensaje":"saludo"}
+    except:
+        return ''
+    finally:
+        session.close()
+        
+
 @routes.route('/upusers')
 def upusers():
     print("data")

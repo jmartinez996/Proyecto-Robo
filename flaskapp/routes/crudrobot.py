@@ -112,4 +112,46 @@ def deleteRobot():
     finally:
         session.close()
 
+@routes.route('/getRobotbyId/<id_robot>')
+@jwt_required()
+def getRobotbyId(id_robot):
+    print(id_robot)
+    current_user_id = get_jwt_identity()
+    sql = session.query(Robots).filter(Robots.id_robot == id_robot).all()
+    data = []
+    for robots in sql:
+        aux = {
+            'id_robot':robots.id_robot,
+            'id_area':robots.id_area,
+            'nombre_robot':robots.nombre_robot,
+            'id_tribunal': robots.id_tribunal,
+            'descripcion_robot':robots.desc_robot
+        }
+        data.append(aux)
+    session.close()
+    return jsonify({'message':data})
+
+@routes.route('/updateRobot/', methods=['POST'])
+@jwt_required()
+def updateRobot():
+    try:
+        current_user_id = get_jwt_identity()
+        id_robot = request.values['id']
+        nombre = request.values['nombre']
+        descripcion = request.values['descripcion']
+        id_area = request.values['id_area']
+        
+        old_data = session.query(Robots).get(id_robot)
+        old_data.nombre_robot = nombre
+        old_data.desc_robot = descripcion
+        old_data.id_area = id_area
+        session.merge(old_data)
+        session.commit()                                
+        return {"mensaje":"saludo"}
+
+    except:
+        return ""
+    finally:
+        session.close()
+
 

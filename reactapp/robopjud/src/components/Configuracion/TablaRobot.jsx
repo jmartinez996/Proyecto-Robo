@@ -62,7 +62,7 @@ export default function TablaRobot(props) {
   //   };
 
   const getrobot = async () => {
-    const robots = await axios(`http://127.0.0.1:5000/getRobot`, {
+    const robots = await axios(`http://10.13.18.84:5000/getRobot`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -106,7 +106,7 @@ export default function TablaRobot(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://127.0.0.1:5000/deleteRobot/`, f, {
+          .post(`http://10.13.18.84:5000/deleteRobot/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
@@ -189,29 +189,16 @@ export default function TablaRobot(props) {
                         <DeleteIcon />
                       </IconButton>
                       <IconButton
-                        aria-label="Editar"
-                        onClick={() => update_Robot()}
+                        component={Link}
+                        to={"/configuracion/updaterobots/"+robot.id_robot}
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
                       >
                         <EditIcon />
                       </IconButton>
                     </TableCell>
                   )}
-                  {/* <TableCell name="hola">
-                    <FormGroup>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            onChange={handleChange}
-                            name={"sw" + robot.id_robot}
-                            checked={state["sw" + robot.id_robot]}
-                            inputProps={{ "aria-label": "sw" + robot.id_robot }}
-                          />
-                        }
-                      />
-                    </FormGroup>
-
-                    <Switch name={'sw'+robot.id_robot} default inputProps={{ 'aria-label': 'primary checkbox' }} />
-                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>

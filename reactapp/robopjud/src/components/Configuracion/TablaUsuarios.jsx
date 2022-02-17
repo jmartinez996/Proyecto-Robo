@@ -20,10 +20,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import Swal from "sweetalert2";
 import { useForm, Controller } from "react-hook-form";
-import FormControl from "@material-ui/core/FormControl";
-import TextField from "@material-ui/core/TextField";
 import Context from "../../context/Context";
-import { gridColumnsTotalWidthSelector } from "@material-ui/data-grid";
 
 export default function Tablausuarios(props) {
   const [context, setContext] = useContext(Context);
@@ -46,7 +43,7 @@ export default function Tablausuarios(props) {
   const getUser = (id) => {
     if (id !== null) {
       const users = axios
-        .get(`http://127.0.0.1:5000/getUsers/` + id, {
+        .get(`http://10.13.18.84:5000/getUsers/` + id, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ` + token,
@@ -82,7 +79,7 @@ export default function Tablausuarios(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://127.0.0.1:5000/deleteUser/`, form, {
+          .post(`http://10.13.18.84:5000/deleteUser/`, form, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
@@ -183,8 +180,11 @@ export default function Tablausuarios(props) {
                         <DeleteIcon />
                       </IconButton>
                       <IconButton
-                        aria-label="Editar"
-                        onClick={() => update_usuario(user.id_usuario)}
+                        component={Link}
+                        to={"/configuracion/updateusuarios/"+user.id_usuario}
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
                       >
                         <EditIcon />
                       </IconButton>
@@ -201,8 +201,11 @@ export default function Tablausuarios(props) {
                         <DeleteIcon />
                       </IconButton>
                       <IconButton
-                        aria-label="Editar"
-                        onClick={() => update_usuario(user.id_usuario)}
+                        component={Link}
+                        to={"/configuracion/updateusuarios/"+user.id_usuario}
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
                       >
                         <EditIcon />
                       </IconButton>

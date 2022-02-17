@@ -96,15 +96,6 @@ def ExeGestSii():
     id_robot = request.values['id_robot']
     id_tribunal = request.values['id_tribunal']
     file = 'archivo.xls'
-    data = {
-        'windows_user' : windows_user,
-        'file' : file,
-        'correo' : correo,
-        'user_sii' : user_sii,
-        'pass_sii' : pass_sii,
-        'id_robot' : id_robot,
-        'id_tribunal' : id_tribunal
-    }
 
     archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
     
@@ -132,18 +123,8 @@ def ExeIngresoExhorto():
     pass_sitci = request.values['pass_sitci']
     correo = request.values['correo']
     id_usuario = request.values['id_usuario']
-
-    data = {
-        'windows_user': windows_user,
-        'id_robot':id_robot,
-        'id_tribunal':id_tribunal,
-        'juez':juez,
-        'user_sitci':user_sitci,
-        'pass_sitci':pass_sitci,
-        'correo':correo
-    }
     
-    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'contrasena':'"+pass_sitci+"', 'correo':'"+correo+"', 'id_usuario':'"+id_usuario+"', 'windows_user':'"+windows_user+"', 'usuario':'"+user_sitci+"'}"+'"'                                                                 
+    script = 'start "" /W /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'contrasena':'"+pass_sitci+"', 'correo':'"+correo+"', 'id_usuario':'"+id_usuario+"', 'windows_user':'"+windows_user+"', 'usuario':'"+user_sitci+"'}"+'"'                                                                 
     os.system(script)
     return 'robot ejecutado' 
 

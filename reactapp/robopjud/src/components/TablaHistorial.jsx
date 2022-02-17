@@ -48,7 +48,7 @@ export default function Tablahistorial() {
 		const f = new FormData();
 		f.append("id_tribunal", idT);
 
-		const historial = await axios.post(`http://127.0.0.1:5000/getHistorial`, f, {
+		const historial = await axios.post(`http://10.13.18.84:5000/getHistorial`, f, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ` + token,

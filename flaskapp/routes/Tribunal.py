@@ -36,10 +36,34 @@ def createTribunal():
 @jwt_required()
 def updateTribunal():
     try:
-        return ""
+        current_user_id = get_jwt_identity()
+        nombre = request.values['nombre']
+        telefono = request.values['telefono']
+        ciudad = request.values['ciudad']
+        ip = request.values['ip']
+        codigo = request.values['codigo']
+        nombre_area = request.values['nombre_area']
+        id_area = request.values['id_area']
+        id_tribunal = request.values['id_tribunal']
+        print(id_area)
+        print(nombre_area)
+        
+        old_data = session.query(Tribunal).get(id_tribunal)
+        old_data.nombre = nombre
+        old_data.fono = telefono
+        old_data.nombre_area = nombre_area.split(",")
+        old_data.ciudad = ciudad
+        old_data.id_area = id_area.split(",")
+        old_data.ip = ip
+        old_data.codigo = codigo
+        session.merge(old_data)
+        session.commit()                                
+        return {"mensaje":"saludo"}
 
     except:
         return ""
+    finally:
+        session.close()
 
 @routes.route('/deleteTribunal/', methods=['POST'])
 @jwt_required()

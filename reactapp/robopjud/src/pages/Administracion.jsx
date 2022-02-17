@@ -28,7 +28,7 @@ function Administracion(props) {
 	const state = true;
 	const getRobots = async () => {
 
-		const robots = await axios(`http://127.0.0.1:5000/getRobotArea/` + props.props.nombre + "/" + props.props.id_tribunal, {
+		const robots = await axios(`http://10.13.18.84:5000/getRobotArea/` + props.props.nombre + "/" + props.props.id_tribunal, {
 
 			headers: {
 				"Content-Type": "application/json",
@@ -54,7 +54,7 @@ function Administracion(props) {
 				<Grid container spacing={10} direction='row' alignItems='center' justifyContent='center'>
 					<Grid item xs={12}>
 						<Typography variant='h3' color='initial' align='center'>
-							Aqui es Administracion
+							Robots disponibles del área Administración.
 						</Typography>
 					</Grid>
 					<Grid container direction='row' spacing={10} alignItems='center' justifyContent='center' xs={12}>

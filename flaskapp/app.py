@@ -29,7 +29,7 @@ app.config['UPLOAD_FOLDER'] = './Archivos'
 app.config['MAIL_SERVER']='smtp.mail.pjud'
 app.config['MAIL_PORT'] = 25
 app.config['MAIL_USERNAME'] = 'rpa_araucania@pjud.cl'
-app.config['MAIL_PASSWORD'] = 'letras2021'
+app.config['MAIL_PASSWORD'] = 'araucania2022'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
 # db = SQLAlchemy(app)
@@ -218,6 +218,23 @@ def getExhortos(idT):
     except Exception as ex:
         print(ex)
         return 'hubo un problema'
+
+@app.route('/updateDB', methods=['GET'])
+@jwt_required()
+def updateDB():
+    try:
+        connection = cx_Oracle.connect(user="ROBOTIZACION", password="PJUD#211125",dsn="civiprod.bdd.pjud:3455/CIVIPROD")
+        cur = connection.cursor()
+        rev = cur.callfunc('TV_JOB_JUECESHAB',int,[])
+        rev = cur.callfunc('TV_JOB_ESCEXHORTO',int,[])
+        cur.close()
+        connection.close()
+        print('Base de datos actualizada')
+        return jsonify({'message':'Base de datos actualizada.'})
+    except Exception as ex:
+        print(ex)
+        return jsonify({'message':'Hubo un problema actualizando la base de datos.'})
+
 
 # @app.route('/Ejecuta', methods=['GET','POST'])
 # def Ejecuta():
