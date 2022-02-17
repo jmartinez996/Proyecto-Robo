@@ -76,7 +76,7 @@ export default function GestionSii(props) {
 		console.log(archivo);
 		if (archivo !== null) {
 			console.log(archivo.type);
-			if (archivo.type !== "application/vnd.ms-excel" || archivo.type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+			if (archivo.type !== "application/vnd.ms-excel" || archivo.type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || archivo.type !== "application/vnd.ms-excel.sheet.binary.macroEnabled.12" ) {
 				return "Tipo de archivo no permitido";
 			}
 		}
