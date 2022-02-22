@@ -18,7 +18,7 @@ session = SessionLocal()
 @jwt_required()
 def gethistorial():
     id_trib = request.values['id_tribunal']
-    rs = session.execute("""select h.id_historial, u.nombre, u.apellido, u.correo, tr.nombre, r.nombre_robot, h.fecha, h.estado_final
+    rs = session.execute("""select h.id_historial, u.nombre, u.apellido, u.correo, tr.nombre_tribunal, r.nombre_robot, h.fecha, h.estado_final
                             from historial as h
                             join usuario as u on h.id_usuario = u.id_usuario
                             join tribunal as tr on h.id_tribunal = tr.id_tribunal
@@ -27,9 +27,10 @@ def gethistorial():
                             order by h.fecha desc""" % (str(id_trib)))
     data = []
     for r in rs:
+        
         aux = {
                 'id_historial':r['id_historial'],
-                'nombre_usuario':r['nombre'],
+                'nombre_usuario':r['nombre_tribunal'],
                 'apellido_usuario':r['apellido'],
                 'correo':r['correo'],
                 'tribunal':r['nombre'],

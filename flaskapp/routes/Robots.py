@@ -171,7 +171,7 @@ def stateRobotGestSii():
         return ''
     finally:
         session.query(Robots).filter(and_(Robots.id_tribunal == id_tribunal,
-                                          Robots.id_robotv == id_robot)).update({'disponibilidad': (True)})
+                                          Robots.id_robot == id_robot)).update({'disponibilidad': (True)})
         session.commit()
         session.close()
         return 'Proceso finalizado'
@@ -192,9 +192,6 @@ def setJuezIngresoExhorto():
         juez = request.values['id_juez']
         ip = request.values['ip']
         correo = request.values['correo']
-        print(correo)
-        # query = session.query(Jueces).filter_by(id_juez=id_juez).first()
-        # print(query)
         dataForm = {
             'user_sitci': user_sitci,
             'pass_sitci': pass_sitci,
@@ -257,16 +254,6 @@ def stateRobotIngresoExhortoError():
             session.add(new_register)
             session.commit()
 
-        # if estado == 'success':
-        #     msg = Message('RPA: Ingreso de Exhortos se ha ejecutado con éxito.',
-        #                   sender='rpa_araucania@pjud.cl', recipients=[correo])
-        #     msg.body = "Los Ingresos de exhorto que se realizaron son: " + \
-        #         rits[1:]
-        #     mail.send(msg)
-        #     new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=True, fecha=datetime.today(
-        #     ).strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
-        #     session.add(new_register)
-        #     session.commit()
         return 'completado'
     except Exception as ex:
         print(ex)
@@ -319,12 +306,180 @@ def stateRobotIngresoExhortoSuccess():
         session.commit()
         session.close()
         return 'Proceso finalizado.'
-    
 
 
-####################### ------------- #########################
+####################### Devolucion de exhortos #########################
+
+@routes.route('/ejecutaDevolucionExhorto/', methods=['POST'])
+@jwt_required()
+def setJuezDevolucionExhorto():
+    try:
+        current_user_id = get_jwt_identity()
+        user_sitci = request.values['user_sitci']
+        pass_sitci = request.values['pass_sitci']
+        id_tribunal = request.values['id_tribunal']
+        id_robot = request.values['id_robot']
+        juez = request.values['id_juez']
+        ip = request.values['ip']
+        correo = request.values['correo']
+        archivo = request.files['archivo']
+        fichero = {'file1': archivo}
+        dataForm = {
+            'user_sitci': user_sitci,
+            'pass_sitci': pass_sitci,
+            'id_tribunal': id_tribunal,
+            'id_robot': id_robot,
+            'juez': juez,
+            'correo': correo,
+            'id_usuario': current_user_id
+        }
+
+        session.query(Robots).filter(and_(Robots.id_tribunal == id_tribunal,
+                                          Robots.id_robot == id_robot)).update({'disponibilidad': (False)})
+        session.commit()
+        resp = req.post('http://'+ip+':5001/ExeDevolucionExhorto/',
+                        files=fichero, data=dataForm)
+
+        return ''
+    except Exception as ex:
+        print(ex)
+        return 'hubo un problema'
+    finally:
+        session.close()
+        return 'Proceso finalizado.'
 
 
-@routes.route('/upRobot')
-def upRobot():
-    return {"mensaje": "Saludo Robot"}
+@routes.route('/stateRobotDevolucionExhortoSuccess', methods=['POST', 'GET'])
+def stateRobotDevolucionExhortoSuccess():
+    try:
+        id_robot = request.values['id_robot']
+        id_tribunal = request.values['id_tribunal']
+        correo = request.values['correo']
+        estado = request.values['estado']
+        file_name = request.values['file_name']
+        id_usuario = request.values['id_usuario']
+        archivo = request.files['archivo']
+        archivo.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+
+        if estado == 'success':
+            msg = Message('RPA: Devolución de Exhortos ejecutado con Éxito.',
+                          sender='rpa_araucania@pjud.cl', recipients=[correo])
+            msg.body = "Se adjunta a este correo un archivo excel con el resultado."
+            with routes.open_resource('../Archivos/'+file_name) as fp:
+                msg.attach(file_name, 'application/vnd.ms-excel', fp.read())
+            mail.send(msg)
+            new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=True, fecha=datetime.today(
+            ).strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
+            session.add(new_register)
+            session.commit()
+
+    except Exception as ex:
+        print(ex)
+        print('no se pudo enviar nada')
+        new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=False,
+                                 fecha=datetime.today().strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
+        session.add(new_register)
+        session.commit()
+        return 'Hubo un problema'
+
+    finally:
+        session.query(Robots).filter(and_(Robots.id_tribunal == id_tribunal,
+                                          Robots.id_robot == id_robot)).update({'disponibilidad': (True)})
+        session.commit()
+        session.close()
+        return 'Proceso finalizado.'
+
+@routes.route('/stateRobotDevolucionExhortoError/', methods=['POST', 'GET'])
+def stateRobotDevolucionExhortoError():
+    try:
+        print('se llego')
+        id_robot = request.values['id_robot']
+        id_tribunal = request.values['id_tribunal']
+        correo = request.values['correo']
+        estado = request.values['estado']
+        id_usuario = request.values['id_usuario']
+        archivo = request.files['img']
+        archivo2 = request.files['archivo']
+
+        archivo.save(os.path.join(
+            app.config['UPLOAD_FOLDER'], 'imgErrorDevExhortos'+str(id_tribunal)+'.png'))
+        archivo2.save(os.path.join(
+            app.config['UPLOAD_FOLDER'], 'errorXlsDevExh'+str(id_tribunal)+'.xls'))
+
+        if estado == 'error':
+            msg = Message('RPA: Hubo un problema ejecutando Devolución de exhortos.',
+                          sender='rpa_araucania@pjud.cl', recipients=[correo])
+            msg.body = "Algo pudo haber fallado durante el proceso. Se adjunta una captura de pantalla para que se tomen medidas de manera manual."
+            with routes.open_resource('../Archivos/imgErrorDevExhortos'+str(id_tribunal)+'.png') as fp:
+                msg.attach('imgErrorDevExhortos'+str(id_tribunal) +
+                            '.png', 'image/png', fp.read())
+                with routes.open_resource('../Archivos/errorXlsDevExh'+str(id_tribunal)+'.xls') as fp:
+                    msg.attach('errorXlsDevExh'+str(id_tribunal) +
+                                '.xls', 'application/vnd.ms-excel', fp.read())
+                
+            mail.send(msg)
+            if os.path.exists('Archivos\imgErrorDevExhortos'+str(id_tribunal)+'.png'):
+                os.remove('Archivos\imgErrorDevExhortos'+str(id_tribunal)+'.png')
+            else:
+                print('no existe el archivo')
+            new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=False,
+                                     fecha=datetime.today().strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
+            session.add(new_register)
+            session.commit()
+
+        return 'completado'
+    except Exception as ex:
+        print(ex)
+        new_register = Historial(id_usuario=id_usuario, id_robot=id_robot, estado_final=False,
+                                 fecha=datetime.today().strftime('%Y-%m-%d %H:%M'), id_tribunal=id_tribunal)
+        session.add(new_register)
+        session.commit()
+        return 'Hubo un problema'
+
+    finally:
+        session.query(Robots).filter(and_(Robots.id_tribunal == id_tribunal,
+                                          Robots.id_robot == id_robot)).update({'disponibilidad': (True)})
+        session.commit()
+        session.close()
+        return 'Proceso finalizado.'
+
+
+####################### Archivado de causas #########################
+
+@routes.route('/ejecutaArchivoCausas/', methods=['POST'])
+@jwt_required()
+def ejecutaArchivoCausas():
+    try:
+        current_user_id = get_jwt_identity()
+        user_sitci = request.values['user_sitci']
+        pass_sitci = request.values['pass_sitci']
+        id_tribunal = request.values['id_tribunal']
+        id_robot = request.values['id_robot']
+        juez = request.values['id_juez']
+        ip = request.values['ip']
+        correo = request.values['correo']
+        archivo = request.files['archivo']
+        fichero = {'file1': archivo}
+        dataForm = {
+            'user_sitci': user_sitci,
+            'pass_sitci': pass_sitci,
+            'id_tribunal': id_tribunal,
+            'id_robot': id_robot,
+            'juez': juez,
+            'correo': correo,
+            'id_usuario': current_user_id
+        }
+
+        session.query(Robots).filter(and_(Robots.id_tribunal == id_tribunal,
+                                          Robots.id_robot == id_robot)).update({'disponibilidad': (False)})
+        session.commit()
+        resp = req.post('http://'+ip+':5001/ExeArchivoCausas/',
+                        files=fichero, data=dataForm)
+
+        return ''
+    except Exception as ex:
+        print(ex)
+        return 'hubo un problema'
+    finally:
+        session.close()
+        return 'Proceso finalizado.'

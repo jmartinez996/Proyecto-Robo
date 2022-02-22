@@ -15,7 +15,6 @@ from Classes.Jueces import Jueces
 from Classes.Tribunal import Tribunal
 import requests as req
 import cx_Oracle
-# from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 

@@ -66,8 +66,10 @@ export default function IngresoExhorto(props) {
   const classes = useStyles();
   const [errMssg, setErrMssg] = useState("");
   const { handleSubmit, control } = useForm();
-  const { formState, setFormState } = useState(true);
+  const { formState, setFormState } = useState(false);
   const token = window.localStorage.getItem("robo-jwt-token");
+  const [userSitci, setUserSitci] = useState("");
+  const [passSitci, setPassSitci] = useState("");
 
   const getJueces = () => {
     const jueces = axios(`http://10.13.18.84:5000/getJueces/` + idT, {
@@ -101,16 +103,34 @@ export default function IngresoExhorto(props) {
       });
   };
 
+  const getUserSitci = () => {
+    const exhortos = axios(`http://10.13.18.84:5000/getUserSitci/` + idT, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ` + token,
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setUserSitci(res.data.user_sitci)
+        setPassSitci(res.data.pass_sitci)
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
+
   useEffect(() => {
     getExhortos();
     getJueces();
+    getUserSitci();
   }, []);
 
   const onSubmit = (data) => {
     const token = window.localStorage.getItem("robo-jwt-token");
     const f = new FormData();
-    f.append("user_sitci", data.user_sitci);
-    f.append("pass_sitci", data.pass_sitci);
+    f.append("user_sitci", userSitci);
+    f.append("pass_sitci", passSitci);
     f.append("id_juez", data.juez);
     f.append("id_tribunal", idT);
     f.append("id_robot", idR);
@@ -142,6 +162,7 @@ export default function IngresoExhorto(props) {
               title: "Completado",
               text: "Robot ejecutado con exito!",
             });
+            setFormState(true);
           })
           .catch((error) => {
             // seteaError(error.response.data.message);
@@ -201,7 +222,6 @@ export default function IngresoExhorto(props) {
                           helperText={error ? error.message : null}
                           label="Correo Electronico"
                           autoComplete="Correo Electronico"
-                          autoFocus
                           onChange={onChange}
                           disabled={formState}
                         />
@@ -225,19 +245,15 @@ export default function IngresoExhorto(props) {
                           margin="dense"
                           fullWidth
                           id="user_sitci"
-                          value={value}
+                          value={userSitci}
                           error={!!error}
                           helperText={error ? error.message : null}
                           label="Usuario de la plataforma civil.pjud"
                           autoComplete="usuario mixtos"
                           onChange={onChange}
-                          disabled={formState}
+                          disabled={true}
                         />
                       )}
-                      rules={{
-                        required: "El campo usuario civil esta vacío",
-                        //  validate: (value) => validation(value)
-                      }}
                     />
                     <Controller
                       name="pass_sitci"
@@ -252,19 +268,15 @@ export default function IngresoExhorto(props) {
                           margin="dense"
                           fullWidth
                           id="pass_sitci"
-                          value={value}
+                          value={passSitci}
                           error={!!error}
                           helperText={error ? error.message : null}
                           label="Contraseña plataforma civil.pjud"
                           autoComplete="contrasena"
-                          type="password"
                           onChange={onChange}
-                          disabled={formState}
+                          disabled={true}
                         />
                       )}
-                      rules={{
-                        required: "El campo Contrasena civil esta vacío",
-                      }}
                     />
 
                     <Controller

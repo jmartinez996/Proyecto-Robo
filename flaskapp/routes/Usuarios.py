@@ -27,7 +27,7 @@ def getUsers(idT):
                 'apellido':users.apellido,
                 'rut':users.rut,
                 'correo':users.correo,
-                'tribunal':tribunal.nombre
+                'tribunal':tribunal.nombre_tribunal
                 }
         print(aux)
         data.append(aux)

@@ -37,6 +37,7 @@ function Civil(props) {
 		})
 			.then((res) => {
 				setRobots(res.data.message);
+				console.log(res.data.message)
 			})
 			.catch((error) => {
 				console.log(error.message);

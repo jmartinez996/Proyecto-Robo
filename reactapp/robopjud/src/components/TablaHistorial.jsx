@@ -94,7 +94,7 @@ export default function Tablahistorial() {
 								<TableRow hover key={dat && dat.id_historial}>
 									<TableCell>{dat && dat.nombre_robot}</TableCell>
                                     <TableCell>{dat && dat.tribunal}</TableCell>
-                                    <TableCell>{dat && dat.nombre_usuario + ' '+ dat.apellido_usuario}</TableCell>
+                                    <TableCell>{dat && dat.nombre_usuario +' '+ dat.apellido_usuario}</TableCell>
                                     <TableCell>{dat && dat.correo}</TableCell>
                                     <TableCell>{dat && dat.fecha}</TableCell>
 									<TableCell>{ dat.estado_final === 'true' ? <CheckCircleRoundedIcon className={`${classes.iconRight}`}/> : <CancelRoundedIcon className={`${classes.iconWrong}`}/> }</TableCell>

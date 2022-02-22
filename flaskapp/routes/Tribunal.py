@@ -21,12 +21,14 @@ def createTribunal():
     ip = request.values['ip']
     codigo_tribunal = request.values['codigo_tribunal']
     s_area = request.values['s_area']
+    user_sitci = request.values['user_sitci']
+    pass_sitci = request.values['pass_sitci']
     s_area = s_area.split(',')
     i_area = []
     for x in s_area:
         query = session.query(Area).filter_by(nombre_area=x).first()
         i_area.append(query.id_area)
-    newTribunal = Tribunal(nombre=nombre,fono=fono,nombre_area=s_area,id_area=i_area,ciudad=ciudad, ip=ip, codigo_tribunal=codigo_tribunal)
+    newTribunal = Tribunal(nombre_tribunal=nombre,fono=fono,nombre_area=s_area,id_area=i_area,ciudad=ciudad, ip=ip, codigo_tribunal=codigo_tribunal, user_sitci=user_sitci, pass_sitci=pass_sitci)
     session.add(newTribunal) 
     session.commit()
     session.close()
@@ -45,17 +47,21 @@ def updateTribunal():
         nombre_area = request.values['nombre_area']
         id_area = request.values['id_area']
         id_tribunal = request.values['id_tribunal']
+        user_sitci = request.values['user_sitci']
+        pass_sitci = request.values['pass_sitci']
         print(id_area)
         print(nombre_area)
         
         old_data = session.query(Tribunal).get(id_tribunal)
-        old_data.nombre = nombre
+        old_data.nombre_tribunal = nombre
         old_data.fono = telefono
         old_data.nombre_area = nombre_area.split(",")
         old_data.ciudad = ciudad
         old_data.id_area = id_area.split(",")
         old_data.ip = ip
         old_data.codigo = codigo
+        old_data.user_sitci = user_sitci
+        old_data.pass_sitci = pass_sitci
         session.merge(old_data)
         session.commit()                                
         return {"mensaje":"saludo"}
@@ -93,7 +99,7 @@ def getTribunal():
         aux = {
             'id_tribunal':tribunal.id_tribunal,
             'id_area':tribunal.id_area,
-            'nombre':tribunal.nombre,
+            'nombre':tribunal.nombre_tribunal,
             'fono':tribunal.fono,
             'nombre_area':tribunal.nombre_area,
             'codigo_tribunal':tribunal.codigo_tribunal
@@ -105,23 +111,29 @@ def getTribunal():
 @routes.route('/getTribunalId', methods = ["POST"])
 #@jwt_required()
 def getTribunalId():
-    print("Entre")
-    #current_user_id = get_jwt_identity()
     id_t = request.values['id']
     quer = session.query(Tribunal).get(id_t)
     aux = {
         'id_tribunal':quer.id_tribunal,
         'id_area':quer.id_area,
-        'nombre':quer.nombre,
+        'nombre':quer.nombre_tribunal,
         'fono':quer.fono,
         'nombre_area':quer.nombre_area,
+        'user_sitci':quer.user_sitci,
+        'pass_sitci':quer.pass_sitci
     }
     session.close()
     return aux
-    try:
-        return ""
 
-    except:
-        return ""
+@routes.route('/getUserSitci/<id_tribunal>', methods = ["GET"])
+#@jwt_required()
+def getUserSitci(id_tribunal):
+    quer = session.query(Tribunal).get(id_tribunal)
+    aux = {
+        'user_sitci':quer.user_sitci,
+        'pass_sitci':quer.pass_sitci
+    }
+    session.close()
+    return aux
     
     

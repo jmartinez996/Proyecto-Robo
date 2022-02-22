@@ -100,6 +100,8 @@ function AgregarTribunal() {
     f.append("i_area", iArea);
     f.append("ip", data.ip);
     f.append("codigo_tribunal", data.codigo_tribunal);
+    f.append("user_sitci", data.user_sitci);
+    f.append("pass_sitci", data.pass_sitci);
     MySwal.fire({
       title: "Agregar",
       text: "¿Desea agregar el tribunal " + data.nombre + "?",
@@ -303,6 +305,58 @@ function AgregarTribunal() {
               )}
               rules={{
                 required: "El campo telefono Tribunal esta vacío",
+                //  validate: (value) => validation(value)
+              }}
+            />
+            <Controller
+              name="user_sitci"
+              control={control}
+              defaultValue=""
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  fullWidth
+                  id="user_sitci"
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Ingresa el usuario que ejecutará los robots en sitci."
+                  autoComplete=""
+                  onChange={onChange}
+                />
+              )}
+              rules={{
+                required: "El campo usuario sitci esta vacío",
+                //  validate: (value) => validation(value)
+              }}
+            />
+            <Controller
+              name="pass_sitci"
+              control={control}
+              defaultValue=""
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  fullWidth
+                  id="pass_sitci"
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Ingresa la contraseña de sitci."
+                  autoComplete=""
+                  onChange={onChange}
+                />
+              )}
+              rules={{
+                required: "El campo contraseña sitci esta vacío",
                 //  validate: (value) => validation(value)
               }}
             />

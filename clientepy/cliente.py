@@ -79,12 +79,6 @@ def ExeResMens():
 
 ##################### GESTION DE SII ##################
 
-# def EjecutaGestionSii(data, queue):
-#     cierraIExplore()  
-#     script = 'start "" /min "C:/Users/'+data['windows_user']+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+data['windows_user']+'/Documents/UiPath/Pago de facturas/main.xaml"' + " --input "+'"'+"{'correo':'"+data['correo']+"', 'user_mixtos':'"+data['user_sii']+"', 'user_wind':'"+data['windows_user']+"', 'pass_mixtos':'"+data['pass_sii']+"', 'archivo':'"+data['file']+"', 'id_tribunal':'"+data['id_tribunal']+"', 'id_robot':'"+data['id_robot']+"'}"+'"'
-#     queue.put(os.system(script))
-#     return 'Robot Ingreso de exhorto ejecutado'
-
 @app.route('/ExeGestSii/', methods=['POST']) 
 def ExeGestSii():
 
@@ -96,18 +90,9 @@ def ExeGestSii():
     id_robot = request.values['id_robot']
     id_tribunal = request.values['id_tribunal']
     file = 'archivo.xls'
-
     archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
-    
-    
     script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Pago de facturas/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_mixtos':'"+user_sii+"', 'user_wind':'"+windows_user+"', 'pass_mixtos':'"+pass_sii+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"'}"+'"'
     os.system(script)
-    # flag = True
-    # while flag:
-    #     if CheckUiPath() == True:
-    #         cierraIExplore()
-    #         os.system(script)
-    #         flag = False
     
     return 'robot ejecutado'
 
@@ -127,6 +112,48 @@ def ExeIngresoExhorto():
     script = 'start "" /W /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/exhortos sin acreditacion/main.xaml"' + " --input "+'"'+"{'juez_firma':'"+juez+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'contrasena':'"+pass_sitci+"', 'correo':'"+correo+"', 'id_usuario':'"+id_usuario+"', 'windows_user':'"+windows_user+"', 'usuario':'"+user_sitci+"'}"+'"'                                                                 
     os.system(script)
     return 'robot ejecutado' 
+
+################### DEVOLUCION DE EXHORTOS #####################
+@app.route('/ExeDevolucionExhorto/', methods=['POST']) 
+def ExeDevolucionExhorto():
+
+    windows_user = getuser()
+    archivo = request.files['file1']
+    correo = request.values['correo']
+    user_sitci = request.values['user_sitci']
+    pass_sitci = request.values['pass_sitci']
+    juez = request.values['juez']
+    id_robot = request.values['id_robot']
+    id_tribunal = request.values['id_tribunal']
+    id_usuario = request.values['id_usuario']
+    file = 'archivoDevExh.xls'
+    archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
+    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Devuelve exhorto/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_sitci':'"+user_sitci+"', 'user_wind':'"+windows_user+"', 'pass_sitci':'"+pass_sitci+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'juez_firma':'"+juez+"', 'id_usuario':'"+id_usuario+"'}"+'"'
+    os.system(script)
+    
+    return 'robot ejecutado'
+
+    ################### ARCHIVO DE CAUSAS #####################
+@app.route('/ExeArchivoCausas/', methods=['POST']) 
+def ExeArchivoCausas():
+
+    windows_user = getuser()
+    archivo = request.files['file1']
+    correo = request.values['correo']
+    user_sitci = request.values['user_sitci']
+    pass_sitci = request.values['pass_sitci']
+    juez = request.values['juez']
+    id_robot = request.values['id_robot']
+    id_tribunal = request.values['id_tribunal']
+    id_usuario = request.values['id_usuario']
+    file = 'archivoCausArch.xls'
+    archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
+    script = 'start "" /min "C:/Users/'+windows_user+'/AppData/Local/Programs/UiPath/Studio/UiRobot.exe" execute --file "D:/'+windows_user+'/Documents/UiPath/Devuelve exhorto/main.xaml"' + " --input "+'"'+"{'correo':'"+correo+"', 'user_sitci':'"+user_sitci+"', 'user_wind':'"+windows_user+"', 'pass_sitci':'"+pass_sitci+"', 'archivo':'"+file+"', 'id_tribunal':'"+id_tribunal+"', 'id_robot':'"+id_robot+"', 'juez_firma':'"+juez+"', 'id_usuario':'"+id_usuario+"'}"+'"'
+    os.system(script)
+    
+    return 'robot ejecutado'
+
+
 
 @app.route('/checkConnection', methods=['GET'])
 def checkConnection():

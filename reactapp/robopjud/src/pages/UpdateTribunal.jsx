@@ -57,7 +57,6 @@ const GreenCheckbox = withStyles({
 function UpdateTribunal() {
   const token = window.localStorage.getItem("robo-jwt-token");
   const { id } = useParams();
-  //   const { handleSubmit, control } = useForm();
   const MySwal = withReactContent(Swal);
   const classes = useStyles();
   const [errMssg, setErrMssg] = useState("");
@@ -72,6 +71,8 @@ function UpdateTribunal() {
   const [codigoTribunal, setCodigoTribunal] = useState("");
   const [areasTribunal, setAreasTribunal] = useState([]);
   const [checkeados, setCheckeados] = useState([{}]);
+  const [userSitci, setUserSitci] = useState([{}]);
+  const [passSitci, setPassSitci] = useState([{}]);
   const [bandera, setBandera] = useState(true);
 
   const getAreas = () => {
@@ -84,7 +85,6 @@ function UpdateTribunal() {
       .then((res) => {
         setAreas(res.data.message);
         getTribunal(res.data.message);
-        // console.log(res.data.message)
       })
       .catch((error) => {
         console.log(error.message);
@@ -102,7 +102,6 @@ function UpdateTribunal() {
         },
       })
       .then((res) => {
-        // console.log(res.data.message);
         const arr = [];
         setTribu(res.data.message);
         seteaNombre(res.data.message.nombre);
@@ -111,6 +110,8 @@ function UpdateTribunal() {
         seteaIp(res.data.message.ip);
         seteaCodigo(res.data.message.codigo_tribunal);
         seteaAreasTribunal(res.data.message.nombre_area);
+        seteaUserSitci(res.data.message.user_sitci);
+        seteaPassSitci(res.data.message.pass_sitci);
         for (var i = 0; i < areas.length; i++) {
           if (res.data.message.nombre_area.includes(areas[i].nombre_area)) {
             arr.push({
@@ -126,12 +127,19 @@ function UpdateTribunal() {
             });
           }
         }
-        // console.log(arr)
         setearCheckeados(arr);
       })
       .catch((error) => {
         console.log(error.message);
       });
+  };
+
+  const seteaUserSitci = (e) => {
+    setUserSitci(e);
+  };
+
+  const seteaPassSitci = (e) => {
+    setPassSitci(e);
   };
 
   const seteaAreasTribunal = (e) => {
@@ -156,13 +164,7 @@ function UpdateTribunal() {
 
   useEffect(() => {
     getAreas();
-    // getTribunal();
   }, []);
-
-  //   useEffect(() => {
-  //     console.log("holaaaa");
-  //     setearCheckeados(checkeados);
-  //   }, [checkeados]);
 
   const [state, setState] = React.useState({
     checkedA: true,
@@ -191,6 +193,8 @@ function UpdateTribunal() {
     f.append("codigo", codigoTribunal);
     f.append("nombre_area", Narea);
     f.append("id_area", Idarea);
+    f.append("user_sitci", userSitci);
+    f.append("pass_sitci", passSitci);
     MySwal.fire({
       title: "Agregar",
       text: "¿Desea agregar el tribunal " + data.nombre + "?",
@@ -223,14 +227,9 @@ function UpdateTribunal() {
           text: "No se pudo Eliminar.",
         });
       });
-    //f.append("area",sArea);
   };
 
   const handleChecked = (e, nombre_area) => {
-    console.log(e);
-    // console.log(nombre_area)
-    // console.log(checkeados)
-    // const aux = checkeados;
     const aux = [];
     checkeados.map(function (row) {
       if (row.nombre_area == nombre_area) {
@@ -242,25 +241,12 @@ function UpdateTribunal() {
     });
     console.log(aux);
     setearCheckeados(aux);
-    // if(e === false){
 
-    // }
   };
   const setearCheckeados = (e) => {
     setCheckeados(e);
   };
 
-  //   const checked = (e, id) => {
-  //     if (e.target.checked == true) {
-  //       setSArea([...sArea, id]);
-  //       console.log(sArea);
-  //     } else {
-  //       setSArea((sArea) => sArea.filter((n) => n != id));
-  //     }
-  //     //falso eliminar
-  //   };
-
-  // console.log(myObject.areas);
   return (
     <React.Fragment>
       <AppbarMenu />
@@ -334,36 +320,28 @@ function UpdateTribunal() {
               autoFocus
               onChange={(e) => seteaCodigo(e.target.value)}
             />
-
-            {/* <FormControlLabel
-              label="chao"
-              control={
-                <Checkbox
-                  value=""
-                  checked={checkeados}
-                  onChange={(e) => seteaCheckeado(e.target.checked)}
-                  color="primary"
-                />
-              }
-            /> */}
-            {/* {!checkeados ? (
-              <Typography variant="h3" color="initial">
-                cargando
-              </Typography>
-            ) : (
-              checkeados.map((area) => (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={area.checked}
-                      // onChange={(e) => seteaCheckeado(e.target.checked)}
-                    />
-                  }
-                  key={area.id_area}
-                  label={area.nombre_area}
-                />
-              ))
-            )} */}
+            <TextField
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              id="nombre"
+              label=""
+              autoComplete="Nombre de Tribunal"
+              value={userSitci}
+              autoFocus
+              onChange={(e) => seteaUserSitci(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              id="nombre"
+              label=""
+              autoComplete="Nombre de Tribunal"
+              value={passSitci}
+              autoFocus
+              onChange={(e) => seteaPassSitci(e.target.value)}
+            />
 
             {checkeados.map((area) => (
               <FormControlLabel

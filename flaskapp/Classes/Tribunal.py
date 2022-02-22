@@ -13,6 +13,8 @@ class Tribunal(Base):
     ciudad = Column(String())
     ip = Column(String())
     codigo_tribunal = Column(Integer)
+    user_sitci = Column(String())
+    pass_sitci = Column(String())
     
 
     def __repr__(self):

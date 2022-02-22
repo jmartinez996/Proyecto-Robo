@@ -14,6 +14,8 @@ import UpdateUsuario from "./pages/UpdateUsuarios";
 import UpdateRobot from "./pages/UpdateRobots";
 import { usuario } from "./pages/Login";
 import IngresoExhorto from "./pages/landingrobots/civil/Ingreso_exhortos";
+import DevolucionExhorto from "./pages/landingrobots/civil/devolucion_exhortos";
+import ArchivoCausas from "./pages/landingrobots/civil/archivoCausas";
 
 import React, { useEffect, useState } from "react";
 // import Container from "@material-ui/core/Container";
@@ -167,6 +169,18 @@ function App() {
             {hasrole1(context.role, ["user", "admin", "sudo"]) && (
               <Route path="/civil/ingreso_de_exhortos/:idT/:idR/:ip" exact>
                 {token !== null && <IngresoExhorto />}
+              </Route>
+            )}
+
+            {hasrole1(context.role, ["user", "admin", "sudo"]) && (
+              <Route path="/civil/devolucion_de_exhortos/:idT/:idR/:ip" exact>
+                {token !== null && <DevolucionExhorto />}
+              </Route>
+            )}
+
+			{hasrole1(context.role, ["user", "admin", "sudo"]) && (
+              <Route path="/civil/causas_para_archivo/:idT/:idR/:ip" exact>
+                {token !== null && <ArchivoCausas />}
               </Route>
             )}
 

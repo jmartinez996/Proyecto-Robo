@@ -1,6 +1,19 @@
 import React from "react";
-import { useState } from "react";
-import { Box, Container, Grid, Typography } from "@material-ui/core";
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Card,
+  CardHeader
+} from "@material-ui/core";
 import { useForm, Controller } from "react-hook-form";
 import { TextField } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
@@ -12,6 +25,10 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite";
 import { useParams } from "react-router";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import { FormControl } from "@material-ui/core";
+import { InputLabel } from "@material-ui/core";
 import AppbarMenu from "../../../components/AppbarMenu";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,19 +56,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function GestionSii(props) {
+export default function ArchivoCausas(props) {
   const MySwal = withReactContent(Swal);
   const { idT } = useParams();
   const { idR } = useParams();
   const { ip } = useParams();
+  const [jueces, setJueces] = useState([]);
   const classes = useStyles();
   const { handleSubmit, control } = useForm();
+  const { formState, setFormState } = useState(false);
+  const token = window.localStorage.getItem("robo-jwt-token");
+  const [userSitci, setUserSitci] = useState("");
+  const [passSitci, setPassSitci] = useState("");
   const [archivo, setArchivo] = useState(null);
-  const [formState, setFormState] = useState(false);
+
+  const getJueces = () => {
+    const jueces = axios(`http://10.13.18.84:5000/getJueces/` + idT, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ` + token,
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setJueces(res.data.message);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 
   const subirArchivo = (e) => {
     setArchivo(e);
-    console.log(e.size);
   };
 
   function validationFile(archivo) {
@@ -72,21 +108,43 @@ export default function GestionSii(props) {
     }
   }
 
+  const getUserSitci = () => {
+    const exhortos = axios(`http://10.13.18.84:5000/getUserSitci/` + idT, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ` + token,
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setUserSitci(res.data.user_sitci)
+        setPassSitci(res.data.pass_sitci)
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
+
+  useEffect(() => {
+    getJueces();
+    getUserSitci();
+  }, []);
+
   const onSubmit = (data) => {
     const token = window.localStorage.getItem("robo-jwt-token");
     const f = new FormData();
-    //console.log(data.archivo[9])
-    f.append("correo", data.correo);
-    f.append("archivo", archivo);
-    f.append("user_sii", data.user_sii);
-    f.append("pass_sii", data.pass_sii);
+    f.append("user_sitci", userSitci);
+    f.append("pass_sitci", passSitci);
+    f.append("id_juez", data.juez);
     f.append("id_tribunal", idT);
     f.append("id_robot", idR);
     f.append("ip", ip);
+    f.append("correo", data.correo);
+    f.append("archivo", archivo);
 
     Swal.fire({
       title: "Estas seguro que los datos son correctos?",
-      text: "Se recomienda probar las credenciales para evitar errores.",
+      text: "",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -97,7 +155,7 @@ export default function GestionSii(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5000/ejecutaRobotGestSii/`, f, {
+          .post(`http://10.13.18.84:5000/ejecutaDevolucionExhorto/`, f, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ` + token,
@@ -114,14 +172,8 @@ export default function GestionSii(props) {
           .catch((error) => {
             // seteaError(error.response.data.message);
           });
-        // Swal.fire(
-        //   'Deleted!',
-        //   'Your file has been deleted.',
-        //   'success'
-        // )
       }
     });
-    //console.log('enviando');
   };
 
   return (
@@ -130,7 +182,7 @@ export default function GestionSii(props) {
       <div>
         <Grid container justify="center">
           <Typography variant="h2" color="initial">
-            Gestion de Sii
+            Archivado de causas.
           </Typography>
         </Grid>
 
@@ -150,7 +202,7 @@ export default function GestionSii(props) {
                     <PlayCircleFilledWhiteIcon />
                   </Avatar>
                   <Typography component="h1" variant="h5">
-                    Iniciar Robot
+                    Configurar Robot
                   </Typography>
                   <form
                     className={classes.form}
@@ -175,7 +227,6 @@ export default function GestionSii(props) {
                           helperText={error ? error.message : null}
                           label="Correo Electronico"
                           autoComplete="Correo Electronico"
-                          autoFocus
                           onChange={onChange}
                           disabled={formState}
                         />
@@ -185,6 +236,52 @@ export default function GestionSii(props) {
                         pattern: /^\S+@\S+$/i,
                         //  validate: (value) => validation(value)
                       }}
+                    />
+                    <Controller
+                      name="user_sitci"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <TextField
+                          variant="outlined"
+                          margin="dense"
+                          fullWidth
+                          id="user_sitci"
+                          value={userSitci}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="Usuario de la plataforma civil.pjud"
+                          autoComplete="usuario mixtos"
+                          onChange={onChange}
+                          disabled={true}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="pass_sitci"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <TextField
+                          variant="outlined"
+                          margin="dense"
+                          fullWidth
+                          id="pass_sitci"
+                          value={passSitci}
+                          error={!!error}
+                          helperText={error ? error.message : null}
+                          label="Contraseña plataforma civil.pjud"
+                          autoComplete="contrasena"
+                          onChange={onChange}
+                          disabled={true}
+                        />
+                      )}
                     />
                     <Controller
                       name="archivo"
@@ -212,70 +309,69 @@ export default function GestionSii(props) {
                         validate: () => validationFile(archivo),
                       }}
                     />
-                    {/* <input type="file" name="pic" id="pic" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /> */}
                     <Controller
-                      name="user_sii"
+                      name="juez"
                       control={control}
                       defaultValue=""
                       render={({
                         field: { onChange, value },
                         fieldState: { error },
                       }) => (
-                        <TextField
-                          variant="outlined"
-                          margin="dense"
-                          fullWidth
-                          id="user_sii"
-                          value={value}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="Usuario de la plataforma SII"
-                          autoComplete="usuario SII"
-                          onChange={onChange}
-                          disabled={formState}
-                        />
+                        <>
+                          <FormControl
+                            variant="outlined"
+                            className={classes.formControl}
+                            fullWidth
+                          >
+                            <InputLabel id="demo-simple-select-outlined-label">
+                              Seleccione Juez para firma
+                            </InputLabel>
+                            <Select
+                              labelId="demo-simple-select-outlined-label"
+                              id="demo-simple-select-outlined"
+                              label="Age"
+                              margin="dense"
+                              error={!!error}
+                              helperText={error ? error.message : null}
+                              onChange={onChange}
+                              name="juez"
+                            >
+                              {jueces.map((juez) => (
+                                <MenuItem
+                                  value={
+                                    juez.apellido_paterno +
+                                    " " +
+                                    juez.apellido_materno +
+                                    ", " +
+                                    juez.primer_nombre +
+                                    " " +
+                                    juez.segundo_nombre
+                                  }
+                                >
+                                  {juez.apellido_paterno +
+                                    " " +
+                                    juez.apellido_materno +
+                                    ", " +
+                                    juez.primer_nombre +
+                                    " " +
+                                    juez.segundo_nombre}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </>
                       )}
                       rules={{
-                        required: "El campo usuario SII esta vacío",
-                        //  validate: (value) => validation(value)
+                        required: "El campo Repite Contrasena esta vacío",
                       }}
                     />
-                    <Controller
-                      name="pass_sii"
-                      control={control}
-                      defaultValue=""
-                      render={({
-                        field: { onChange, value },
-                        fieldState: { error },
-                      }) => (
-                        <TextField
-                          variant="outlined"
-                          margin="dense"
-                          fullWidth
-                          id="pass_sii"
-                          value={value}
-                          error={!!error}
-                          helperText={error ? error.message : null}
-                          label="Contrasena plataforma SII"
-                          autoComplete="contrasena SII"
-                          type="password"
-                          onChange={onChange}
-                          disabled={formState}
-                        />
-                      )}
-                      rules={{ required: "El campo Contrasena SII esta vacío" }}
-                    />
+
                     <Grid
                       container
                       justify="center"
                       style={{ marginTop: "10px" }}
                     >
-                      <Button
-                        type="submit"
-                        disabled={formState}
-                        variant="contained"
-                        color="primary"
-                      >
+                      <Button type="submit" variant="contained" color="primary">
                         Iniciar Robot
                       </Button>
                     </Grid>

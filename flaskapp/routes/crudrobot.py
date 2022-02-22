@@ -49,13 +49,18 @@ def getRobot(idT):
 def getRobotArea(nombre, id_tribunal):
     print(nombre)
     current_user_id = get_jwt_identity()
-    
+    disp = []
     # query = session.query(Robots, Tribunal, Area).join(Area).filter_by(nombre_area = nombre).join(Tribunal).filter_by(id_tribunal=id_tribunal)
-    q = session.query(Robots).filter_by(id_tribunal=int(id_tribunal)).filter_by(disponibilidad = False).first()
-    if(q == None):
-        disponibilidad = True
-    else: disponibilidad  = False
-    
+    # q = session.query(Robots).filter_by(id_tribunal=int(id_tribunal)).filter_by(disponibilidad = False).first()
+    # if(q == None):
+    #     disponibilidad = True
+    # else: disponibilidad  = False
+    rs = session.execute(""" select nombre_robot from robots where disponibilidad = true and id_tribunal = %s """ % (str(id_tribunal)))
+    for r in rs:
+        disp.append([])
+    if (len(disp) == 0):
+        disponibilidad = False
+    else: disponibilidad = True
     query = session.query(Robots, Tribunal, Area).join(Area).filter_by(nombre_area = nombre).join(Tribunal).filter_by(id_tribunal=int(id_tribunal))
     data = []
     for robots, tribunales, areas in query:
