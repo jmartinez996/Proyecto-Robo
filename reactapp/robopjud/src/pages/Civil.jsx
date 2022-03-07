@@ -3,6 +3,15 @@ import { makeStyles } from "@material-ui/styles";
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import ProductCard from "../components/Robots";
+<<<<<<< Updated upstream
+=======
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import JsxParser from "react-jsx-parser";
+import AppbarMenu from "../components/AppbarMenu";
+>>>>>>> Stashed changes
 
 const useStyles = makeStyles({
   root: {
@@ -10,6 +19,13 @@ const useStyles = makeStyles({
   }
 });
 
+<<<<<<< Updated upstream
+=======
+function Civil(props) {
+	const [robots, setRobots] = useState([]);
+	const token = window.localStorage.getItem("robo-jwt-token");
+	const getRobots = async () => {
+>>>>>>> Stashed changes
 
 
 function Civil() {

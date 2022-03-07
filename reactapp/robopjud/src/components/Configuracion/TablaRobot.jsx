@@ -52,6 +52,7 @@ import {Link } from 'react-router-dom';
   useEffect(() => {
     getrobot();
   }, []);
+<<<<<<< Updated upstream
     
     const showAlert =() =>{
       
@@ -82,6 +83,32 @@ import {Link } from 'react-router-dom';
               'success'
             )
             getrobot();    
+=======
+  //   const [state, setState] = useState({});
+
+  function showAlert() {}
+  const delete_Robot = ($id, $name) => {
+    console.log("delete id: " + $id);
+    const token = window.localStorage.getItem("robo-jwt-token");
+    const f = new FormData();
+    f.append("id_robot", $id);
+    Swal.fire({
+      title: "Eliminar",
+      text: "Desea eliminar el Tribunal " + $name,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(`http://10.13.18.84:5005/deleteRobot/`, f, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ` + token,
+            },
+>>>>>>> Stashed changes
           })
         } else if (
           /* Read more about handling dismissals below */
