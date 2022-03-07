@@ -85,7 +85,7 @@ export default function GestionSii(props) {
     f.append("ip", ip);
 
     Swal.fire({
-      title: "Estas seguro que los datos son correctos?",
+      title: "Estás seguro que los datos son correctos?",
       text: "Se recomienda probar las credenciales para evitar errores.",
       icon: "warning",
       showCancelButton: true,
@@ -97,7 +97,7 @@ export default function GestionSii(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5000/ejecutaRobotGestSii/`, f, {
+          .post(`http://10.13.18.84:5005/ejecutaRobotGestSii/`, f, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ` + token,

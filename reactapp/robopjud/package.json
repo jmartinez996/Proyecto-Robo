@@ -2,7 +2,7 @@
   "name": "robopjud",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://10.13.18.84:5000/",
+  "proxy": "http://10.13.18.84:5005/",
   "dependencies": {
     "@date-io/date-fns": "^2.11.0",
     "@material-ui/core": "^4.12.1",
@@ -20,7 +20,9 @@
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.14.2",
     "react-jsx-parser": "^1.28.4",
+    "react-material-ui-carousel": "^2.3.11",
     "react-perfect-scrollbar": "^1.5.8",
+    "react-responsive-carousel": "^3.2.22",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "socket.io-client": "^4.4.0",

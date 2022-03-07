@@ -159,4 +159,25 @@ def updateRobot():
     finally:
         session.close()
 
-
+@routes.route('/setDisponibilidad/', methods=['POST'])
+@jwt_required()
+def setDisponibilidad():
+    try:
+        current_user_id = get_jwt_identity()
+        id_robot = request.values['id_robot']
+        disponibilidad = request.values['disponibilidad']
+        if disponibilidad == 'true':
+            disponibilidad = True
+        if disponibilidad == 'false':
+            disponibilidad = False
+        old_data = session.query(Robots).get(id_robot)
+        old_data.disponibilidad = disponibilidad
+        session.merge(old_data)
+        session.commit()
+        return {"mensaje":"saludo"}
+    except:
+        return ''
+    finally:
+        session.close()
+    # print("Robot Ejecutado")
+    # return jsonify({'message':'Robot ejecutado'})/

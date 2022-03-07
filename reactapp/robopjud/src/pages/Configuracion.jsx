@@ -52,7 +52,7 @@ function Configuracion(props) {
   const getTribunales = () => {
     if (context.role === "sudo") {
       axios
-        .get(`http://10.13.18.84:5000/getTribunal`, {
+        .get(`http://10.13.18.84:5005/getTribunal`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ` + token,
@@ -85,7 +85,7 @@ function Configuracion(props) {
   const seteaUsuarios = (trib) => {
     if (trib !== null) {
       const users = axios
-        .get(`http://10.13.18.84:5000/getUsers/` + trib, {
+        .get(`http://10.13.18.84:5005/getUsers/` + trib, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ` + token,
@@ -103,7 +103,7 @@ function Configuracion(props) {
 
   const seteaRobots = (trib) => {
     if (trib !== null) {
-      const robots = axios(`http://10.13.18.84:5000/getRobot/` + trib, {
+      const robots = axios(`http://10.13.18.84:5005/getRobot/` + trib, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -167,6 +167,7 @@ function Configuracion(props) {
             <Grid item lg={5} sm={12} xl={5} xs={12}>
               <Tablausuarios usuarios={usuarios} idT={tribunal} />
             </Grid>
+            
             <Grid item lg={7} sm={12} xl={7} xs={12}>
               <TablaRobot robots={robots} />
             </Grid>

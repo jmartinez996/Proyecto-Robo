@@ -43,7 +43,7 @@ export default function Tablausuarios(props) {
   const getUser = (id) => {
     if (id !== null) {
       const users = axios
-        .get(`http://10.13.18.84:5000/getUsers/` + id, {
+        .get(`http://10.13.18.84:5005/getUsers/` + id, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ` + token,
@@ -79,7 +79,7 @@ export default function Tablausuarios(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5000/deleteUser/`, form, {
+          .post(`http://10.13.18.84:5005/deleteUser/`, form, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,

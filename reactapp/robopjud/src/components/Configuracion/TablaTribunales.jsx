@@ -41,7 +41,7 @@ export default function Tablatribunales() {
   const [data, setData] = useState([]);
 
   const getTribunal = async () => {
-    const tribunal = await axios(`http://10.13.18.84:5000/getTribunal`, {
+    const tribunal = await axios(`http://10.13.18.84:5005/getTribunal`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -88,7 +88,7 @@ export default function Tablatribunales() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5000/deleteTribunal/`, f, {
+          .post(`http://10.13.18.84:5005/deleteTribunal/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,

@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 8,
   },
   centerBox: {
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   card: {
@@ -138,10 +138,11 @@ function Home() {
   const [areas, setAreas] = useState([]);
   const [r, setR] = useState(1);
   const [checkTribunal, setCheckTribunal] = useState(null);
+  const [nombreTribunal, setNombreTribunal] = useState("");
 
   const getUserState = () => {
     axios
-      .get(`http://10.13.18.84:5000/userState`, {
+      .get(`http://10.13.18.84:5005/userState`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -152,6 +153,21 @@ function Home() {
         setNombre(res.data.nombre);
         setIdTribunal(res.data.id_tribunal);
         setIdUser(res.data.id_usuario);
+        const f = new FormData();
+        f.append("id", res.data.id_tribunal);
+        axios.post(`http://10.13.18.84:5005/getTribunalId`, f, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ` + token,
+            },
+          })
+          .then((res) => {
+            console.log("asdasdasdasd");
+            setNombreTribunal(res.data.message.nombre);
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
       })
       .catch((error) => {
         console.log(error.message);
@@ -159,7 +175,7 @@ function Home() {
   };
 
   const getAreas = async () => {
-    await axios(`http://10.13.18.84:5000/getAreas`, {
+    await axios(`http://10.13.18.84:5005/getAreas`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -173,11 +189,30 @@ function Home() {
       });
   };
 
+  const getTribunal = async () => {
+    const f = new FormData();
+    f.append("id", idTribunal);
+    const req = axios
+    .post(`http://10.13.18.84:5005/getTribunalId`, f, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ` + token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.message.nombre);
+        setNombreTribunal(res.data.message.nombre);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   const checkeaTribunal = async () => {
     const f = new FormData();
     f.append("idTribunal", idTribunal);
     await axios
-      .post(`http://10.13.18.84:5000/checkConnect`, f, {
+      .post(`http://10.13.18.84:5005/checkConnect`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -213,6 +248,7 @@ function Home() {
   useEffect(() => {
     getUserState();
     getAreas();
+    // getTribunal();
   }, []);
 
   const classes = useStyles();
@@ -249,6 +285,9 @@ function Home() {
               m={1}
               className={`${classes.box} ${classes.centerBox}`}
             >
+              <Typography variant="h4" color="initial">
+                {nombreTribunal}
+              </Typography>
               <Card className={`${classes.card}`}>
                 <Box className={`${classes.insideCard}`}>
                   {checkTribunal === "True" ? (

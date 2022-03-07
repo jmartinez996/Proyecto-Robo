@@ -99,7 +99,7 @@ export default function ResumenMensual(props) {
 		f.append("ip", ip);
 
 		Swal.fire({
-			title: "Estas seguro que los datos son correctos?",
+			title: "Estás seguro que los datos son correctos?",
 			text: "Se recomienda probar las credenciales de las distintas plataformas para evitar errores.",
 			icon: "warning",
 			showCancelButton: true,
@@ -111,16 +111,14 @@ export default function ResumenMensual(props) {
 		}).then((result) => {
 			if (result.isConfirmed) {
 				axios
-					.post(`http://10.13.18.84:5000/ejecutaRobotResMens/`, f, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ` + token } })
+					.post(`http://10.13.18.84:5005/ejecutaRobotResMens/`, f, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ` + token } })
 					.then((response) => {
-						// seteaError("");
-						//console.log(response.data.message)
 						MySwal.fire({
 							icon: "success",
 							title: "Completado",
 							text: "Robot ejecutado con exito!",
 						});
-						// setFormState(true);
+						setFormState(true);
 					})
 					.catch((error) => {
 						// seteaError(error.response.data.message);

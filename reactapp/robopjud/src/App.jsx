@@ -128,7 +128,7 @@ function App() {
   };
   const getUserState = () => {
     axios
-      .get(`http://10.13.18.84:5000/userState`, {
+      .get(`http://10.13.18.84:5005/userState`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -178,11 +178,11 @@ function App() {
               </Route>
             )}
 
-			{hasrole1(context.role, ["user", "admin", "sudo"]) && (
+            {/* {hasrole1(context.role, ["user", "admin", "sudo"]) && (
               <Route path="/civil/causas_para_archivo/:idT/:idR/:ip" exact>
                 {token !== null && <ArchivoCausas />}
               </Route>
-            )}
+            )} */}
 
             {hasrole1(context.role, ["user", "admin", "sudo"]) && (
               <Route path="/civil" exact>
@@ -269,12 +269,6 @@ function App() {
                 {token !== null && <UpdateTribunal />}
               </Route>
             )}
-
-            {/* {hasrole1(context.role, ["user", "admin", "sudo"]) && (
-							<Route path='/configuracion/updatetribunal' exact>
-								{token !== null && <UpdateTribunal />}
-							</Route>
-						)} */}
 
             {hasrole1(context.role, ["user", "admin", "sudo"]) && (
               <Route path="/configuracion" exact>

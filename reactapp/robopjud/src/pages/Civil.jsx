@@ -28,7 +28,7 @@ function Civil(props) {
 	const state = true;
 	const getRobots = async () => {
 
-		const robots = await axios(`http://10.13.18.84:5000/getRobotArea/` + props.props.nombre + "/" + props.props.id_tribunal, {
+		const robots = await axios(`http://10.13.18.84:5005/getRobotArea/` + props.props.nombre + "/" + props.props.id_tribunal, {
 
 			headers: {
 				"Content-Type": "application/json",
@@ -45,7 +45,7 @@ function Civil(props) {
 	};
 
 	const updateDBS = async () => {
-		await axios(`http://10.13.18.84:5000/updateDB`, {
+		await axios(`http://10.13.18.84:5005/updateDB`, {
 
 			headers: {
 				"Content-Type": "application/json",

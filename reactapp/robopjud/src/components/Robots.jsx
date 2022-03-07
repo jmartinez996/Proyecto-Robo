@@ -4,7 +4,7 @@ import {
   CardContent,
   Divider,
   Grid,
-  Typography, Container, Switch
+  Typography, Container, Switch, FormControlLabel, Radio
 } from '@material-ui/core';
 
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
@@ -14,15 +14,18 @@ import PauseCircleFilledRoundedIcon from '@material-ui/icons/PauseCircleFilledRo
 const Play = (flag) => {
   return (
     <Container>
-      <PlayCircleOutlineIcon color="primary" />
+      <FormControlLabel value="" label="" control={<PlayCircleOutlineIcon display="inline"  color="primary" />} />
+      
       <Typography
         color="primary"
         display="inline"
-        sx={{ pl: 1 }}
-        variant="body2"
+        sx={{ pl: 0 }}
+        variant="body1"
       >
         Disponible para ejecutar. 
       </Typography>
+
+      
     </Container>
   );
 };
@@ -30,7 +33,7 @@ const Play = (flag) => {
 const Pausa = (flag) => {
   return (
     <Container>
-      <PauseCircleFilledRoundedIcon color="action" />
+      <FormControlLabel value="" label="" control={<PauseCircleFilledRoundedIcon color="action" />} />
       <Typography
         color="textSecondary"
         display="inline"
@@ -69,20 +72,19 @@ const ProductCard = (props) => (
       >
         {props.titulo}
       </Typography>
-      <Typography
-        align="center"
-        color="textPrimary"
-        variant="body1"
-      >
-        {props.desc}
-      </Typography>
     </CardContent>
     <Box sx={{ flexGrow: 1 }} />
     <Divider />
     <Box sx={{ p: 2 }}>
+      
       <Grid
         container
-        spacing={2}
+        spacing={1}
+        direction="row"
+        justify="center"
+        alignItems="center"
+        alignContent="center"
+        wrap="nowrap"
         sx={{ justifyContent: 'space-between' }}
       >
         <Grid

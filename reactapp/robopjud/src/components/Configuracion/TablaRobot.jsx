@@ -34,6 +34,7 @@ export default function TablaRobot(props) {
   const name = window.localStorage.getItem("robo-jwt-name");
   const role = window.localStorage.getItem("robo-jwt-role");
   const [estado, setEstado] = useState({});
+  const [switched, setSwitched] = useState(null);
   const getData = () => {
     setContext({
       name: name,
@@ -62,7 +63,7 @@ export default function TablaRobot(props) {
   //   };
 
   const getrobot = async () => {
-    const robots = await axios(`http://10.13.18.84:5000/getRobot`, {
+    const robots = await axios(`http://10.13.18.84:5005/getRobot`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -106,7 +107,7 @@ export default function TablaRobot(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5000/deleteRobot/`, f, {
+          .post(`http://10.13.18.84:5005/deleteRobot/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
@@ -126,6 +127,59 @@ export default function TablaRobot(props) {
   };
   const update_Robot = ($name, $id) => {
     console.log("Update");
+  };
+
+  const handleSwitched = (e, id_switch) => {
+    // console.log(e)
+    const miSwitch = document.querySelector("#switch" + id_switch);
+    console.log(miSwitch.parentElement.parentElement.className.length)
+    const classChecked = miSwitch.parentElement.parentElement.className
+    console.log(classChecked)
+    if (
+      miSwitch.parentElement.parentElement.className.length ===
+      152 || miSwitch.parentElement.parentElement.className.length ===
+      150
+    ) {
+      miSwitch.parentElement.parentElement.setAttribute(
+        "class",
+        "MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-70 MuiSwitch-switchBase MuiSwitch-colorSecondary"
+      );
+      const f = new FormData();
+      f.append("id_robot", id_switch);
+      f.append("disponibilidad", false);
+      axios.post(`http://10.13.18.84:5005/setDisponibilidad/`, f, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ` + token,
+        },
+      });
+    } else {
+      miSwitch.parentElement.parentElement.setAttribute(
+        "class",
+        "MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-70 MuiSwitch-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked-71 Mui-checked"
+      );
+      const f = new FormData();
+      f.append("id_robot", id_switch);
+      f.append("disponibilidad", true);
+      axios.post(`http://10.13.18.84:5005/setDisponibilidad/`, f, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ` + token,
+        },
+      });
+      // console.log(miSwitch.parentElement.parentElement.className)
+    }
+    // if(e === true){
+    //   miSwitch.checked = false
+    //   miSwitch.parentElement.parentElement.setAttribute("class", "MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-70 MuiSwitch-switchBase MuiSwitch-colorSecondary ")
+    //   console.log(miSwitch.checked)
+
+    // }
+    // else{
+    //   miSwitch.checked = true
+    //   miSwitch.parentElement.parentElement.setAttribute("class", "MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-70 MuiSwitch-switchBase MuiSwitch-colorSecondary PrivateSwitchBase-checked-71 Mui-checked")
+    //   console.log(miSwitch.checked)
+    // }
   };
 
   return (
@@ -165,7 +219,7 @@ export default function TablaRobot(props) {
                 <TableCell>Tribunal</TableCell>
                 <TableCell>Area</TableCell>
                 {context.role === "sudo" && <TableCell>Acciones</TableCell>}
-                {/* <TableCell>Disp.</TableCell> */}
+                <TableCell>Disp.</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -178,7 +232,9 @@ export default function TablaRobot(props) {
                   {/* <TableCell>{robot.desc_robot}</TableCell> */}
                   <TableCell>{robot.nombre_tribunal}</TableCell>
                   <TableCell>{robot.nombre_area} </TableCell>
+
                   {context.role === "sudo" && (
+                    
                     <TableCell>
                       <IconButton
                         aria-label="Eliminar"
@@ -190,7 +246,7 @@ export default function TablaRobot(props) {
                       </IconButton>
                       <IconButton
                         component={Link}
-                        to={"/configuracion/updaterobots/"+robot.id_robot}
+                        to={"/configuracion/updaterobots/" + robot.id_robot}
                         aria-label="more"
                         aria-controls="long-menu"
                         aria-haspopup="true"
@@ -198,6 +254,20 @@ export default function TablaRobot(props) {
                         <EditIcon />
                       </IconButton>
                     </TableCell>
+                  )}
+                  {context.role === "sudo" && (
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          id={"switch" + robot.id_robot}
+                          checked={robot.disponibilidad}
+                          onChange={(e) =>
+                            handleSwitched(e.target, robot.id_robot)
+                          }
+                        />
+                      }
+                      key={robot.id_robot}
+                    />
                   )}
                 </TableRow>
               ))}

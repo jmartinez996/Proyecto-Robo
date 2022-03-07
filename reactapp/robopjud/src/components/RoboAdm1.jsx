@@ -84,11 +84,6 @@ const RoboAdm1 = (titulo) => (
       </Grid>
     </Box>
   </Card>
-  // </Link>
 );
-
-// ProductCard.propTypes = {
-//   product: PropTypes.object.isRequired
-// };
 
 export default RoboAdm1;
