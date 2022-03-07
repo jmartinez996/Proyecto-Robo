@@ -167,7 +167,7 @@ export default function IngresoExhorto(props) {
             MySwal.fire({
               icon: "success",
               title: "Completado",
-              text: "Robot ejecutado con exito!",
+              text: "Robot ejecutado con éxito!",
             });
             
           })
@@ -234,7 +234,7 @@ export default function IngresoExhorto(props) {
                   />
                 )}
                 rules={{
-                  required: "El campo Correo Electronico esta vacío",
+                  required: "El campo Correo Electrónico está vacío",
                   pattern: /^\S+@\S+$/i,
                   //  validate: (value) => validation(value)
                 }}

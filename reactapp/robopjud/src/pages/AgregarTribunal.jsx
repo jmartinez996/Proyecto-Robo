@@ -119,7 +119,7 @@ function AgregarTribunal() {
               Authorization: `Bearer ` + token,
             },
           });
-          MySwal.fire("Agregado", "El registro se ha agregado", "success");
+          MySwal.fire("Agregado", "Registro agregado con éxito.", "success");
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
@@ -200,7 +200,7 @@ function AgregarTribunal() {
                 />
               )}
               rules={{
-                required: "El campo nombre Tribunal esta vacío",
+                required: "El campo nombre Tribunal está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -220,13 +220,13 @@ function AgregarTribunal() {
                   value={value}
                   error={!!error}
                   helperText={error ? error.message : null}
-                  label="Ingresa Telefono Tribunal"
-                  autoComplete="Telefono Tribunal"
+                  label="Ingresa Teléfono Tribunal"
+                  autoComplete="Teléfono Tribunal"
                   onChange={onChange}
                 />
               )}
               rules={{
-                required: "El campo telefono Tribunal esta vacío",
+                required: "El campo teléfono Tribunal está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -252,7 +252,7 @@ function AgregarTribunal() {
                 />
               )}
               rules={{
-                required: "El campo Código Tribunal esta vacío",
+                required: "El campo Código Tribunal está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -278,7 +278,7 @@ function AgregarTribunal() {
                 />
               )}
               rules={{
-                required: "El campo telefono Tribunal esta vacío",
+                required: "El campo telefono Tribunal está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -304,7 +304,7 @@ function AgregarTribunal() {
                 />
               )}
               rules={{
-                required: "El campo telefono Tribunal esta vacío",
+                required: "El campo IP está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -330,7 +330,7 @@ function AgregarTribunal() {
                 />
               )}
               rules={{
-                required: "El campo usuario sitci esta vacío",
+                required: "El campo usuario sitci está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -356,7 +356,7 @@ function AgregarTribunal() {
                 />
               )}
               rules={{
-                required: "El campo contraseña sitci esta vacío",
+                required: "El campo contraseña sitci está vacío",
                 //  validate: (value) => validation(value)
               }}
             />

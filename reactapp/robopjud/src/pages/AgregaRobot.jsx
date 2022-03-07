@@ -123,7 +123,7 @@ function AgregaRobot() {
 							defaultValue=''
 							render={({ field: { onChange, value }, fieldState: { error } }) => <TextField variant='outlined' margin='dense' fullWidth id='nombre' value={value} error={!!error} helperText={error ? error.message : null} label='Ingresa Nombre del Robot' autoComplete='Nombre de Robot' autoFocus onChange={onChange} />}
 							rules={{
-								required: "El campo Nombre de usuario esta vacío",
+								required: "El campo Nombre de usuario está vacío",
 								//  validate: (value) => validation(value)
 							}}
 						/>
@@ -133,7 +133,7 @@ function AgregaRobot() {
 							defaultValue=''
 							render={({ field: { onChange, value }, fieldState: { error } }) => <TextField variant='outlined' margin='dense' fullWidth id='descripción' value={value} error={!!error} helperText={error ? error.message : null} label='Ingresa Descripción del robot' autoComplete='Descripción de Robot' onChange={onChange} />}
 							rules={{
-								required: "El campo Apellido de usuario esta vacío",
+								required: "El campo Apellido de usuario está vacío",
 								//  validate: (value) => validation(value)
 							}}
 						/>
@@ -143,7 +143,7 @@ function AgregaRobot() {
 							defaultValue=''
 							render={({ field: { onChange, value }, fieldState: { error } }) => <TextField variant='outlined' margin='dense' fullWidth id='rut' value={value} error={!!error} helperText={error ? error.message : null} label='Ingresa ruta de Robot' autoComplete='ruta robot' onChange={onChange} />}
 							rules={{
-								required: "El campo Rut de usuario esta vacío",
+								required: "El campo Rut de usuario está vacío",
 								//  validate: (value) => validation(value)
 							}}
 						/>
@@ -163,7 +163,7 @@ function AgregaRobot() {
 									</FormControl>
 								</>
 							)}
-							rules={{ required: "El campo Repite Contrasena esta vacío" }}
+							rules={{ required: "El campo Repite Contrasena está vacío" }}
 						/>
 						<Controller
 							name='area'
@@ -181,7 +181,7 @@ function AgregaRobot() {
 									</FormControl>
 								</>
 							)}
-							rules={{ required: "El campo Repite Contrasena esta vacío" }}
+							rules={{ required: "El campo Repite Contrasena está vacío" }}
 						/>
 
 						<Typography variant='inherit' color='error'>

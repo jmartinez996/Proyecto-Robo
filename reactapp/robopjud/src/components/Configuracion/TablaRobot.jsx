@@ -114,14 +114,14 @@ export default function TablaRobot(props) {
             },
           })
           .then((response) => {
-            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+            Swal.fire("Eliminado!", "El registro ha sido eliminado con éxito.", "success");
             getrobot();
           });
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
-        Swal.fire("Cancelled", "Your imaginary file is safe :)", "error");
+        Swal.fire("Cancelado", "No se ha eliminado el registro", "error");
       }
     });
   };
@@ -255,7 +255,7 @@ export default function TablaRobot(props) {
                       </IconButton>
                     </TableCell>
                   )}
-                  {context.role === "sudo" && (
+                  {/* {context.role === "sudo" && ( */}
                     <FormControlLabel
                       control={
                         <Switch
@@ -268,7 +268,8 @@ export default function TablaRobot(props) {
                       }
                       key={robot.id_robot}
                     />
-                  )}
+                  {/* )} */}
+                  
                 </TableRow>
               ))}
             </TableBody>

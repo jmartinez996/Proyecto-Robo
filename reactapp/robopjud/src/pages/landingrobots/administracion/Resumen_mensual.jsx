@@ -116,7 +116,7 @@ export default function ResumenMensual(props) {
 						MySwal.fire({
 							icon: "success",
 							title: "Completado",
-							text: "Robot ejecutado con exito!",
+							text: "Robot ejecutado con éxito!",
 						});
 						setFormState(true);
 					})

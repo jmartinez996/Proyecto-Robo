@@ -77,7 +77,7 @@ export default function Tablaareas() {
 						MySwal.fire({
 							icon: "success",
 							title: "Completado",
-							text: "Se agrego con exito " + nombre + ".",
+							text: "Se agregó con éxito " + nombre + ".",
 						});
 						getAreas();
 					})
@@ -112,7 +112,7 @@ export default function Tablaareas() {
 			showLoaderOnConfirm: true,
 			preConfirm: (nombre) => {
 				f.append("nombre_area_nuevo", nombre);
-				console.log("se modifico");
+				console.log("se modificó");
 				console.log(name);
 				return axios
 					.post(`http://10.13.18.84:5005/updateArea/`, f, {
@@ -133,7 +133,7 @@ export default function Tablaareas() {
 						MySwal.fire({
 							icon: "error",
 							title: "Error...",
-							text: "No se pudo cambiar" + name + ".",
+							text: "No se pudo modificar" + name + ".",
 						});
 					});
 			},

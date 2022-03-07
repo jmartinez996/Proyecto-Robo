@@ -196,7 +196,7 @@ function UpdateTribunal() {
     f.append("pass_sitci", passSitci);
     MySwal.fire({
       title: "Agregar",
-      text: "¿Desea agregar el tribunal " + data.nombre + "?",
+      text: "¿Desea actualizar el tribunal " + data.nombre + "?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Agregar",
@@ -211,19 +211,19 @@ function UpdateTribunal() {
               Authorization: `Bearer ` + token,
             },
           });
-          MySwal.fire("Agregado", "El registro se ha agregado", "success");
+          MySwal.fire("Actualizado", "El registro se ha actualizado con éxito", "success");
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
-          MySwal.fire("Cancelado", "El registro no se ha eliminado", "error");
+          MySwal.fire("Cancelado", "El registro no se ha actualizado", "error");
         }
       })
       .catch((error) => {
         MySwal.fire({
           icon: "error",
           title: "Error...",
-          text: "No se pudo Eliminar.",
+          text: "No se pudo actualizar.",
         });
       });
   };

@@ -117,7 +117,7 @@ function UpdateUsuario() {
         MySwal.fire({
           icon: "success",
           title: "Completado",
-          text: "Usuario Registrado con exito!",
+          text: "Usuario actualizado con éxito!",
         });
       })
       .catch((error) => {
@@ -236,26 +236,6 @@ function UpdateUsuario() {
               value={correoUsuario}
               onChange={(e) => seteaCorreo(e.target.value)}
             />
-
-            {/* <TextField
-              variant="outlined"
-              margin="dense"
-              fullWidth
-              id="contrasena"
-              label="Ingresa Contrasena"
-              autoComplete="contrasena"
-              type="password"
-            ></TextField>
-
-            <TextField
-              variant="outlined"
-              margin="dense"
-              fullWidth
-              id="repcontrasena"
-              label="Repite Contrasena"
-              autoComplete="Repite contrasena"
-              type="password"
-            /> */}
 
             {context.role === "sudo" && (
               <FormControl

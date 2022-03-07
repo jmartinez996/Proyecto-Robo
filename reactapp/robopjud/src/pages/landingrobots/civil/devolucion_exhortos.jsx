@@ -165,7 +165,7 @@ export default function DevolucionExhorto(props) {
             MySwal.fire({
               icon: "success",
               title: "Completado",
-              text: "Robot ejecutado con exito!",
+              text: "Robot ejecutado con éxito!",
             });
             setFormState(true);
           })
@@ -231,7 +231,7 @@ export default function DevolucionExhorto(props) {
                       />
                     )}
                     rules={{
-                      required: "El campo Correo Electronico esta vacío",
+                      required: "El campo Correo Electronico está vacío",
                       pattern: /^\S+@\S+$/i,
                       //  validate: (value) => validation(value)
                     }}
@@ -362,7 +362,7 @@ export default function DevolucionExhorto(props) {
                       </>
                     )}
                     rules={{
-                      required: "El campo Repite Contrasena esta vacío",
+                      required: "El campo Repite Contrasena está vacío",
                     }}
                   />
 

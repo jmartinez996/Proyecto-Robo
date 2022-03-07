@@ -93,7 +93,7 @@ export default function Tablausuarios(props) {
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
-        Swal.fire("Cancelled", "Your imaginary file is safe :)", "error");
+        Swal.fire("Cancelado", "No se ha eliminado ningún registro.", "error");
       }
     });
   };

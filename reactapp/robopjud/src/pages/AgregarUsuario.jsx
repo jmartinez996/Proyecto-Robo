@@ -89,7 +89,7 @@ function AgregarUsuario() {
         MySwal.fire({
           icon: "success",
           title: "Completado",
-          text: "Usuario Registrado con exito!",
+          text: "Usuario Registrado con éxito!",
         });
       })
       .catch((error) => {
@@ -162,7 +162,7 @@ function AgregarUsuario() {
                 />
               )}
               rules={{
-                required: "El campo Nombre de usuario esta vacío",
+                required: "El campo Nombre de Usuario está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -188,7 +188,7 @@ function AgregarUsuario() {
                 />
               )}
               rules={{
-                required: "El campo Apellido de usuario esta vacío",
+                required: "El campo Apellido de Usuario está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -214,7 +214,7 @@ function AgregarUsuario() {
                 />
               )}
               rules={{
-                required: "El campo Rut de usuario esta vacío",
+                required: "El campo Rut de Usuario está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -240,7 +240,7 @@ function AgregarUsuario() {
                 />
               )}
               rules={{
-                required: "El campo Correo de usuario esta vacío",
+                required: "El campo Correo de Usuario está vacío",
                 //  validate: (value) => validation(value)
               }}
             />
@@ -266,7 +266,7 @@ function AgregarUsuario() {
                   type="password"
                 />
               )}
-              rules={{ required: "El campo Contrasena esta vacío" }}
+              rules={{ required: "El campo Contraseña está vacío" }}
             />
             <Controller
               name="repcontrasena"
@@ -290,7 +290,7 @@ function AgregarUsuario() {
                   type="password"
                 />
               )}
-              rules={{ required: "El campo Repite Contrasena esta vacío" }}
+              rules={{ required: "El campo Repite Contraseña está vacío" }}
             />
             {context.role === "sudo" && (
               <Controller
@@ -329,7 +329,7 @@ function AgregarUsuario() {
                     </FormControl>
                   </>
                 )}
-                rules={{ required: "El campo Repite Contrasena esta vacío" }}
+                rules={{ required: "El campo Repite Contraseña está vacío" }}
               />
             )}
             <Controller
@@ -368,7 +368,7 @@ function AgregarUsuario() {
                   </FormControl>
                 </>
               )}
-              rules={{ required: "El campo Repite Contrasena esta vacío" }}
+              rules={{ required: "El campo Repite Contraseña está vacío" }}
             />
 
             <Typography variant="inherit" color="error">

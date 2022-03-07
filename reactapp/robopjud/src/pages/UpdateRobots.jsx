@@ -86,7 +86,7 @@ function UpdateRobot() {
         MySwal.fire({
           icon: "success",
           title: "Completado",
-          text: "Usuario Registrado con exito!",
+          text: "Robot actualizado con éxito!",
         });
       })
       
@@ -172,38 +172,6 @@ const getRobotId = async () => {
               value = {descripcionRobot}
               onChange = {(e) => seteaDescripcion(e.target.value)}
             />
-
-            {/* <TextField
-              variant="outlined"
-              margin="dense"
-              fullWidth
-              id="rut"
-              label="Ingresa ruta de Robot"
-              autoComplete="ruta robot"
-            /> */}
-
-            {/* <FormControl
-              variant="outlined"
-              className={classes.formControl}
-              fullWidth
-            >
-              <InputLabel id="demo-simple-select-outlined-label">
-                Seleccione Tribunal
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                label="Age"
-                margin="dense"
-                name="tribunal"
-              >
-                {tribunales.map((tribunal) => (
-                  <MenuItem value={tribunal.id_tribunal}>
-                    {tribunal.nombre}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl> */}
 
             <FormControl
               variant="outlined"

@@ -82,8 +82,8 @@ export default function Tablatribunales() {
       text: "Desea eliminar el Tribunal " + $name,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel!",
+      confirmButtonText: "Elminar",
+      cancelButtonText: "Cancelar",
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -95,14 +95,14 @@ export default function Tablatribunales() {
             },
           })
           .then((response) => {
-            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+            Swal.fire("Eliminado!", "El registro se ha eliminado con éxito.", "success");
             getTribunal();
           });
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
-        Swal.fire("Cancelled", "Your imaginary file is safe :)", "error");
+        Swal.fire("Cancelado", "No se ha elminado el registro", "error");
       }
     });
   };
