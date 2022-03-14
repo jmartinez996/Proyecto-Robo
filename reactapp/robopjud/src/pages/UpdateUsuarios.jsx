@@ -106,7 +106,7 @@ function UpdateUsuario() {
       f.append("tribunal", idT);
     }
     f.append("tipo_usuario", tipoUsuario);
-    await axios.post(`http://10.13.18.84:5005/updateUser/`, f, {
+    await axios.post(`http://10.13.18.84:5000/updateUser/`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -131,7 +131,7 @@ function UpdateUsuario() {
 
   const getUserId = () => {
     axios
-      .get(`http://10.13.18.84:5005/getUserbyId/` + id, {
+      .get(`http://10.13.18.84:5000/getUserbyId/` + id, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -152,7 +152,7 @@ function UpdateUsuario() {
 
   const getTribunal = async () => {
     await axios
-      .get(`http://10.13.18.84:5005/getTribunal`, {
+      .get(`http://10.13.18.84:5000/getTribunal`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,

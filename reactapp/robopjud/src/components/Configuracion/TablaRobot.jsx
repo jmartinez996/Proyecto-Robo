@@ -63,7 +63,7 @@ export default function TablaRobot(props) {
   //   };
 
   const getrobot = async () => {
-    const robots = await axios(`http://10.13.18.84:5005/getRobot`, {
+    const robots = await axios(`http://10.13.18.84:5000/getRobot`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -107,7 +107,7 @@ export default function TablaRobot(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5005/deleteRobot/`, f, {
+          .post(`http://10.13.18.84:5000/deleteRobot/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
@@ -147,7 +147,7 @@ export default function TablaRobot(props) {
       const f = new FormData();
       f.append("id_robot", id_switch);
       f.append("disponibilidad", false);
-      axios.post(`http://10.13.18.84:5005/setDisponibilidad/`, f, {
+      axios.post(`http://10.13.18.84:5000/setDisponibilidad/`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -161,7 +161,7 @@ export default function TablaRobot(props) {
       const f = new FormData();
       f.append("id_robot", id_switch);
       f.append("disponibilidad", true);
-      axios.post(`http://10.13.18.84:5005/setDisponibilidad/`, f, {
+      axios.post(`http://10.13.18.84:5000/setDisponibilidad/`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,

@@ -78,7 +78,7 @@ function AgregarUsuario() {
     }
     f.append("tipo_usuario", data.tipo_usuario);
     await axios
-      .post(`http://10.13.18.84:5005/agregauser/`, f, {
+      .post(`http://10.13.18.84:5000/agregauser/`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -104,7 +104,7 @@ function AgregarUsuario() {
 
   useEffect(async () => {
     await axios
-      .get(`http://10.13.18.84:5005/getTribunal`, {
+      .get(`http://10.13.18.84:5000/getTribunal`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,

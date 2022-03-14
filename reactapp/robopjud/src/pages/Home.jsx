@@ -142,7 +142,7 @@ function Home() {
 
   const getUserState = () => {
     axios
-      .get(`http://10.13.18.84:5005/userState`, {
+      .get(`http://10.13.18.84:5000/userState`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -155,7 +155,7 @@ function Home() {
         setIdUser(res.data.id_usuario);
         const f = new FormData();
         f.append("id", res.data.id_tribunal);
-        axios.post(`http://10.13.18.84:5005/getTribunalId`, f, {
+        axios.post(`http://10.13.18.84:5000/getTribunalId`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
@@ -175,7 +175,7 @@ function Home() {
   };
 
   const getAreas = async () => {
-    await axios(`http://10.13.18.84:5005/getAreas`, {
+    await axios(`http://10.13.18.84:5000/getAreas`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -193,7 +193,7 @@ function Home() {
     const f = new FormData();
     f.append("id", idTribunal);
     const req = axios
-    .post(`http://10.13.18.84:5005/getTribunalId`, f, {
+    .post(`http://10.13.18.84:5000/getTribunalId`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -212,7 +212,7 @@ function Home() {
     const f = new FormData();
     f.append("idTribunal", idTribunal);
     await axios
-      .post(`http://10.13.18.84:5005/checkConnect`, f, {
+      .post(`http://10.13.18.84:5000/checkConnect`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,

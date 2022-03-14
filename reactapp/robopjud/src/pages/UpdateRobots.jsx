@@ -76,7 +76,7 @@ function UpdateRobot() {
     f.append("nombre", nombreRobot);
     f.append("descripcion", descripcionRobot);
     f.append("id_area", areaRobot);
-    await axios.post(`http://10.13.18.84:5005/updateRobot/`, f, {
+    await axios.post(`http://10.13.18.84:5000/updateRobot/`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -94,7 +94,7 @@ function UpdateRobot() {
 
 const getAreas = async () => {
     await axios
-      .get(`http://10.13.18.84:5005/getAreas`, {
+      .get(`http://10.13.18.84:5000/getAreas`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -110,7 +110,7 @@ const getAreas = async () => {
 
 const getRobotId = async () => {
     axios
-    .get(`http://10.13.18.84:5005/getRobotbyId/` + id, {
+    .get(`http://10.13.18.84:5000/getRobotbyId/` + id, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,

@@ -71,7 +71,7 @@ export default function DevolucionExhorto(props) {
   const [archivo, setArchivo] = useState(null);
 
   const getJueces = () => {
-    const jueces = axios(`http://10.13.18.84:5005/getJueces/` + idT, {
+    const jueces = axios(`http://10.13.18.84:5000/getJueces/` + idT, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -109,7 +109,7 @@ export default function DevolucionExhorto(props) {
   }
 
   const getUserSitci = () => {
-    const exhortos = axios(`http://10.13.18.84:5005/getUserSitci/` + idT, {
+    const exhortos = axios(`http://10.13.18.84:5000/getUserSitci/` + idT, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -155,7 +155,7 @@ export default function DevolucionExhorto(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`http://10.13.18.84:5005/ejecutaDevolucionExhorto/`, f, {
+          .post(`http://10.13.18.84:5000/ejecutaDevolucionExhorto/`, f, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ` + token,

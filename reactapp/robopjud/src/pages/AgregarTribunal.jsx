@@ -62,7 +62,7 @@ function AgregarTribunal() {
   const [sArea, setSArea] = useState([]);
   const [iArea, setIArea] = useState([]);
   const getAreas = async () => {
-    const areas = await axios(`http://10.13.18.84:5005/getAreas`, {
+    const areas = await axios(`http://10.13.18.84:5000/getAreas`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -113,7 +113,7 @@ function AgregarTribunal() {
     })
       .then((result) => {
         if (result.isConfirmed) {
-          axios.post(`http://10.13.18.84:5005/createTribunal/`, f, {
+          axios.post(`http://10.13.18.84:5000/createTribunal/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,

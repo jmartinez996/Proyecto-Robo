@@ -74,7 +74,7 @@ export default function IngresoExhorto(props) {
   const [passSitci, setPassSitci] = useState("");
 
   const getJueces = () => {
-    const jueces = axios(`http://10.13.18.84:5005/getJueces/` + idT, {
+    const jueces = axios(`http://10.13.18.84:5000/getJueces/` + idT, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -90,7 +90,7 @@ export default function IngresoExhorto(props) {
   };
 
   const getExhortos = () => {
-    const exhortos = axios(`http://10.13.18.84:5005/getExhortos/` + idT, {
+    const exhortos = axios(`http://10.13.18.84:5000/getExhortos/` + idT, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -106,7 +106,7 @@ export default function IngresoExhorto(props) {
   };
 
   const getUserSitci = () => {
-    const exhortos = axios(`http://10.13.18.84:5005/getUserSitci/` + idT, {
+    const exhortos = axios(`http://10.13.18.84:5000/getUserSitci/` + idT, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -155,7 +155,7 @@ export default function IngresoExhorto(props) {
         
         
         axios
-          .post(`http://10.13.18.84:5005/ejecutaIngresoExhorto/`, f, {
+          .post(`http://10.13.18.84:5000/ejecutaIngresoExhorto/`, f, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ` + token,

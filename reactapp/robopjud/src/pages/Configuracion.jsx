@@ -52,7 +52,7 @@ function Configuracion(props) {
   const getTribunales = () => {
     if (context.role === "sudo") {
       axios
-        .get(`http://10.13.18.84:5005/getTribunal`, {
+        .get(`http://10.13.18.84:5000/getTribunal`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ` + token,
@@ -85,7 +85,7 @@ function Configuracion(props) {
   const seteaUsuarios = (trib) => {
     if (trib !== null) {
       const users = axios
-        .get(`http://10.13.18.84:5005/getUsers/` + trib, {
+        .get(`http://10.13.18.84:5000/getUsers/` + trib, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ` + token,
@@ -103,7 +103,7 @@ function Configuracion(props) {
 
   const seteaRobots = (trib) => {
     if (trib !== null) {
-      const robots = axios(`http://10.13.18.84:5005/getRobot/` + trib, {
+      const robots = axios(`http://10.13.18.84:5000/getRobot/` + trib, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,

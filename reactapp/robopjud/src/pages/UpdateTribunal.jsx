@@ -76,7 +76,7 @@ function UpdateTribunal() {
   const [bandera, setBandera] = useState(true);
 
   const getAreas = () => {
-    const areas = axios(`http://10.13.18.84:5005/getAreas`, {
+    const areas = axios(`http://10.13.18.84:5000/getAreas`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ` + token,
@@ -94,7 +94,7 @@ function UpdateTribunal() {
   const getTribunal = (areas) => {
     const f = new FormData();
     f.append("id", id);
-    const req = axios.post(`http://10.13.18.84:5005/getTribunalId`, f, {
+    const req = axios.post(`http://10.13.18.84:5000/getTribunalId`, f, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ` + token,
@@ -205,7 +205,7 @@ function UpdateTribunal() {
     })
       .then((result) => {
         if (result.isConfirmed) {
-          axios.post(`http://10.13.18.84:5005/updateTribunal/`, f, {
+          axios.post(`http://10.13.18.84:5000/updateTribunal/`, f, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ` + token,
