@@ -142,7 +142,6 @@ def ejecutaRobotGestSii():
 @routes.route('/stateRobotGestSii/', methods=['POST', 'GET'])
 def stateRobotGestSii():
     try:
-
         estado = request.values['estado']
         id_robot = request.values['id_robot']
         id_tribunal = request.values['id_tribunal']
@@ -155,7 +154,7 @@ def stateRobotGestSii():
         if estado == 'error':
             msg = Message('RPA: Hubo un error ejecutando Gestión de SII.',
                           sender='rpa_araucania@pjud.cl', recipients=[correo])
-            msg.body = "Pruebe revisando la plantill    a para verificar que corresponda con los requerimientos establecidos."
+            msg.body = "Pruebe revisando la plantilla para verificar que corresponda con los requerimientos establecidos."
             mail.send(msg)
 
         if estado == 'success':
@@ -174,7 +173,7 @@ def stateRobotGestSii():
                                           Robots.id_robot == id_robot)).update({'disponibilidad': (True)})
         session.commit()
         session.close()
-        return 'Proceso finalizado'
+        return ''
         #
 
 ################################# INGRESO DE EXHORTOS ######################################

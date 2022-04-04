@@ -32,7 +32,7 @@ def createTribunal():
     session.add(newTribunal) 
     session.commit()
     session.close()
-    return {"mensaje":"saludo"}
+    return {"mensaje":"Tribunal agregado con exito."}
 
 @routes.route('/updateTribunal/', methods=['POST'])
 @jwt_required()
@@ -64,10 +64,10 @@ def updateTribunal():
         old_data.pass_sitci = pass_sitci
         session.merge(old_data)
         session.commit()                                
-        return {"mensaje":"saludo"}
+        return {"mensaje":"Tribunal actualizado con exito"}
 
     except:
-        return ""
+        return " No se pudo actualizar el Tribunal "
     finally:
         session.close()
 
@@ -81,10 +81,10 @@ def deleteTribunal():
     print("Eliminar id: "+id_t)
     print("llegue")
     try:
-        return ""
+        return "Tribunal Eliminado"
 
     except:
-        return ""
+        return "No se pudo eliminar el Tribunal"
  
 
 @routes.route('/getTribunal') 

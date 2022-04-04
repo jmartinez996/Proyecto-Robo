@@ -122,7 +122,34 @@ export default function IngresoExhorto(props) {
       });
   };
 
+  const checkExe = async () => {
+    await axios(`http://10.13.18.84:5000/getRobotState/` + idT, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ` + token,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.message);
+        if (res.data.message) {
+		    setState(true)
+          Swal.fire({
+            title: "La plataforma se encuentra ejecutando un robot en este momento.",
+            text: "Se recomienda probar nuevamente en unos minutos",
+            icon: "warning",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Ok",
+            allowOutsideClick: false,
+          })
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   useEffect(() => {
+    checkExe();
     getExhortos();
     getJueces();
     getUserSitci();

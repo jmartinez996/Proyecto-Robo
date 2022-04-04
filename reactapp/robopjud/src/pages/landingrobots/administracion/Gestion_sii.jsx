@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Container, Grid, Typography } from "@material-ui/core";
 import { useForm, Controller } from "react-hook-form";
 import { TextField } from "@material-ui/core";
@@ -48,7 +48,7 @@ export default function GestionSii(props) {
   const { handleSubmit, control } = useForm();
   const [archivo, setArchivo] = useState(null);
   const [formState, setFormState] = useState(false);
-
+  const token = window.localStorage.getItem("robo-jwt-token");
   const subirArchivo = (e) => {
     setArchivo(e);
     console.log(e.size);
@@ -73,6 +73,7 @@ export default function GestionSii(props) {
   }
 
   const onSubmit = (data) => {
+
     const token = window.localStorage.getItem("robo-jwt-token");
     const f = new FormData();
     //console.log(data.archivo[9])
@@ -96,8 +97,7 @@ export default function GestionSii(props) {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .post(`http://10.13.18.84:5000/ejecutaRobotGestSii/`, f, {
+        axios.post(`http://10.13.18.84:5000/ejecutaRobotGestSii/`, f, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ` + token,
@@ -123,6 +123,37 @@ export default function GestionSii(props) {
     });
     //console.log('enviando');
   };
+
+  const checkExe = async () => {
+    await axios(`http://10.13.18.84:5000/getRobotState/` + idT, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ` + token,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.message);
+        if (res.data.message) {
+		  setFormState(true)
+          Swal.fire({
+            title: "La plataforma se encuentra ejecutando un robot en este momento.",
+            text: "Se recomienda probar nuevamente en unos minutos",
+            icon: "warning",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Ok",
+            allowOutsideClick: false,
+          })
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  useEffect(() => {
+    checkExe();
+  }, []);
+
 
   return (
     <React.Fragment>
@@ -278,6 +309,7 @@ export default function GestionSii(props) {
                       >
                         Iniciar Robot
                       </Button>
+                      
                     </Grid>
                   </form>
                 </div>

@@ -216,7 +216,7 @@ export default function TablaRobot(props) {
               <TableRow>
                 <TableCell>Nombre</TableCell>
                 {/* <TableCell>Descripción</TableCell> */}
-                <TableCell>Tribunal</TableCell>
+                {/* <TableCell>Tribunal</TableCell> */}
                 <TableCell>Area</TableCell>
                 {context.role === "sudo" && <TableCell>Acciones</TableCell>}
                 <TableCell>Disp.</TableCell>
@@ -230,7 +230,7 @@ export default function TablaRobot(props) {
                 >
                   <TableCell>{robot.nombre_robot}</TableCell>
                   {/* <TableCell>{robot.desc_robot}</TableCell> */}
-                  <TableCell>{robot.nombre_tribunal}</TableCell>
+                  {/* <TableCell>{robot.nombre_tribunal}</TableCell> */}
                   <TableCell>{robot.nombre_area} </TableCell>
 
                   {context.role === "sudo" && (

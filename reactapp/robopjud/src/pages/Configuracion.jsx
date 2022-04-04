@@ -1,10 +1,12 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
-import { Box, Container, Grid } from "@material-ui/core";
+import { Box, Container, Grid, Typography } from "@material-ui/core";
 import Tablausuarios from "../components/Configuracion/TablaUsuarios";
 import Tablaareas from "../components/Configuracion/TablaAreas";
 import Tablatribunales from "../components/Configuracion/TablaTribunales";
 import TablaRobot from "../components/Configuracion/TablaRobot";
+import FormUpdateTribunal from "../components/Configuracion/FormUpdateTribunal"
+import UpdateTribunal from "../pages/UpdateTribunal"
 import Context from "../context/Context";
 import AppbarMenu from "../components/AppbarMenu";
 import { makeStyles } from "@material-ui/core/styles";
@@ -65,10 +67,10 @@ function Configuracion(props) {
           console.log(error.message);
         });
     }
-	if (context.role === "admin") {
-		seteaUsuarios(id_tribunal);
-		seteaRobots(id_tribunal);
-	  }
+    if (context.role === "admin") {
+      seteaUsuarios(id_tribunal);
+      seteaRobots(id_tribunal);
+    }
   };
 
   useEffect(() => {
@@ -163,14 +165,29 @@ function Configuracion(props) {
                 </FormControl>
               </Grid>
             )}
+            {context.role === "sudo" && (
+              <Grid item lg={6} sm={12} xl={5} xs={12}>
+                <Tablausuarios usuarios={usuarios} idT={tribunal} />
+              </Grid>
+            )}
+            {context.role === "sudo" && (
+              <Grid item lg={6} sm={12} xl={7} xs={12}>
+                <TablaRobot robots={robots} />
+              </Grid>
+            )}
 
-            <Grid item lg={5} sm={12} xl={5} xs={12}>
-              <Tablausuarios usuarios={usuarios} idT={tribunal} />
-            </Grid>
-            
-            <Grid item lg={7} sm={12} xl={7} xs={12}>
-              <TablaRobot robots={robots} />
-            </Grid>
+            {context.role === "admin" && (
+              <Grid item lg={6} sm={12} xl={5} xs={12}>
+                <FormUpdateTribunal idT={tribunal} />
+                <TablaRobot robots={robots} />
+              </Grid>
+            )}
+            {context.role === "admin" && (
+              <Grid item lg={6} sm={12} xl={7} xs={12}>
+                <Tablausuarios usuarios={usuarios} idT={tribunal} />
+                
+              </Grid>
+            )}
           </Grid>
         </Container>
       </Box>

@@ -16,6 +16,9 @@ from Classes.Tribunal import Tribunal
 import requests as req
 import cx_Oracle
 
+  
+
+
 app = Flask(__name__)
 
 app.register_blueprint(routes)
@@ -49,7 +52,7 @@ def index():
     # msg = Message('Hello', sender = 'rpa_araucania@pjud.cl', recipients = ['agmardones@pjud.cl'])
     # msg.body = "Hello Flask message sent from Flask-Mail"
     # mail.send(msg)
-    return {"mensaje":"saludo"}
+    return {"mensaje":"Funciona"}
 
 @app.route('/mensaje/', methods=['GET', 'POST'])
 def mensaje():
@@ -111,36 +114,36 @@ def agregauser():
     finally:
         session.close()
 
-@app.route('/IngresoDeExhorto')
-def IngresoDeExhorto():
-    try:
-        print('ejecutando')
-        query = session.query(Robots, Tribunal, Jueces).join(Tribunal).join(Jueces).all()
-        # print(query)
-        data = []
-        for robots, tribunal, jueces in query:
-            # print(robots)
-            aux = {
-                'id_robot':robots.id_robot,
-                'id_tribunal':tribunal.id_tribunal,
-                'ip':tribunal.ip,
-                'juez':jueces.apellido_juez + ', ' + jueces.nombre_juez
-            }
-            # print(aux)
-            data.append(aux)
+# @app.route('/IngresoDeExhorto')
+# def IngresoDeExhorto():
+#     try:
+#         print('ejecutando')
+#         query = session.query(Robots, Tribunal, Jueces).join(Tribunal).join(Jueces).all()
+#         # print(query)
+#         data = []
+#         for robots, tribunal, jueces in query:
+#             # print(robots)
+#             aux = {
+#                 'id_robot':robots.id_robot,
+#                 'id_tribunal':tribunal.id_tribunal,
+#                 'ip':tribunal.ip,
+#                 'juez':jueces.apellido_juez + ', ' + jueces.nombre_juez
+#             }
+#             # print(aux)
+#             data.append(aux)
         
-        if (len(data) != 0):
-            for i in data:
-                print (i)
-                resp = req.post('http://'+i['ip']+':5001/ExeIngresoExhorto/', data=i)
+#         if (len(data) != 0):
+#             for i in data:
+#                 print (i)
+#                 resp = req.post('http://'+i['ip']+':5001/ExeIngresoExhorto/', data=i)
 
         
-        return 'ejecutado'
-    except:
-        return ''
-    finally:
-        session.close()
-        return 'Conexion finalizada'
+#         return 'ejecutado'
+#     except:
+#         return ''
+#     finally:
+#         session.close()
+#         return 'Conexion finalizada'
 
 @app.route('/checkConnect', methods=['POST'])
 def checkConnect():
@@ -190,7 +193,7 @@ def getJueces(idT):
 
     except Exception as ex:
         print(ex)
-        return 'hubo un problema'
+        return 'hubo un problema conectando a civiprod'
 
 @app.route('/getExhortos/<idT>', methods=['GET'])
 @jwt_required()
@@ -216,7 +219,7 @@ def getExhortos(idT):
 
     except Exception as ex:
         print(ex)
-        return 'hubo un problema'
+        return 'hubo un problema conectando a civiprod'
 
 @app.route('/updateDB', methods=['GET'])
 @jwt_required()
@@ -233,6 +236,8 @@ def updateDB():
     except Exception as ex:
         print(ex)
         return jsonify({'message':'Hubo un problema actualizando la base de datos.'})
+
+# This route generates HTML of documentation
 
 
 # @app.route('/Ejecuta', methods=['GET','POST'])

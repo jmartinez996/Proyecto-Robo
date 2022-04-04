@@ -63,7 +63,7 @@ def ExeResMens():
 
     fecha_act = date.today().replace(day=1)
     mes_ant = fecha_act - timedelta(days = 1)
-    file = 'EstadoMensual'+str(mes_ant.strftime("%b"))+'.xls'
+    file = 'EstadoMensual'+str(mes_ant.strftime("%b"))+str(id_tribunal)+'.xls'
     path = os.path.abspath(file)
     archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],file))
     print('recibido desde el cliente')

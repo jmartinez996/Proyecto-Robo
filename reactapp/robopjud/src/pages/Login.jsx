@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import { BrowserRouter as Router, Switch, Route, Link, useLocation, Redirect } from "react-router-dom";
 import Context from "../context/Context";
+import AppbarMenu from "../components/AppbarMenu";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -80,7 +81,12 @@ export default function SignIn() {
   // }
 
   return (
+    
+    <div>
+
+<AppbarMenu />
     <Container component="main" maxWidth="xs">
+      
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -147,5 +153,6 @@ export default function SignIn() {
 
       
     </Container>
+    </div>
   );
 }

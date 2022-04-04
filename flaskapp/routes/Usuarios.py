@@ -45,10 +45,10 @@ def deleteUser():
     session.commit()
     print("eliminado")
     try:
-        return ""
+        return "Usuario eliminado"
 
     except:
-        return ""
+        return "No se pudo eliminar usuario"
 
 @routes.route('/getUserbyId/<id>')
 #@jwt_required()
@@ -92,7 +92,7 @@ def updateUser():
         old_data.tipo_usuario = tipo_usuario
         session.merge(old_data)
         session.commit()  
-        return {"mensaje":"saludo"}
+        return {"mensaje":"Usuario Actualizado."}
     except:
         return ''
     finally:

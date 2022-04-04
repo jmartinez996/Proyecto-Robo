@@ -65,9 +65,9 @@ def updateArea():
         AreaM.nombre_area = name_N
         session.merge(AreaM)
         session.commit()
-        return ""
+        return "Area actualizada con exito"
     except:
-        return ''
+        return 'No se pudo actualizar area'
     finally:
         session.close()
 
@@ -79,7 +79,7 @@ def deleteArea():
         id_A = request.values['id_area']
         session.query(Area).filter(Area.id_area == id_A).delete()
         session.commit()
-        return ""
+        return "Eliminado con exito"
     except:
         return jsonify({'message':'No se puede eliminar el registro'}), 422
     finally:

@@ -23,12 +23,14 @@ import { useForm, Controller } from "react-hook-form";
 import Context from "../../context/Context";
 
 export default function Tablausuarios(props) {
+  console.log(props)
   const [context, setContext] = useContext(Context);
   const token = window.localStorage.getItem("robo-jwt-token");
   const name = window.localStorage.getItem("robo-jwt-name");
   const role = window.localStorage.getItem("robo-jwt-role");
   const [users, setUsers] = useState(props.usuarios)
-  
+  console.log(props.usuarios)
+
 //   console.log(users)
   const getData = () => {
     setContext({

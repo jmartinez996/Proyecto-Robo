@@ -10,14 +10,14 @@ Base.metadata.create_all(engine)
 
 session = SessionLocal()
 
-@routes.route('/testrobot') 
-def testrobot(): 
-    return {"mensaje":"saludo"}
-    try:
-        return ""
+# @routes.route('/testrobot') 
+# def testrobot(): 
+#     return {"mensaje":"saludo"}
+#     try:
+#         return ""
 
-    except:
-        return ""
+#     except:
+#         return ""
 @routes.route('/getRobot/<idT>')
 @jwt_required()
 def getRobot(idT):
@@ -71,7 +71,6 @@ def getRobotArea(nombre, id_tribunal):
             'id_tribunal': robots.id_tribunal,
             'nombre_tribunal': tribunales.nombre,
             'disponibilidad': disponibilidad,
-            'link': robots.nombre_robot.lower().replace(' ', '_'),
             'ip': tribunales.ip
         }
         data.append(aux)
@@ -96,9 +95,9 @@ def createRobot():
     session.commit()
     #print("Agregado")
     try:
-        return ""
+        return "Se ha creado con exito"
     except:
-        return ""
+        return "No se pudo crear el registro"
     finally:
         session.close()
     
@@ -110,10 +109,10 @@ def deleteRobot():
     session.query(Robots).filter(Robots.id_robot == id_R).delete()
     session.commit()
     try:
-        return ""
+        return "Eliminado con exito"
 
     except:
-       return ""
+       return "No se pudo eliminar el registro"
     finally:
         session.close()
 
